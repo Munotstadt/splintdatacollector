@@ -755,8 +755,40 @@ function importOpportunitiesCSV(text, asOfISO){
 }
 
 // ---------------------------------------------------------------- DERIVED --
+// Derives the currently open quantity and cost basis purely from the persisted transaction
+// ledger (moving-average-cost method). This is the durable source of truth for "is this asset
+// still held" — it stays correct even in a session where the Investment Opportunities file
+// hasn't been (re-)uploaded yet, e.g. right after loading saved data from GitHub.
+function computeOpenPosition(assetId){
+  const txs = DB.transactions.filter(t => t.assetId === assetId)
+    .slice().sort((a,b)=> a.dateISO < b.dateISO ? -1 : (a.dateISO > b.dateISO ? 1 : 0));
+  let qty = 0, cost = 0;
+  txs.forEach(t => {
+    if (/purchase/i.test(t.type)){
+      qty += t.splints;
+      cost += (t.amount + t.fees);
+    } else {
+      const avgCost = qty > 0 ? cost / qty : 0;
+      const soldQty = Math.min(t.splints, qty);
+      cost -= avgCost * soldQty;
+      qty -= soldQty;
+    }
+  });
+  qty = Math.round(qty * 100) / 100;
+  if (qty < 0.0001) { qty = 0; cost = 0; }
+  return {qty, costBasis: cost};
+}
+// Current price per splint: prefer this session's live Investment-Opportunities snapshot
+// (most precise, broker-supplied), else fall back to the latest persisted monthly price —
+// so a held position still shows a (slightly less fresh) value even without re-uploading.
+function currentPricePerSplint(assetId){
+  const h = DB.holdings[assetId];
+  if (h && h.owned > 0) return {price: h.currentValue, currency: h.currency};
+  const lp = latestPrice(assetId);
+  return lp ? {price: lp.price, currency: lp.currency} : {price: null, currency: 'EUR'};
+}
 function isCurrentlyHeld(assetId){
-  return !!DB.holdings[assetId] && DB.holdings[assetId].owned > 0;
+  return computeOpenPosition(assetId).qty > 0.0001;
 }
 function latestPrice(assetId){
   const list = DB.prices.filter(p => p.assetId === assetId).sort((a,b)=> a.month < b.month ? -1 : 1);
@@ -779,18 +811,21 @@ function allAssetIds(){
 }
 
 function computeKPIs(){
-  let currentValue = 0, costBasis = 0, unrealized = 0, splintsTotal = 0;
-  Object.keys(DB.holdings).forEach(id => {
-    const h = DB.holdings[id];
-    currentValue += h.owned * h.currentValue;
-    costBasis += h.owned * h.avgPurchasePrice;
-    unrealized += h.performanceEUR;
-    splintsTotal += h.owned;
+  let currentValue = 0, costBasis = 0, unrealized = 0, splintsTotal = 0, heldCount = 0;
+  allAssetIds().forEach(id => {
+    const pos = computeOpenPosition(id);
+    if (pos.qty <= 0.0001) return;
+    const cp = currentPricePerSplint(id);
+    const val = cp.price === null ? 0 : pos.qty * cp.price;
+    currentValue += val;
+    costBasis += pos.costBasis;
+    unrealized += (val - pos.costBasis);
+    splintsTotal += pos.qty;
+    heldCount++;
   });
   const ledger = computeRealizedLedger();
   const realized = ledger.reduce((sum, e) => sum + e.gain, 0);
   const exitedCount = allAssetIds().filter(id => !isCurrentlyHeld(id) && DB.transactions.some(t=>t.assetId===id)).length;
-  const heldCount = Object.values(DB.holdings).filter(h=>h.owned>0).length;
   return {currentValue, costBasis, unrealized, realized, total: unrealized+realized, splintsTotal, heldCount, exitedCount};
 }
 
@@ -885,11 +920,14 @@ function computeSecurityPerformance(assetId){
       cashflows.push({date: new Date(t.dateISO), amount: (t.amount - t.fees)});
     }
   });
-  const h = DB.holdings[assetId];
+  const pos = computeOpenPosition(assetId);
   let terminalValue = 0;
-  if (h && h.owned > 0){
-    terminalValue = h.owned * h.currentValue;
-    cashflows.push({date: new Date(), amount: terminalValue});
+  if (pos.qty > 0.0001){
+    const cp = currentPricePerSplint(assetId);
+    if (cp.price !== null){
+      terminalValue = pos.qty * cp.price;
+      cashflows.push({date: new Date(), amount: terminalValue});
+    }
   }
   const absolute = divested + terminalValue - invested;
   const relativePct = invested > 0 ? (absolute / invested) * 100 : null;
@@ -917,10 +955,12 @@ function computePortfolioIRR(assetIds){
     else cashflows.push({date: new Date(t.dateISO), amount: (t.amount - t.fees)});
   });
   const today = new Date();
-  Object.keys(DB.holdings).forEach(id => {
-    if (idSet && !idSet.has(id)) return;
-    const h = DB.holdings[id];
-    if (h.owned > 0) cashflows.push({date: today, amount: h.owned * h.currentValue});
+  const ids = idSet ? Array.from(idSet) : allAssetIds();
+  ids.forEach(id => {
+    const pos = computeOpenPosition(id);
+    if (pos.qty <= 0.0001) return;
+    const cp = currentPricePerSplint(id);
+    if (cp.price !== null) cashflows.push({date: today, amount: pos.qty * cp.price});
   });
   return cashflows.length >= 2 ? xirr(cashflows) : null;
 }
@@ -1031,33 +1071,37 @@ function renderDashboard(){
 
   // portfolio value history: for currently held assets, price(month) * owned(today)
   const months = allMonthsSorted();
-  const heldIds = Object.keys(DB.holdings).filter(id => DB.holdings[id].owned > 0);
+  const heldIds = allAssetIds().filter(isCurrentlyHeld);
   const points = months.map(m => {
     let val = 0;
     heldIds.forEach(id => {
       const series = assetPriceSeries(id).filter(p => p.month <= m);
-      if (series.length) val += series[series.length-1].price * DB.holdings[id].owned;
+      if (series.length) val += series[series.length-1].price * computeOpenPosition(id).qty;
     });
     return {label: monthLabel(m), value: val};
   });
   document.getElementById('portfolio-chart-card').innerHTML = svgLineChart(points);
 
   // top positions
-  const rows = heldIds.map(id => ({
-    id, name: assetName(id),
-    category: DB.master[id] ? [DB.master[id].category, DB.master[id].subCategory].filter(Boolean).join(' / ') : '',
-    splints: DB.holdings[id].owned,
-    value: DB.holdings[id].owned * DB.holdings[id].currentValue,
-    perf: DB.holdings[id].performanceEUR,
-    perfPct: DB.holdings[id].performancePct,
-  })).sort((a,b)=>b.value-a.value).slice(0,12);
+  const rows = heldIds.map(id => {
+    const pos = computeOpenPosition(id);
+    const cp = currentPricePerSplint(id);
+    const value = cp.price === null ? 0 : pos.qty * cp.price;
+    const perf = value - pos.costBasis;
+    const perfPct = pos.costBasis > 0 ? (perf / pos.costBasis * 100) : null;
+    return {
+      id, name: assetName(id),
+      category: DB.master[id] ? [DB.master[id].category, DB.master[id].subCategory].filter(Boolean).join(' / ') : '',
+      splints: pos.qty, value, perf, perfPct,
+    };
+  }).sort((a,b)=>b.value-a.value).slice(0,12);
   document.querySelector('#top-positions-table tbody').innerHTML = rows.map(r => `
     <tr>
       <td>${assetLinkHTML(r.id, r.name)}</td>
       <td>${escapeHtml(r.category)||'<span class="hint">—</span>'}</td>
       <td class="num">${fmtNum(r.splints,0)}</td>
       <td class="num">${fmtMoney(r.value)}</td>
-      <td class="num" style="color:${r.perf>=0?'var(--green)':'var(--red)'}">${fmtMoney(r.perf)} (${fmtPct(r.perfPct*100 <= 5 ? r.perfPct*100 : r.perfPct)})</td>
+      <td class="num" style="color:${r.perf>=0?'var(--green)':'var(--red)'}">${fmtMoney(r.perf)} (${r.perfPct===null?'—':fmtPct(r.perfPct)})</td>
     </tr>
   `).join('') || `<tr><td colspan="5" class="hint">No open positions.</td></tr>`;
 
@@ -1164,16 +1208,15 @@ function renderSecurityDetail(assetId){
   empty.style.display='none'; detail.style.display='';
 
   const m = DB.master[assetId] || {assetName:assetId, category:'', subCategory:'', categoryOld:'', notes:''};
-  const h = DB.holdings[assetId];
+  const h = DB.holdings[assetId]; // may be absent this session; used only for release date/horizon metadata below
+  const pos = computeOpenPosition(assetId);
+  const cp = currentPricePerSplint(assetId);
   const hasRealName = m.assetName && m.assetName !== assetId;
   document.getElementById('sec-name').textContent = hasRealName ? m.assetName : 'Ohne Namen';
   document.getElementById('sec-meta').textContent = `Asset-ID: ${assetId}` + (h && h.releaseDate ? ` · Release: ${isoToDMY(h.releaseDate)}` : '') + (h ? ` · Horizont ${h.minHorizon}-${h.maxHorizon} Jahre` : '');
-  document.getElementById('sec-owned').textContent = h ? fmtNum(h.owned,0) : '0';
-  document.getElementById('sec-value').textContent = h ? fmtMoney(h.owned*h.currentValue, h.currency) : '—';
-  const lp = latestPrice(assetId);
-  const valuePerSplint = h ? h.currentValue : (lp ? lp.price : null);
-  const valuePerSplintCurrency = h ? h.currency : (lp ? lp.currency : 'EUR');
-  document.getElementById('sec-value-per-splint').textContent = valuePerSplint===null ? '—' : fmtMoney(valuePerSplint, valuePerSplintCurrency);
+  document.getElementById('sec-owned').textContent = fmtNum(pos.qty,0);
+  document.getElementById('sec-value').textContent = pos.qty>0.0001 ? (cp.price===null ? '—' : fmtMoney(pos.qty*cp.price, cp.currency)) : fmtMoney(0);
+  document.getElementById('sec-value-per-splint').textContent = cp.price===null ? '—' : fmtMoney(cp.price, cp.currency);
 
   const perf = computeSecurityPerformance(assetId);
   const absEl = document.getElementById('sec-return-abs');
@@ -1258,7 +1301,7 @@ function renderPerformance(){
 // ---------------------------------------------------------------- HEADER --
 function updateHeaderStatus(){
   const el = document.getElementById('header-status');
-  const heldCount = Object.values(DB.holdings).filter(h=>h.owned>0).length;
+  const heldCount = allAssetIds().filter(isCurrentlyHeld).length;
   if (!DB.transactions.length && !heldCount){ el.textContent = 'Keine Daten geladen'; return; }
   el.textContent = `${DB.transactions.length} Transaktionen · ${heldCount} offene Positionen · ${DB.prices.length} Kurspunkte`;
 }
@@ -1272,16 +1315,18 @@ function renderPortfolio(){
   let ids = allAssetIds();
 
   let rows = ids.map(id => {
-    const h = DB.holdings[id];
-    const held = !!h && h.owned > 0;
+    const pos = computeOpenPosition(id);
+    const held = pos.qty > 0.0001;
+    const cp = currentPricePerSplint(id);
+    const value = held && cp.price !== null ? pos.qty * cp.price : 0;
     const perf = computeSecurityPerformance(id);
     const m = DB.master[id];
     return {
       id,
       name: assetName(id),
       held,
-      splints: held ? h.owned : 0,
-      value: held ? h.owned * h.currentValue : 0,
+      splints: held ? pos.qty : 0,
+      value,
       cost: perf.invested,
       returnAbs: perf.absolute,
       returnRel: perf.relativePct,
