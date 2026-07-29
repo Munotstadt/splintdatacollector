@@ -239,9 +239,20 @@
 
       <div class="section-title">
         <h2>Portfolio Value Over Time</h2>
-        <span class="hint">Currently held positions · monthly prices × today's quantity</span>
+        <span class="hint">Quantity at month-end × price at month-end; second line: cost basis at month-end</span>
       </div>
       <div class="card" id="portfolio-chart-card" style="padding:18px 18px 10px;"></div>
+
+      <div class="section-title">
+        <h2>By Category</h2>
+        <span class="hint">Currently held positions, grouped by category</span>
+      </div>
+      <div class="table-wrap">
+        <table id="category-table">
+          <thead><tr><th>Category</th><th class="num">Value</th><th class="num">Cost</th><th class="num">Return</th><th class="num">IRR p.a.</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
 
       <div class="section-title">
         <h2>Top Positions by Value</h2>
@@ -256,7 +267,7 @@
 
       <div class="section-title">
         <h2>Cash Flow</h2>
-        <span class="hint">Monthly investments, exits/sales, net cash flow, and realized return</span>
+        <span class="hint">Monthly investments, exits/sales, net cash flow, and realized return · newest first</span>
       </div>
       <div class="table-wrap">
         <table id="cashflow-table">
@@ -642,6 +653,11 @@ function fmtPct(n, decimals=2){
   const sign = n > 0 ? '+' : '';
   return sign + n.toLocaleString('de-CH', {minimumFractionDigits:decimals, maximumFractionDigits:decimals}) + '%';
 }
+// Positive -> green, negative -> red, zero/null/unknown -> neutral grey.
+function signColor(n){
+  if (n === undefined || n === null || isNaN(n) || n === 0) return 'var(--ink-soft)';
+  return n > 0 ? 'var(--green)' : 'var(--red)';
+}
 function todayISO(){
   const d = new Date();
   return d.toISOString().slice(0,10);
@@ -767,15 +783,19 @@ function importOpportunitiesCSV(text, asOfISO){
 // ledger (moving-average-cost method). This is the durable source of truth for "is this asset
 // still held" — it stays correct even in a session where the Investment Opportunities file
 // hasn't been (re-)uploaded yet, e.g. right after loading saved data from GitHub.
-function computeOpenPosition(assetId){
-  const txs = DB.transactions.filter(t => t.assetId === assetId)
-    .slice().sort((a,b)=> a.dateISO < b.dateISO ? -1 : (a.dateISO > b.dateISO ? 1 : 0));
+function computeOpenPosition(assetId, asOfMonth){
+  let txs = DB.transactions.filter(t => t.assetId === assetId);
+  if (asOfMonth) txs = txs.filter(t => t.dateISO.slice(0,7) <= asOfMonth);
+  txs = txs.slice().sort((a,b)=> a.dateISO < b.dateISO ? -1 : (a.dateISO > b.dateISO ? 1 : 0));
   // No transaction history known for this asset yet (e.g. the Opportunities file was uploaded
   // before the Activities file this session) — fall back to the live broker snapshot so the
-  // position isn't shown as empty just because of upload order.
+  // position isn't shown as empty just because of upload order. Only applies to "as of now"
+  // lookups (asOfMonth omitted); historical cutoffs must stay purely ledger-derived.
   if (txs.length === 0){
-    const h = DB.holdings[assetId];
-    if (h && h.owned > 0) return {qty: h.owned, costBasis: h.owned * h.avgPurchasePrice};
+    if (!asOfMonth){
+      const h = DB.holdings[assetId];
+      if (h && h.owned > 0) return {qty: h.owned, costBasis: h.owned * h.avgPurchasePrice};
+    }
     return {qty: 0, costBasis: 0};
   }
   let qty = 0, cost = 0;
@@ -1047,6 +1067,58 @@ function svgLineChart(points, opts={}){
   </svg>`;
 }
 
+function svgMultiLineChart(series, opts={}){
+  // series: [{name, color, points:[{label, value}]}] — all point arrays must share the same x-axis labels
+  const w = opts.width || 900, h = opts.height || 220;
+  const padL = 54, padR = 16, padT = 16, padB = 28;
+  const innerW = w - padL - padR, innerH = h - padT - padB;
+  const points0 = series[0] ? series[0].points : [];
+  if (!points0.length) return `<div class="empty-state" style="border:none;padding:30px;">Keine Kursdaten vorhanden.</div>`;
+  const n = points0.length;
+  const allValues = series.flatMap(s => s.points.map(p => p.value));
+  let min = Math.min(0, ...allValues), max = Math.max(...allValues);
+  if (min === max) { min -= 1; max += 1; }
+  const range = max - min;
+  const x = i => padL + (n===1 ? innerW/2 : (i/(n-1)) * innerW);
+  const y = v => padT + innerH - ((v - min)/range) * innerH;
+
+  let ticksY = '';
+  const nTicks = 4;
+  for(let i=0;i<=nTicks;i++){
+    const v = min + (range * i/nTicks);
+    const yy = y(v);
+    ticksY += `<line x1="${padL}" y1="${yy.toFixed(1)}" x2="${w-padR}" y2="${yy.toFixed(1)}" stroke="#eceef0" stroke-width="1"/>`;
+    ticksY += `<text x="${padL-8}" y="${(yy+3).toFixed(1)}" text-anchor="end" class="chart-tooltip-label">${fmtNum(v,0)}</text>`;
+  }
+  let labelsX = '';
+  const step = Math.max(1, Math.ceil(n/8));
+  points0.forEach((p,i)=>{
+    if (i % step === 0 || i === n-1){
+      labelsX += `<text x="${x(i).toFixed(1)}" y="${h-8}" text-anchor="middle" class="chart-tooltip-label">${p.label}</text>`;
+    }
+  });
+  let linesSvg = '';
+  series.forEach(s => {
+    const linePts = s.points.map((p,i)=>`${x(i).toFixed(1)},${y(p.value).toFixed(1)}`).join(' ');
+    let dots = '';
+    s.points.forEach((p,i)=>{
+      dots += `<circle cx="${x(i).toFixed(1)}" cy="${y(p.value).toFixed(1)}" r="2.4" fill="${s.color}"><title>${escapeHtml(s.name)} · ${p.label}: ${fmtNum(p.value)}</title></circle>`;
+    });
+    linesSvg += `<polyline points="${linePts}" fill="none" stroke="${s.color}" stroke-width="2"/>${dots}`;
+  });
+  let legend = '';
+  if (series.length > 1){
+    legend = `<div style="display:flex;gap:16px;margin-bottom:6px;">` + series.map(s=>
+      `<span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-soft);"><span style="width:10px;height:10px;border-radius:2px;background:${s.color};display:inline-block;"></span>${escapeHtml(s.name)}</span>`
+    ).join('') + `</div>`;
+  }
+  return `${legend}<svg viewBox="0 0 ${w} ${h}" width="100%" height="${h}" preserveAspectRatio="xMidYMid meet">
+    ${ticksY}
+    ${linesSvg}
+    ${labelsX}
+  </svg>`;
+}
+
 // ---------------------------------------------------------------- RENDER: DASHBOARD --
 function renderDashboard(){
   const hasData = DB.transactions.length || Object.keys(DB.holdings).length;
@@ -1070,33 +1142,77 @@ function renderDashboard(){
     </div>
     <div class="card kpi">
       <div class="label">Unrealized Performance</div>
-      <div class="value" style="color:${k.unrealized>=0?'var(--green)':'var(--red)'}">${fmtMoney(k.unrealized)}</div>
+      <div class="value" style="color:${signColor(k.unrealized)}">${fmtMoney(k.unrealized)}</div>
       <div class="delta ${k.unrealized>=0?'pos':'neg'}">${fmtPct(k.costBasis? (k.unrealized/k.costBasis*100):0)}</div>
     </div>
     <div class="card kpi">
       <div class="label">Realized Performance</div>
-      <div class="value" style="color:${k.realized>=0?'var(--green)':'var(--red)'}">${fmtMoney(k.realized)}</div>
+      <div class="value" style="color:${signColor(k.realized)}">${fmtMoney(k.realized)}</div>
       <div class="delta">${k.exitedCount} fully exited assets</div>
     </div>
     <div class="card kpi">
       <div class="label">Portfolio IRR p.a.</div>
-      <div class="value" style="color:${portfolioIrr===null?'var(--ink)':(portfolioIrr>=0?'var(--green)':'var(--red)')}">${portfolioIrr===null?'—':fmtPct(portfolioIrr*100)}</div>
+      <div class="value" style="color:${signColor(portfolioIrr)}">${portfolioIrr===null?'—':fmtPct(portfolioIrr*100)}</div>
       <div class="delta">All cash flows; open positions at today's value</div>
     </div>
   `;
 
-  // portfolio value history: for currently held assets, price(month) * owned(today)
+  // Portfolio value history: for each month, use the quantity actually held AT THAT MONTH-END
+  // (ledger-derived, historical) × the latest known price up to that month — not today's quantity.
+  // Second line: cost basis outstanding at that same month-end.
   const months = allMonthsSorted();
-  const heldIds = allAssetIds().filter(isCurrentlyHeld);
-  const points = months.map(m => {
-    let val = 0;
-    heldIds.forEach(id => {
+  const allIds = allAssetIds();
+  const heldIds = allIds.filter(isCurrentlyHeld); // today's holdings, used below for Top Positions
+  const valuePoints = [], costPoints = [];
+  months.forEach(m => {
+    let val = 0, cost = 0;
+    allIds.forEach(id => {
+      const pos = computeOpenPosition(id, m);
+      if (pos.qty <= 0.0001) return;
       const series = assetPriceSeries(id).filter(p => p.month <= m);
-      if (series.length) val += series[series.length-1].price * computeOpenPosition(id).qty;
+      if (series.length) val += series[series.length-1].price * pos.qty;
+      cost += pos.costBasis;
     });
-    return {label: monthLabel(m), value: val};
+    valuePoints.push({label: monthLabel(m), value: val});
+    costPoints.push({label: monthLabel(m), value: cost});
   });
-  document.getElementById('portfolio-chart-card').innerHTML = svgLineChart(points);
+  document.getElementById('portfolio-chart-card').innerHTML = svgMultiLineChart([
+    {name: 'Value', color: '#E30613', points: valuePoints},
+    {name: 'Cost', color: '#94a3b8', points: costPoints},
+  ]);
+
+  // by category
+  const catMap = {};
+  allIds.forEach(id => {
+    const pos = computeOpenPosition(id);
+    if (pos.qty <= 0.0001) return;
+    const cat = (DB.master[id] && DB.master[id].category) ? DB.master[id].category : 'Ohne Kategorie';
+    if (!catMap[cat]) catMap[cat] = [];
+    catMap[cat].push(id);
+  });
+  const catRows = Object.keys(catMap).map(cat => {
+    const ids = catMap[cat];
+    let value = 0, cost = 0;
+    ids.forEach(id => {
+      const pos = computeOpenPosition(id);
+      const cp = currentPricePerSplint(id);
+      value += cp.price === null ? 0 : pos.qty * cp.price;
+      cost += pos.costBasis;
+    });
+    const ret = value - cost;
+    const retPct = cost > 0 ? (ret/cost*100) : null;
+    const irr = computePortfolioIRR(ids);
+    return {cat, value, cost, ret, retPct, irr};
+  }).sort((a,b)=>b.value-a.value);
+  document.querySelector('#category-table tbody').innerHTML = catRows.map(r => `
+    <tr>
+      <td>${escapeHtml(r.cat)}</td>
+      <td class="num">${fmtMoney(r.value)}</td>
+      <td class="num">${fmtMoney(r.cost)}</td>
+      <td class="num" style="color:${signColor(r.ret)}">${fmtMoney(r.ret)} (${r.retPct===null?'—':fmtPct(r.retPct)})</td>
+      <td class="num" style="color:${signColor(r.irr)}">${r.irr===null?'—':fmtPct(r.irr*100)}</td>
+    </tr>
+  `).join('') || `<tr><td colspan="5" class="hint">No open positions.</td></tr>`;
 
   // top positions
   const rows = heldIds.map(id => {
@@ -1117,7 +1233,7 @@ function renderDashboard(){
       <td>${escapeHtml(r.category)||'<span class="hint">—</span>'}</td>
       <td class="num">${fmtNum(r.splints,0)}</td>
       <td class="num">${fmtMoney(r.value)}</td>
-      <td class="num" style="color:${r.perf>=0?'var(--green)':'var(--red)'}">${fmtMoney(r.perf)} (${r.perfPct===null?'—':fmtPct(r.perfPct)})</td>
+      <td class="num" style="color:${signColor(r.perf)}">${fmtMoney(r.perf)} (${r.perfPct===null?'—':fmtPct(r.perfPct)})</td>
     </tr>
   `).join('') || `<tr><td colspan="5" class="hint">No open positions.</td></tr>`;
 
@@ -1136,18 +1252,19 @@ function renderCashFlow(months){
     const mo = e.dateISO.slice(0,7);
     realizedByMonth[mo] = (realizedByMonth[mo]||0) + e.gain;
   });
-  const allMonths = Array.from(new Set([...months, ...Object.keys(invByMonth), ...Object.keys(exitByMonth)])).sort();
+  const allMonths = Array.from(new Set([...months, ...Object.keys(invByMonth), ...Object.keys(exitByMonth)])).sort().reverse();
   document.querySelector('#cashflow-table tbody').innerHTML = allMonths.map(m => {
     const inv = invByMonth[m] || 0;
     const ext = exitByMonth[m] || 0;
-    const net = ext - inv;
+    const extVal = -ext;
+    const net = inv + extVal;
     const real = realizedByMonth[m] || 0;
     return `<tr>
       <td class="mono">${monthLabel(m)}</td>
-      <td class="num">${inv ? fmtMoney(-inv) : '—'}</td>
-      <td class="num">${ext ? fmtMoney(ext) : '—'}</td>
-      <td class="num" style="color:${net>=0?'var(--green)':'var(--red)'}">${fmtMoney(net)}</td>
-      <td class="num" style="color:${real>=0?'var(--green)':'var(--red)'}">${real ? fmtMoney(real) : '—'}</td>
+      <td class="num" style="color:${signColor(inv)}">${inv ? fmtMoney(inv) : '—'}</td>
+      <td class="num" style="color:${signColor(extVal)}">${ext ? fmtMoney(extVal) : '—'}</td>
+      <td class="num" style="color:${signColor(net)}">${fmtMoney(net)}</td>
+      <td class="num" style="color:${signColor(real)}">${real ? fmtMoney(real) : '—'}</td>
     </tr>`;
   }).join('') || `<tr><td colspan="5" class="hint">No cash flow data yet.</td></tr>`;
 }
@@ -1237,13 +1354,13 @@ function renderSecurityDetail(assetId){
   const perf = computeSecurityPerformance(assetId);
   const absEl = document.getElementById('sec-return-abs');
   absEl.textContent = fmtMoney(perf.absolute);
-  absEl.style.color = perf.absolute>=0 ? 'var(--green)' : 'var(--red)';
+  absEl.style.color = signColor(perf.absolute);
   const relEl = document.getElementById('sec-return-rel');
   relEl.textContent = perf.relativePct === null ? '—' : fmtPct(perf.relativePct);
-  relEl.style.color = perf.relativePct===null ? '' : (perf.relativePct>=0 ? 'var(--green)' : 'var(--red)');
+  relEl.style.color = signColor(perf.relativePct);
   const irrEl = document.getElementById('sec-irr');
   irrEl.textContent = perf.irr === null ? '—' : fmtPct(perf.irr*100);
-  irrEl.style.color = perf.irr===null ? '' : (perf.irr>=0 ? 'var(--green)' : 'var(--red)');
+  irrEl.style.color = signColor(perf.irr);
 
   document.getElementById('sec-name-input').value = hasRealName ? m.assetName : '';
   document.getElementById('sec-category').value = m.category || '';
@@ -1281,9 +1398,10 @@ function renderSecurityDetail(assetId){
 let perfMode = 'price';
 function renderPerformance(){
   const search = document.getElementById('perf-search').value.trim().toLowerCase();
-  const months = allMonthsSorted();
+  const monthsAsc = allMonthsSorted();
+  const monthsDesc = monthsAsc.slice().reverse();
   const thead = document.querySelector('#perf-table thead tr');
-  thead.innerHTML = `<th>Asset</th>` + months.map(m=>`<th class="num">${monthLabel(m)}</th>`).join('');
+  thead.innerHTML = `<th>Asset</th>` + monthsDesc.map(m=>`<th class="num">${monthLabel(m)}</th>`).join('');
 
   let ids = allAssetIds().filter(id => DB.prices.some(p=>p.assetId===id));
   if (search) ids = ids.filter(id => assetName(id).toLowerCase().includes(search));
@@ -1292,10 +1410,13 @@ function renderPerformance(){
   const bodyRows = ids.map(id => {
     const series = {};
     assetPriceSeries(id).forEach(p => series[p.month] = p.price);
+    // Δ% needs the chronologically preceding month's value, so compute cell contents walking
+    // months oldest-to-newest first, then render the resulting cells newest-to-oldest (left to right).
     let lastVal = null;
-    const cells = months.map(m => {
+    const cellsByMonth = {};
+    monthsAsc.forEach(m => {
       const v = series[m];
-      if (v === undefined){ return `<td class="num hint">—</td>`; }
+      if (v === undefined){ cellsByMonth[m] = `<td class="num hint">—</td>`; return; }
       let display;
       if (perfMode === 'price'){
         display = fmtNum(v);
@@ -1303,12 +1424,13 @@ function renderPerformance(){
         if (lastVal === null || lastVal === 0){ display = '—'; }
         else {
           const chg = ((v-lastVal)/lastVal)*100;
-          display = `<span style="color:${chg>=0?'var(--green)':'var(--red)'}">${fmtPct(chg,1)}</span>`;
+          display = `<span style="color:${signColor(chg)}">${fmtPct(chg,1)}</span>`;
         }
       }
       lastVal = v;
-      return `<td class="num">${display}</td>`;
-    }).join('');
+      cellsByMonth[m] = `<td class="num">${display}</td>`;
+    });
+    const cells = monthsDesc.map(m => cellsByMonth[m]).join('');
     return `<tr><td>${assetLinkHTML(id, assetName(id))}${isCurrentlyHeld(id)?'':' <span class="hint">(verkauft)</span>'}</td>${cells}</tr>`;
   });
   document.querySelector('#perf-table tbody').innerHTML = bodyRows.join('') || `<tr><td class="hint">Keine Kursdaten vorhanden.</td></tr>`;
@@ -1385,9 +1507,9 @@ function renderPortfolio(){
       <td class="num">${fmtNum(r.splints,0)}</td>
       <td class="num">${fmtMoney(r.value)}</td>
       <td class="num">${fmtMoney(r.cost)}</td>
-      <td class="num" style="color:${r.returnAbs>=0?'var(--green)':'var(--red)'}">${fmtMoney(r.returnAbs)}</td>
-      <td class="num" style="color:${r.returnRel===null?'inherit':(r.returnRel>=0?'var(--green)':'var(--red)')}">${r.returnRel===null?'—':fmtPct(r.returnRel)}</td>
-      <td class="num" style="color:${r.irr===null?'inherit':(r.irr>=0?'var(--green)':'var(--red)')}">${r.irr===null?'—':fmtPct(r.irr*100)}</td>
+      <td class="num" style="color:${signColor(r.returnAbs)}">${fmtMoney(r.returnAbs)}</td>
+      <td class="num" style="color:${signColor(r.returnRel)}">${r.returnRel===null?'—':fmtPct(r.returnRel)}</td>
+      <td class="num" style="color:${signColor(r.irr)}">${r.irr===null?'—':fmtPct(r.irr*100)}</td>
       <td class="mono">${r.firstBuy?isoToDMY(r.firstBuy):'—'}</td>
       <td class="mono">${r.exitDate?isoToDMY(r.exitDate):'—'}</td>
       <td>${escapeHtml(r.category)||'<span class="hint">—</span>'}</td>
@@ -1408,9 +1530,9 @@ function renderPortfolio(){
     <td class="num">${fmtNum(totalSplints,0)}</td>
     <td class="num">${fmtMoney(totalValue)}</td>
     <td class="num">${fmtMoney(totalCost)}</td>
-    <td class="num" style="color:${totalReturnAbs>=0?'var(--green)':'var(--red)'}">${fmtMoney(totalReturnAbs)}</td>
-    <td class="num" style="color:${totalReturnRel===null?'inherit':(totalReturnRel>=0?'var(--green)':'var(--red)')}">${totalReturnRel===null?'—':fmtPct(totalReturnRel)}</td>
-    <td class="num" style="color:${totalIrr===null?'inherit':(totalIrr>=0?'var(--green)':'var(--red)')}">${totalIrr===null?'—':fmtPct(totalIrr*100)}</td>
+    <td class="num" style="color:${signColor(totalReturnAbs)}">${fmtMoney(totalReturnAbs)}</td>
+    <td class="num" style="color:${signColor(totalReturnRel)}">${totalReturnRel===null?'—':fmtPct(totalReturnRel)}</td>
+    <td class="num" style="color:${signColor(totalIrr)}">${totalIrr===null?'—':fmtPct(totalIrr*100)}</td>
     <td></td><td></td><td></td><td></td>
   `;
 
