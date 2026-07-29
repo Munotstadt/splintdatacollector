@@ -496,13 +496,21 @@
         <div class="upload-row">
           <label class="hint mono" style="white-space:nowrap;">Kursdatum</label>
           <input type="date" id="opp-date">
-          <input type="file" id="load-opp" accept=".csv">
         </div>
+        <div class="upload-row">
+          <input type="file" id="load-opp" accept=".csv">
+          <button class="btn primary" id="upload-opp-btn" disabled>Upload</button>
+        </div>
+        <div class="hint mono" id="load-opp-filename"></div>
       </div>
       <div class="card upload-card">
         <strong><span class="step-num">B</span>Activities Export</strong>
         <div class="desc">Vollständiges Transaktionsprotokoll von Splint. Neue Transaktions-IDs werden ergänzt, bestehende nicht dupliziert oder verändert.</div>
-        <div class="upload-row"><input type="file" id="load-act" accept=".csv"></div>
+        <div class="upload-row">
+          <input type="file" id="load-act" accept=".csv">
+          <button class="btn primary" id="upload-act-btn" disabled>Upload</button>
+        </div>
+        <div class="hint mono" id="load-act-filename"></div>
       </div>
     </div>
 
@@ -762,6 +770,14 @@ function importOpportunitiesCSV(text, asOfISO){
 function computeOpenPosition(assetId){
   const txs = DB.transactions.filter(t => t.assetId === assetId)
     .slice().sort((a,b)=> a.dateISO < b.dateISO ? -1 : (a.dateISO > b.dateISO ? 1 : 0));
+  // No transaction history known for this asset yet (e.g. the Opportunities file was uploaded
+  // before the Activities file this session) — fall back to the live broker snapshot so the
+  // position isn't shown as empty just because of upload order.
+  if (txs.length === 0){
+    const h = DB.holdings[assetId];
+    if (h && h.owned > 0) return {qty: h.owned, costBasis: h.owned * h.avgPurchasePrice};
+    return {qty: 0, costBasis: 0};
+  }
   let qty = 0, cost = 0;
   txs.forEach(t => {
     if (/purchase/i.test(t.type)){
@@ -1507,20 +1523,47 @@ document.getElementById('load-prices').addEventListener('change', async (e) => {
 document.getElementById('load-transactions').addEventListener('change', async (e) => {
   try{ importTransactionsCSV(await readFile(e.target), 'transactions.csv'); renderAll(); } catch(err){ log('Fehler beim Laden von transactions.csv: '+err.message, true); }
 });
-document.getElementById('load-opp').addEventListener('change', async (e) => {
+document.getElementById('load-opp').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  const btn = document.getElementById('upload-opp-btn');
+  const label = document.getElementById('load-opp-filename');
+  btn.disabled = !file;
+  label.textContent = file ? `Ausgewählt: ${file.name}` : '';
+});
+document.getElementById('upload-opp-btn').addEventListener('click', async () => {
+  const input = document.getElementById('load-opp');
+  const btn = document.getElementById('upload-opp-btn');
+  if (!input.files[0]) return;
+  btn.disabled = true;
   try{
     const asOf = document.getElementById('opp-date').value || todayISO();
-    importOpportunitiesCSV(await readFile(e.target), asOf);
+    importOpportunitiesCSV(await readFile(input), asOf);
     renderAll();
     await autoSyncToGitHub('Investment-Opportunities-Import');
-  } catch(err){ log('Fehler beim Laden des Opportunities-Exports: '+err.message, true); }
+    document.getElementById('load-opp-filename').textContent = '';
+    input.value = '';
+  } catch(err){ log('Fehler beim Laden des Opportunities-Exports: '+err.message, true); btn.disabled = false; }
 });
-document.getElementById('load-act').addEventListener('change', async (e) => {
+
+document.getElementById('load-act').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  const btn = document.getElementById('upload-act-btn');
+  const label = document.getElementById('load-act-filename');
+  btn.disabled = !file;
+  label.textContent = file ? `Ausgewählt: ${file.name}` : '';
+});
+document.getElementById('upload-act-btn').addEventListener('click', async () => {
+  const input = document.getElementById('load-act');
+  const btn = document.getElementById('upload-act-btn');
+  if (!input.files[0]) return;
+  btn.disabled = true;
   try{
-    importTransactionsCSV(await readFile(e.target), 'Activities-Export');
+    importTransactionsCSV(await readFile(input), 'Activities-Export');
     renderAll();
     await autoSyncToGitHub('Activities-Import');
-  } catch(err){ log('Fehler beim Laden des Activities-Exports: '+err.message, true); }
+    document.getElementById('load-act-filename').textContent = '';
+    input.value = '';
+  } catch(err){ log('Fehler beim Laden des Activities-Exports: '+err.message, true); btn.disabled = false; }
 });
 
 // ---------------------------------------------------------------- CSV BUILDERS (shared by download + GitHub save) --
