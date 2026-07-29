@@ -13,7 +13,8 @@
     --ink:#14181c;
     --ink-soft:#4b5560;
     --paper:#ffffff;
-    --paper-alt:#f5f6f7;
+    --paper-alt:#ffffff;
+    --hover:#f7f7f8;
     --line:#dde1e4;
     --line-soft:#eceef0;
     --green:#0d7a3f;
@@ -24,7 +25,7 @@
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   body{
-    background:var(--paper-alt);
+    background:#ffffff;
     color:var(--ink);
     font-family:'Inter',sans-serif;
     font-size:14px;
@@ -83,11 +84,12 @@
   @media(max-width:600px){.grid.cols-4,.grid.cols-3,.grid.cols-2{grid-template-columns:1fr;}}
 
   .card{
-    background:var(--paper);
-    border:1px solid var(--line);
-    border-radius:var(--radius);
-    padding:16px 18px;
+    background:transparent;
+    border:none;
+    border-radius:0;
+    padding:0;
   }
+  .card.kpi{border-bottom:1px solid var(--line); padding-bottom:14px;}
   .card.kpi .label{font-size:11px; text-transform:uppercase; letter-spacing:.07em; color:var(--ink-soft); margin-bottom:8px; font-family:'IBM Plex Mono',monospace;}
   .card.kpi .value{font-family:'Space Grotesk',sans-serif; font-size:26px; font-weight:600;}
   .card.kpi .delta{font-family:'IBM Plex Mono',monospace; font-size:12px; margin-top:6px;}
@@ -114,7 +116,7 @@
   thead th:hover{color:var(--ink);}
   thead th .arrow{color:var(--red); margin-left:3px;}
   tbody td{padding:8px 10px; border-bottom:1px solid var(--line-soft); vertical-align:middle;}
-  tbody tr:hover{background:var(--paper-alt);}
+  tbody tr:hover{background:var(--hover);}
   .num{font-family:'IBM Plex Mono',monospace; text-align:right; white-space:nowrap;}
   .tag{
     display:inline-block; font-family:'IBM Plex Mono',monospace; font-size:10px;
@@ -125,6 +127,10 @@
   .asset-link{color:var(--ink); text-decoration:none; border-bottom:1px solid var(--line); cursor:pointer;}
   .asset-link:hover{color:var(--red); border-bottom-color:var(--red);}
   .table-wrap{border:1px solid var(--line); border-radius:var(--radius); overflow:auto; max-height:640px;}
+  tfoot td{
+    padding:9px 10px; font-family:'IBM Plex Mono',monospace; font-weight:600;
+    border-top:2px solid var(--ink); position:sticky; bottom:0; background:#fff;
+  }
 
   /* ---------- Controls ---------- */
   .toolbar{display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:12px;}
@@ -226,24 +232,35 @@
   <section id="view-dashboard" class="view active">
     <div id="dashboard-empty" class="empty-state">
       <div class="step-num">i</div>
-      <p><strong>Noch keine Daten geladen.</strong><br>Öffne den Tab «Daten verwalten» und lade zuerst deine gespeicherten CSV-Dateien (falls vorhanden) sowie die aktuellen Splint-Exporte hoch.</p>
+      <p><strong>No data loaded yet.</strong><br>Open the "Data Management" tab and load your saved CSV files (if any) plus the latest Splint exports.</p>
     </div>
     <div id="dashboard-content" style="display:none;">
       <div class="grid cols-4" id="kpi-grid"></div>
 
       <div class="section-title">
-        <h2>Portfolio-Entwicklung</h2>
-        <span class="hint">Aktuell gehaltene Positionen · monatliche Kurse × heutige Stückzahl</span>
+        <h2>Portfolio Value Over Time</h2>
+        <span class="hint">Currently held positions · monthly prices × today's quantity</span>
       </div>
       <div class="card" id="portfolio-chart-card" style="padding:18px 18px 10px;"></div>
 
       <div class="section-title">
-        <h2>Top Positionen nach Wert</h2>
-        <span class="hint">Aktuell gehalten</span>
+        <h2>Top Positions by Value</h2>
+        <span class="hint">Currently held</span>
       </div>
       <div class="table-wrap">
         <table id="top-positions-table">
-          <thead><tr><th>Asset</th><th>Kategorie</th><th class="num">Splints</th><th class="num">Wert</th><th class="num">Performance</th></tr></thead>
+          <thead><tr><th>Asset</th><th>Category</th><th class="num">Splints</th><th class="num">Value</th><th class="num">Performance</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div class="section-title">
+        <h2>Cash Flow</h2>
+        <span class="hint">Monthly investments, exits/sales, net cash flow, and realized return</span>
+      </div>
+      <div class="table-wrap">
+        <table id="cashflow-table">
+          <thead><tr><th>Month</th><th class="num">Investments</th><th class="num">Exits/Sales</th><th class="num">Net Cash Flow</th><th class="num">Realized Return</th></tr></thead>
           <tbody></tbody>
         </table>
       </div>
@@ -282,6 +299,7 @@
           </tr>
         </thead>
         <tbody></tbody>
+        <tfoot><tr id="portfolio-total-row"></tr></tfoot>
       </table>
     </div>
   </section>
@@ -347,9 +365,10 @@
             <h2 id="sec-name">—</h2>
             <div class="sec-meta" id="sec-meta">—</div>
           </div>
-          <div class="grid cols-2" style="min-width:220px;">
+          <div class="grid cols-3" style="min-width:320px;">
             <div class="card kpi" style="padding:10px 12px;"><div class="label">Splints</div><div class="value" id="sec-owned" style="font-size:18px;">—</div></div>
             <div class="card kpi" style="padding:10px 12px;"><div class="label">Wert</div><div class="value" id="sec-value" style="font-size:18px;">—</div></div>
+            <div class="card kpi" style="padding:10px 12px;"><div class="label">Wert pro Splint</div><div class="value" id="sec-value-per-splint" style="font-size:18px;">—</div></div>
           </div>
         </div>
 
@@ -383,6 +402,11 @@
             <label>Asset-Subkategorie</label>
             <input type="text" id="sec-subcategory" list="subcategory-list" placeholder="z. B. Fussball, Gemälde, Sneaker …">
             <datalist id="subcategory-list"></datalist>
+          </div>
+          <div>
+            <label>Asset Category_old</label>
+            <input type="text" id="sec-category-old" list="category-old-list" placeholder="frühere Kategorie-Zuordnung …">
+            <datalist id="category-old-list"></datalist>
           </div>
           <div style="grid-column:1/-1;">
             <label>Notizen (Stammdaten, nicht aus Splint-Exporten)</label>
@@ -432,13 +456,15 @@
   <!-- ============ DATA MANAGEMENT ============ -->
   <section id="view-data" class="view">
     <div class="section-title">
-      <h2>GitHub-Verbindung</h2>
-      <span class="hint">prices.csv / transactions.csv / stammdaten.csv leben im Repo, nicht im Browser</span>
+      <h2>1 · GitHub-Verbindung</h2>
+      <span class="hint">prices.csv / transactions.csv / stammdaten.csv leben nur im Repo</span>
     </div>
     <div class="card upload-card">
       <div class="desc">
         Personal Access Token mit <strong>Contents: Read and write</strong> auf dieses Repo (Fine-grained PAT unter
-        github.com → Settings → Developer settings → Personal access tokens).
+        github.com → Settings → Developer settings → Personal access tokens). Sobald verbunden, wird <strong>jede Änderung
+        sofort auf GitHub gespeichert</strong> — Uploads, Stammdaten-Bearbeitung, alles. Es gibt keinen separaten
+        Zwischenstand mehr, der manuell gesichert werden müsste.
       </div>
       <div class="field-grid" style="grid-template-columns:1fr 1fr 1fr 2fr;">
         <div><label>Owner</label><input type="text" id="gh-owner" value="Munotstadt"></div>
@@ -448,24 +474,25 @@
       </div>
       <div class="upload-row" style="margin-top:6px;">
         <label class="hint" style="display:flex; align-items:center; gap:6px; cursor:pointer;">
-          <input type="checkbox" id="gh-remember" style="margin:0;"> Verbindung in diesem Browser merken
+          <input type="checkbox" id="gh-remember" style="margin:0;"> Verbindung in diesem Browser merken (automatisches Laden beim Öffnen)
         </label>
       </div>
       <div class="upload-row" style="margin-top:6px;">
-        <button class="btn primary" id="gh-load">Von GitHub laden</button>
-        <button class="btn primary" id="gh-save">Auf GitHub speichern</button>
+        <button class="btn ghost" id="gh-load">Manuell neu von GitHub laden</button>
+        <button class="btn ghost" id="gh-save">Manuell auf GitHub erzwingen</button>
         <button class="btn ghost" id="gh-forget">Verbindung vergessen</button>
         <span class="hint mono" id="gh-status"></span>
       </div>
       <div class="desc" style="margin-top:4px;">Pfade im Repo: <span class="mono">data/prices.csv</span>, <span class="mono">data/transactions.csv</span>, <span class="mono">data/stammdaten.csv</span> — werden beim ersten Speichern automatisch angelegt.</div>
-      <div class="desc" style="margin-top:4px;">Bei aktivierter Checkbox liegt das Token im <span class="mono">localStorage</span> dieses Browsers (unverschlüsselt) und wird beim nächsten Öffnen automatisch wieder eingefüllt. Nur auf einem eigenen, vertrauenswürdigen Gerät aktivieren — nicht auf gemeinsam genutzten Geräten. Ohne Häkchen bleibt alles nur im Speicher dieser Session, wie bisher.</div>
+      <div class="desc" style="margin-top:4px;">Bei aktivierter Checkbox liegt das Token im <span class="mono">localStorage</span> dieses Browsers (unverschlüsselt) und wird beim Öffnen automatisch wieder eingefüllt <em>und sofort der letzte GitHub-Stand geladen</em> — kein manueller Klick nötig. Nur auf einem eigenen, vertrauenswürdigen Gerät aktivieren.</div>
     </div>
 
-    <div class="section-title"><h2>Neue Splint-Exporte hochladen</h2><span class="hint">Die beiden Original-Exportdateien von Splint</span></div>
+    <div class="section-title"><h2>2 · Splint-Exporte hochladen</h2><span class="hint">Nur diese zwei Buttons betreffen die Original-Dateien von Splint</span></div>
+    <div class="desc" style="margin:-6px 0 10px;">Diese Uploads <strong>ergänzen</strong> prices.csv, transactions.csv und stammdaten.csv um neue Zeilen — bestehende Zeilen werden nie überschrieben oder gelöscht (Kurspunkte werden pro Asset/Monat aktualisiert, Transaktionen per eindeutiger ID dedupliziert). Ist GitHub verbunden, wird direkt danach automatisch gespeichert.</div>
     <div class="grid cols-2">
       <div class="card upload-card">
         <strong><span class="step-num">A</span>Investment Opportunities Export</strong>
-        <div class="desc">Aktuelle Positionen mit heutigem Kurs. Wird als ein Kurspunkt pro Monat in prices.csv übernommen (letzter Upload pro Monat überschreibt vorherigen).</div>
+        <div class="desc">Aktuelle Positionen mit heutigem Kurs. Wird als ein Kurspunkt pro Monat in prices.csv ergänzt/aktualisiert (letzter Upload pro Monat überschreibt nur den Monatswert, nie andere Monate).</div>
         <div class="upload-row">
           <label class="hint mono" style="white-space:nowrap;">Kursdatum</label>
           <input type="date" id="opp-date">
@@ -474,13 +501,12 @@
       </div>
       <div class="card upload-card">
         <strong><span class="step-num">B</span>Activities Export</strong>
-        <div class="desc">Vollständiges Transaktionsprotokoll von Splint. Neue Transaktions-IDs werden ergänzt, bestehende nicht dupliziert.</div>
+        <div class="desc">Vollständiges Transaktionsprotokoll von Splint. Neue Transaktions-IDs werden ergänzt, bestehende nicht dupliziert oder verändert.</div>
         <div class="upload-row"><input type="file" id="load-act" accept=".csv"></div>
       </div>
     </div>
-    <div class="hint" style="margin:4px 0 0;">Reihenfolge pro Session: zuerst oben «Von GitHub laden», danach A und B hochladen. Ist eine GitHub-Verbindung (Owner/Repo/Token) gesetzt, werden prices.csv, transactions.csv und stammdaten.csv nach jedem Upload automatisch im Repo aktualisiert — «Auf GitHub speichern» ist dann nur noch nötig, nachdem im Tab «Wertschriften» Name, Kategorie, Subkategorie oder Notizen geändert wurden.</div>
 
-    <div class="section-title"><h2>Manueller Import / Export (Fallback ohne Token)</h2><span class="hint">Nur nötig, falls keine GitHub-Verbindung genutzt wird</span></div>
+    <div class="section-title"><h2>3 · Erweitert / Fallback</h2><span class="hint">Nur nötig ohne GitHub-Verbindung</span></div>
     <div class="grid cols-2">
       <div class="card upload-card">
         <strong>prices.csv laden</strong>
@@ -624,7 +650,7 @@ function log(msg, isErr){
 
 function ensureMaster(assetId, assetName){
   if (!DB.master[assetId]){
-    DB.master[assetId] = {assetId, assetName: assetName || assetId, category:'', subCategory:'', notes:''};
+    DB.master[assetId] = {assetId, assetName: assetName || assetId, category:'', subCategory:'', categoryOld:'', notes:''};
   } else if (assetName && (!DB.master[assetId].assetName || DB.master[assetId].assetName === assetId)) {
     DB.master[assetId].assetName = assetName;
   }
@@ -689,6 +715,7 @@ function importMasterCSV(text){
       assetName: r['Asset Name'] || assetId,
       category: r['Asset Category'] || '',
       subCategory: r['Asset SubCategory'] || '',
+      categoryOld: r['Asset Category_old'] || '',
       notes: r['Notes'] || '',
     };
   });
@@ -760,19 +787,42 @@ function computeKPIs(){
     unrealized += h.performanceEUR;
     splintsTotal += h.owned;
   });
-  // realized P&L: net cash flow for assets no longer held
-  const cashByAsset = {};
-  DB.transactions.forEach(t => {
-    if (!cashByAsset[t.assetId]) cashByAsset[t.assetId] = 0;
-    if (/purchase/i.test(t.type)) cashByAsset[t.assetId] -= (t.amount + t.fees);
-    else cashByAsset[t.assetId] += (t.amount - t.fees);
-  });
-  let realized = 0, exitedCount = 0;
-  Object.keys(cashByAsset).forEach(id => {
-    if (!isCurrentlyHeld(id)) { realized += cashByAsset[id]; exitedCount++; }
-  });
+  const ledger = computeRealizedLedger();
+  const realized = ledger.reduce((sum, e) => sum + e.gain, 0);
+  const exitedCount = allAssetIds().filter(id => !isCurrentlyHeld(id) && DB.transactions.some(t=>t.assetId===id)).length;
   const heldCount = Object.values(DB.holdings).filter(h=>h.owned>0).length;
   return {currentValue, costBasis, unrealized, realized, total: unrealized+realized, splintsTotal, heldCount, exitedCount};
+}
+
+// Moving-average-cost ledger: walks every asset's transactions in date order, tracking a running
+// quantity and cost basis. Each sale realizes a gain = proceeds − (average cost × splints sold).
+// This correctly captures partial sales too, not just fully-exited assets.
+function computeRealizedLedger(){
+  const byAsset = {};
+  DB.transactions.forEach(t => {
+    if (!byAsset[t.assetId]) byAsset[t.assetId] = [];
+    byAsset[t.assetId].push(t);
+  });
+  const entries = [];
+  Object.keys(byAsset).forEach(assetId => {
+    const txs = byAsset[assetId].slice().sort((a,b)=> a.dateISO < b.dateISO ? -1 : (a.dateISO > b.dateISO ? 1 : 0));
+    let qty = 0, cost = 0;
+    txs.forEach(t => {
+      if (/purchase/i.test(t.type)){
+        qty += t.splints;
+        cost += (t.amount + t.fees);
+      } else {
+        const avgCost = qty > 0 ? cost / qty : 0;
+        const soldQty = Math.min(t.splints, qty);
+        const costOfSold = avgCost * soldQty;
+        const gain = (t.amount - t.fees) - costOfSold;
+        entries.push({assetId, dateISO: t.dateISO, dateDMY: t.dateDMY, gain});
+        qty -= soldQty;
+        cost -= costOfSold;
+      }
+    });
+  });
+  return entries;
 }
 
 // ---------------------------------------------------------------- XIRR (money-weighted, annualized) --
@@ -858,14 +908,17 @@ function assetLastExitDate(assetId){
   return sales.reduce((max, t) => (t.dateISO > max ? t.dateISO : max), sales[0].dateISO);
 }
 
-function computePortfolioIRR(){
+function computePortfolioIRR(assetIds){
+  const idSet = assetIds ? new Set(assetIds) : null;
   const cashflows = [];
   DB.transactions.forEach(t => {
+    if (idSet && !idSet.has(t.assetId)) return;
     if (/purchase/i.test(t.type)) cashflows.push({date: new Date(t.dateISO), amount: -(t.amount + t.fees)});
     else cashflows.push({date: new Date(t.dateISO), amount: (t.amount - t.fees)});
   });
   const today = new Date();
   Object.keys(DB.holdings).forEach(id => {
+    if (idSet && !idSet.has(id)) return;
     const h = DB.holdings[id];
     if (h.owned > 0) cashflows.push({date: today, amount: h.owned * h.currentValue});
   });
@@ -950,29 +1003,29 @@ function renderDashboard(){
   const kpiGrid = document.getElementById('kpi-grid');
   kpiGrid.innerHTML = `
     <div class="card kpi">
-      <div class="label">Aktueller Wert</div>
+      <div class="label">Current Value</div>
       <div class="value">${fmtMoney(k.currentValue)}</div>
-      <div class="delta">${k.heldCount} gehaltene Assets · ${fmtNum(k.splintsTotal,0)} Splints</div>
+      <div class="delta">${k.heldCount} assets held · ${fmtNum(k.splintsTotal,0)} splints</div>
     </div>
     <div class="card kpi">
-      <div class="label">Investiert (offene Positionen)</div>
+      <div class="label">Invested (Open Positions)</div>
       <div class="value">${fmtMoney(k.costBasis)}</div>
-      <div class="delta">Ø Einstandspreis, gewichtet</div>
+      <div class="delta">Weighted avg. cost basis</div>
     </div>
     <div class="card kpi">
-      <div class="label">Unrealisierte Performance</div>
-      <div class="value ${k.unrealized>=0?'':''}" style="color:${k.unrealized>=0?'var(--green)':'var(--red)'}">${fmtMoney(k.unrealized)}</div>
+      <div class="label">Unrealized Performance</div>
+      <div class="value" style="color:${k.unrealized>=0?'var(--green)':'var(--red)'}">${fmtMoney(k.unrealized)}</div>
       <div class="delta ${k.unrealized>=0?'pos':'neg'}">${fmtPct(k.costBasis? (k.unrealized/k.costBasis*100):0)}</div>
     </div>
     <div class="card kpi">
-      <div class="label">Realisierte Performance</div>
+      <div class="label">Realized Performance</div>
       <div class="value" style="color:${k.realized>=0?'var(--green)':'var(--red)'}">${fmtMoney(k.realized)}</div>
-      <div class="delta">${k.exitedCount} vollständig verkaufte Assets</div>
+      <div class="delta">${k.exitedCount} fully exited assets</div>
     </div>
     <div class="card kpi">
       <div class="label">Portfolio IRR p.a.</div>
       <div class="value" style="color:${portfolioIrr===null?'var(--ink)':(portfolioIrr>=0?'var(--green)':'var(--red)')}">${portfolioIrr===null?'—':fmtPct(portfolioIrr*100)}</div>
-      <div class="delta">Alle Cashflows, offene Positionen zu heutigem Wert</div>
+      <div class="delta">All cash flows; open positions at today's value</div>
     </div>
   `;
 
@@ -1006,7 +1059,37 @@ function renderDashboard(){
       <td class="num">${fmtMoney(r.value)}</td>
       <td class="num" style="color:${r.perf>=0?'var(--green)':'var(--red)'}">${fmtMoney(r.perf)} (${fmtPct(r.perfPct*100 <= 5 ? r.perfPct*100 : r.perfPct)})</td>
     </tr>
-  `).join('') || `<tr><td colspan="5" class="hint">Keine offenen Positionen.</td></tr>`;
+  `).join('') || `<tr><td colspan="5" class="hint">No open positions.</td></tr>`;
+
+  renderCashFlow(months);
+}
+
+function renderCashFlow(months){
+  const ledger = computeRealizedLedger();
+  const invByMonth = {}, exitByMonth = {}, realizedByMonth = {};
+  DB.transactions.forEach(t => {
+    const mo = t.dateISO.slice(0,7);
+    if (/purchase/i.test(t.type)) invByMonth[mo] = (invByMonth[mo]||0) + (t.amount + t.fees);
+    else exitByMonth[mo] = (exitByMonth[mo]||0) + (t.amount - t.fees);
+  });
+  ledger.forEach(e => {
+    const mo = e.dateISO.slice(0,7);
+    realizedByMonth[mo] = (realizedByMonth[mo]||0) + e.gain;
+  });
+  const allMonths = Array.from(new Set([...months, ...Object.keys(invByMonth), ...Object.keys(exitByMonth)])).sort();
+  document.querySelector('#cashflow-table tbody').innerHTML = allMonths.map(m => {
+    const inv = invByMonth[m] || 0;
+    const ext = exitByMonth[m] || 0;
+    const net = ext - inv;
+    const real = realizedByMonth[m] || 0;
+    return `<tr>
+      <td class="mono">${monthLabel(m)}</td>
+      <td class="num">${inv ? fmtMoney(-inv) : '—'}</td>
+      <td class="num">${ext ? fmtMoney(ext) : '—'}</td>
+      <td class="num" style="color:${net>=0?'var(--green)':'var(--red)'}">${fmtMoney(net)}</td>
+      <td class="num" style="color:${real>=0?'var(--green)':'var(--red)'}">${real ? fmtMoney(real) : '—'}</td>
+    </tr>`;
+  }).join('') || `<tr><td colspan="5" class="hint">No cash flow data yet.</td></tr>`;
 }
 
 function escapeHtml(s){
@@ -1080,13 +1163,17 @@ function renderSecurityDetail(assetId){
   if (!assetId){ empty.style.display=''; detail.style.display='none'; return; }
   empty.style.display='none'; detail.style.display='';
 
-  const m = DB.master[assetId] || {assetName:assetId, category:'', subCategory:'', notes:''};
+  const m = DB.master[assetId] || {assetName:assetId, category:'', subCategory:'', categoryOld:'', notes:''};
   const h = DB.holdings[assetId];
   const hasRealName = m.assetName && m.assetName !== assetId;
   document.getElementById('sec-name').textContent = hasRealName ? m.assetName : 'Ohne Namen';
   document.getElementById('sec-meta').textContent = `Asset-ID: ${assetId}` + (h && h.releaseDate ? ` · Release: ${isoToDMY(h.releaseDate)}` : '') + (h ? ` · Horizont ${h.minHorizon}-${h.maxHorizon} Jahre` : '');
   document.getElementById('sec-owned').textContent = h ? fmtNum(h.owned,0) : '0';
   document.getElementById('sec-value').textContent = h ? fmtMoney(h.owned*h.currentValue, h.currency) : '—';
+  const lp = latestPrice(assetId);
+  const valuePerSplint = h ? h.currentValue : (lp ? lp.price : null);
+  const valuePerSplintCurrency = h ? h.currency : (lp ? lp.currency : 'EUR');
+  document.getElementById('sec-value-per-splint').textContent = valuePerSplint===null ? '—' : fmtMoney(valuePerSplint, valuePerSplintCurrency);
 
   const perf = computeSecurityPerformance(assetId);
   const absEl = document.getElementById('sec-return-abs');
@@ -1102,14 +1189,16 @@ function renderSecurityDetail(assetId){
   document.getElementById('sec-name-input').value = hasRealName ? m.assetName : '';
   document.getElementById('sec-category').value = m.category || '';
   document.getElementById('sec-subcategory').value = m.subCategory || '';
+  document.getElementById('sec-category-old').value = m.categoryOld || '';
   document.getElementById('sec-notes').value = m.notes || '';
   document.getElementById('sec-save-status').textContent = '';
 
   // datalists for categories
-  const cats = new Set(), subcats = new Set();
-  Object.values(DB.master).forEach(mm => { if(mm.category) cats.add(mm.category); if(mm.subCategory) subcats.add(mm.subCategory); });
+  const cats = new Set(), subcats = new Set(), catsOld = new Set();
+  Object.values(DB.master).forEach(mm => { if(mm.category) cats.add(mm.category); if(mm.subCategory) subcats.add(mm.subCategory); if(mm.categoryOld) catsOld.add(mm.categoryOld); });
   document.getElementById('category-list').innerHTML = Array.from(cats).map(c=>`<option value="${escapeHtml(c)}">`).join('');
   document.getElementById('subcategory-list').innerHTML = Array.from(subcats).map(c=>`<option value="${escapeHtml(c)}">`).join('');
+  document.getElementById('category-old-list').innerHTML = Array.from(catsOld).map(c=>`<option value="${escapeHtml(c)}">`).join('');
 
   // price chart
   const series = assetPriceSeries(assetId);
@@ -1245,6 +1334,25 @@ function renderPortfolio(){
     </tr>
   `).join('') || `<tr><td colspan="11" class="hint">Keine Assets gefunden.</td></tr>`;
 
+  // Total / Subtotal row — reflects whatever is currently filtered/searched
+  const isFiltered = portfolioFilter !== 'all' || !!search;
+  const totalSplints = rows.reduce((s,r)=>s+r.splints, 0);
+  const totalValue = rows.reduce((s,r)=>s+r.value, 0);
+  const totalCost = rows.reduce((s,r)=>s+r.cost, 0);
+  const totalReturnAbs = rows.reduce((s,r)=>s+r.returnAbs, 0);
+  const totalReturnRel = totalCost > 0 ? (totalReturnAbs/totalCost*100) : null;
+  const totalIrr = computePortfolioIRR(rows.map(r=>r.id));
+  document.getElementById('portfolio-total-row').innerHTML = `
+    <td>${isFiltered ? `Subtotal (${rows.length})` : 'Total'}</td>
+    <td class="num">${fmtNum(totalSplints,0)}</td>
+    <td class="num">${fmtMoney(totalValue)}</td>
+    <td class="num">${fmtMoney(totalCost)}</td>
+    <td class="num" style="color:${totalReturnAbs>=0?'var(--green)':'var(--red)'}">${fmtMoney(totalReturnAbs)}</td>
+    <td class="num" style="color:${totalReturnRel===null?'inherit':(totalReturnRel>=0?'var(--green)':'var(--red)')}">${totalReturnRel===null?'—':fmtPct(totalReturnRel)}</td>
+    <td class="num" style="color:${totalIrr===null?'inherit':(totalIrr>=0?'var(--green)':'var(--red)')}">${totalIrr===null?'—':fmtPct(totalIrr*100)}</td>
+    <td></td><td></td><td></td><td></td>
+  `;
+
   document.querySelectorAll('#portfolio-table thead th').forEach(th => {
     th.querySelectorAll('.arrow').forEach(a=>a.remove());
     if (th.dataset.key === portfolioSort.key){
@@ -1306,7 +1414,7 @@ document.querySelectorAll('#tx-table thead th[data-key]').forEach(th => {
 
 document.getElementById('sec-search').addEventListener('input', populateSecuritySelect);
 document.getElementById('sec-select').addEventListener('change', (e) => renderSecurityDetail(e.target.value));
-document.getElementById('sec-save-btn').addEventListener('click', () => {
+document.getElementById('sec-save-btn').addEventListener('click', async () => {
   const id = document.getElementById('sec-select').value;
   if (!id) return;
   const m = ensureMaster(id, assetName(id));
@@ -1314,14 +1422,17 @@ document.getElementById('sec-save-btn').addEventListener('click', () => {
   m.assetName = nameInput || id; // falls kein Name vergeben: intern auf Asset-ID zurückfallen
   m.category = document.getElementById('sec-category').value.trim();
   m.subCategory = document.getElementById('sec-subcategory').value.trim();
+  m.categoryOld = document.getElementById('sec-category-old').value.trim();
   m.notes = document.getElementById('sec-notes').value.trim();
   document.getElementById('sec-save-status').textContent = 'Gespeichert ✓';
   populateSecuritySelect();
   document.getElementById('sec-select').value = id;
   renderSecurityDetail(id);
   renderDashboard();
+  renderPortfolio();
   renderTransactions();
   renderPerformance();
+  await autoSyncToGitHub('Stammdaten aktualisiert');
 });
 
 document.getElementById('perf-search').addEventListener('input', renderPerformance);
@@ -1356,14 +1467,14 @@ document.getElementById('load-opp').addEventListener('change', async (e) => {
     const asOf = document.getElementById('opp-date').value || todayISO();
     importOpportunitiesCSV(await readFile(e.target), asOf);
     renderAll();
-    await autoSaveAfterUpload();
+    await autoSyncToGitHub('Investment-Opportunities-Import');
   } catch(err){ log('Fehler beim Laden des Opportunities-Exports: '+err.message, true); }
 });
 document.getElementById('load-act').addEventListener('change', async (e) => {
   try{
     importTransactionsCSV(await readFile(e.target), 'Activities-Export');
     renderAll();
-    await autoSaveAfterUpload();
+    await autoSyncToGitHub('Activities-Import');
   } catch(err){ log('Fehler beim Laden des Activities-Exports: '+err.message, true); }
 });
 
@@ -1386,8 +1497,8 @@ function buildTransactionsCSV(){
 }
 function buildMasterCSV(){
   const rows = Object.values(DB.master).sort((a,b)=>a.assetName.localeCompare(b.assetName))
-    .map(m => ({AssetID:m.assetId, 'Asset Name':m.assetName, 'Asset Category':m.category, 'Asset SubCategory':m.subCategory, Notes:m.notes}));
-  return toCSV(['AssetID','Asset Name','Asset Category','Asset SubCategory','Notes'], rows);
+    .map(m => ({AssetID:m.assetId, 'Asset Name':m.assetName, 'Asset Category':m.category, 'Asset SubCategory':m.subCategory, 'Asset Category_old':m.categoryOld||'', Notes:m.notes}));
+  return toCSV(['AssetID','Asset Name','Asset Category','Asset SubCategory','Asset Category_old','Notes'], rows);
 }
 
 document.getElementById('export-prices').addEventListener('click', () => { downloadText('prices.csv', buildPricesCSV()); log('prices.csv heruntergeladen.'); });
@@ -1496,11 +1607,10 @@ function ghStatus(msg, isErr){
   el.style.color = isErr ? 'var(--red)' : 'var(--ink-soft)';
 }
 
-document.getElementById('gh-load').addEventListener('click', async () => {
+async function performGhLoad(){
   const cfg = ghConfig();
-  if (!cfg.owner || !cfg.repo || !cfg.token){ ghStatus('Owner, Repo und Token angeben.', true); return; }
+  if (!cfg.owner || !cfg.repo || !cfg.token){ ghStatus('Owner, Repo und Token angeben.', true); return {ok:false}; }
   ghStatus('Lade von GitHub …');
-  const btn = document.getElementById('gh-load'); btn.disabled = true;
   try{
     const files = [
       {path:'data/prices.csv', key:'prices', importer: t => importPricesCSV(t)},
@@ -1518,12 +1628,20 @@ document.getElementById('gh-load').addEventListener('click', async () => {
       }
     }
     renderAll();
-    ghStatus('Geladen ✓ (' + zurichTimestamp() + ')');
-    ghMaybePersist();
+    ghStatus('Aktueller Stand ✓ (' + zurichTimestamp() + ')');
+    return {ok:true};
   } catch(err){
     ghStatus('Fehler: ' + err.message, true);
     log('GitHub-Laden fehlgeschlagen: ' + err.message, true);
-  } finally { btn.disabled = false; }
+    return {ok:false, error:err};
+  }
+}
+
+document.getElementById('gh-load').addEventListener('click', async () => {
+  const btn = document.getElementById('gh-load'); btn.disabled = true;
+  const result = await performGhLoad();
+  if (result.ok) ghMaybePersist();
+  btn.disabled = false;
 });
 
 async function saveToGitHub(commitMessage){
@@ -1552,17 +1670,18 @@ async function saveToGitHub(commitMessage){
   }
 }
 
-// Automatically pushes prices.csv / transactions.csv / stammdaten.csv to GitHub right after
-// an Investment-Opportunities- or Activities-Export is uploaded, so the repo is always in sync.
-async function autoSaveAfterUpload(){
+// Pushes prices.csv / transactions.csv / stammdaten.csv to GitHub right after ANY mutating
+// action (Splint export upload, or a Stammdaten edit) so the repo always reflects the current
+// state in real time. No separate "unsaved session" ever accumulates when connected.
+async function autoSyncToGitHub(reason){
   const cfg = ghConfig();
   if (!cfg.owner || !cfg.repo || !cfg.token){
     log('GitHub nicht verbunden (Owner/Repo/Token fehlt) — bitte Stand manuell exportieren oder Verbindung herstellen.');
     return;
   }
   const ts = zurichTimestamp();
-  const result = await saveToGitHub(`Splint-Import – ${ts}`);
-  if (result.ok) log('Automatisch auf GitHub gesichert nach Upload.');
+  const result = await saveToGitHub(`${reason} – ${ts}`);
+  if (result.ok) log(`Automatisch auf GitHub gesichert (${reason}).`);
 }
 
 document.getElementById('gh-save').addEventListener('click', async () => {
@@ -1585,7 +1704,9 @@ document.getElementById('gh-forget').addEventListener('click', () => {
   log('Gespeicherte GitHub-Verbindung aus diesem Browser gelöscht.');
 });
 
-// Restore a previously remembered connection (owner/repo/branch/token), if any.
+// Restore a previously remembered connection (owner/repo/branch/token), if any — and
+// immediately fetch the current GitHub state so the last known state shows right away,
+// with no manual "load" click required.
 (function restoreGhConfig(){
   const saved = ghLoadConfigFromStorage();
   if (!saved) return;
@@ -1595,6 +1716,7 @@ document.getElementById('gh-forget').addEventListener('click', () => {
   if (saved.token) document.getElementById('gh-token').value = saved.token;
   document.getElementById('gh-remember').checked = true;
   log('Gespeicherte GitHub-Verbindung aus diesem Browser geladen.');
+  if (saved.token) performGhLoad();
 })();
 
 // default opp-date to today
