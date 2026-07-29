@@ -438,8 +438,7 @@
     <div class="card upload-card">
       <div class="desc">
         Personal Access Token mit <strong>Contents: Read and write</strong> auf dieses Repo (Fine-grained PAT unter
-        github.com → Settings → Developer settings → Personal access tokens). Das Token wird nur im Speicher dieser Session
-        gehalten — nirgends gespeichert, verschwindet beim Neuladen der Seite.
+        github.com → Settings → Developer settings → Personal access tokens).
       </div>
       <div class="field-grid" style="grid-template-columns:1fr 1fr 1fr 2fr;">
         <div><label>Owner</label><input type="text" id="gh-owner" value="Munotstadt"></div>
@@ -448,11 +447,18 @@
         <div><label>Personal Access Token</label><input type="password" id="gh-token" placeholder="ghp_ / github_pat_ …"></div>
       </div>
       <div class="upload-row" style="margin-top:6px;">
+        <label class="hint" style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+          <input type="checkbox" id="gh-remember" style="margin:0;"> Verbindung in diesem Browser merken
+        </label>
+      </div>
+      <div class="upload-row" style="margin-top:6px;">
         <button class="btn primary" id="gh-load">Von GitHub laden</button>
         <button class="btn primary" id="gh-save">Auf GitHub speichern</button>
+        <button class="btn ghost" id="gh-forget">Verbindung vergessen</button>
         <span class="hint mono" id="gh-status"></span>
       </div>
       <div class="desc" style="margin-top:4px;">Pfade im Repo: <span class="mono">data/prices.csv</span>, <span class="mono">data/transactions.csv</span>, <span class="mono">data/stammdaten.csv</span> — werden beim ersten Speichern automatisch angelegt.</div>
+      <div class="desc" style="margin-top:4px;">Bei aktivierter Checkbox liegt das Token im <span class="mono">localStorage</span> dieses Browsers (unverschlüsselt) und wird beim nächsten Öffnen automatisch wieder eingefüllt. Nur auf einem eigenen, vertrauenswürdigen Gerät aktivieren — nicht auf gemeinsam genutzten Geräten. Ohne Häkchen bleibt alles nur im Speicher dieser Session, wie bisher.</div>
     </div>
 
     <div class="section-title"><h2>Neue Splint-Exporte hochladen</h2><span class="hint">Die beiden Original-Exportdateien von Splint</span></div>
@@ -1397,11 +1403,32 @@ document.getElementById('reset-all').addEventListener('click', () => {
 });
 
 // ---------------------------------------------------------------- GITHUB CONTENTS API --
-// Token lives only in this in-memory object for the lifetime of the page — never written to
-// localStorage/sessionStorage/cookies, so it disappears on reload and is never persisted anywhere.
+// Token lives in memory only, UNLESS the person explicitly ticks "Verbindung in diesem
+// Browser merken" — only then is it written to localStorage (opt-in, off by default).
 const GH = {
   shas: {prices:null, transactions:null, master:null},
 };
+const GH_STORAGE_KEY = 'splint-tracker-gh-config';
+
+function ghSaveConfigToStorage(){
+  try{
+    const cfg = ghConfig();
+    localStorage.setItem(GH_STORAGE_KEY, JSON.stringify(cfg));
+  } catch(err){ log('Konnte Verbindung nicht im Browser speichern: ' + err.message, true); }
+}
+function ghForgetConfigFromStorage(){
+  try{ localStorage.removeItem(GH_STORAGE_KEY); } catch(err){ /* ignore */ }
+}
+function ghLoadConfigFromStorage(){
+  try{
+    const raw = localStorage.getItem(GH_STORAGE_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch(err){ return null; }
+}
+function ghMaybePersist(){
+  if (document.getElementById('gh-remember').checked) ghSaveConfigToStorage();
+}
 
 function b64EncodeUnicode(str){
   return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (m, p1) => String.fromCharCode(parseInt(p1, 16))));
@@ -1492,6 +1519,7 @@ document.getElementById('gh-load').addEventListener('click', async () => {
     }
     renderAll();
     ghStatus('Geladen ✓ (' + zurichTimestamp() + ')');
+    ghMaybePersist();
   } catch(err){
     ghStatus('Fehler: ' + err.message, true);
     log('GitHub-Laden fehlgeschlagen: ' + err.message, true);
@@ -1541,8 +1569,33 @@ document.getElementById('gh-save').addEventListener('click', async () => {
   const btn = document.getElementById('gh-save'); btn.disabled = true;
   const result = await saveToGitHub();
   if (result.reason === 'no-config') ghStatus('Owner, Repo und Token angeben.', true);
+  if (result.ok) ghMaybePersist();
   btn.disabled = false;
 });
+
+document.getElementById('gh-remember').addEventListener('change', (e) => {
+  if (e.target.checked) { ghSaveConfigToStorage(); log('Verbindung wird ab jetzt in diesem Browser gespeichert.'); }
+  else { ghForgetConfigFromStorage(); log('Verbindung wird nicht mehr im Browser gespeichert.'); }
+});
+document.getElementById('gh-forget').addEventListener('click', () => {
+  ghForgetConfigFromStorage();
+  document.getElementById('gh-token').value = '';
+  document.getElementById('gh-remember').checked = false;
+  ghStatus('Gespeicherte Verbindung gelöscht.');
+  log('Gespeicherte GitHub-Verbindung aus diesem Browser gelöscht.');
+});
+
+// Restore a previously remembered connection (owner/repo/branch/token), if any.
+(function restoreGhConfig(){
+  const saved = ghLoadConfigFromStorage();
+  if (!saved) return;
+  if (saved.owner) document.getElementById('gh-owner').value = saved.owner;
+  if (saved.repo) document.getElementById('gh-repo').value = saved.repo;
+  if (saved.branch) document.getElementById('gh-branch').value = saved.branch;
+  if (saved.token) document.getElementById('gh-token').value = saved.token;
+  document.getElementById('gh-remember').checked = true;
+  log('Gespeicherte GitHub-Verbindung aus diesem Browser geladen.');
+})();
 
 // default opp-date to today
 document.getElementById('opp-date').value = todayISO();
