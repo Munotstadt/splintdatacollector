@@ -343,6 +343,7 @@
             <th data-key="splints" class="num">Splints</th>
             <th data-key="amount" class="num">Betrag</th>
             <th data-key="pricePerSplint" class="num">Preis/Splint</th>
+            <th data-key="day1Profit" class="num">Day1Profit</th>
             <th data-key="fees" class="num">Gebühren</th>
             <th data-key="id">Trans.-ID</th>
             <th>Beleg</th>
@@ -436,7 +437,7 @@
       <div class="section-title"><h2>Transaktionen dieses Assets</h2></div>
       <div class="table-wrap">
         <table id="sec-tx-table">
-          <thead><tr><th>Datum</th><th>Typ</th><th class="num">Splints</th><th class="num">Betrag</th><th class="num">Preis/Splint</th><th class="num">Gebühren</th></tr></thead>
+          <thead><tr><th>Datum</th><th>Typ</th><th class="num">Splints</th><th class="num">Betrag</th><th class="num">Preis/Splint</th><th class="num">Day1Profit</th><th class="num">Gebühren</th></tr></thead>
           <tbody></tbody>
         </table>
       </div>
@@ -723,6 +724,7 @@ function importTransactionsCSV(text, sourceLabel){
       fees: feesP.amount,
       confirmation: r['Purchase/Sale Confirmation'] || r['confirmation'] || '',
       splints,
+      day1Profit: (r['Day1Profit'] !== undefined && r['Day1Profit'] !== null) ? r['Day1Profit'] : '',
     });
     added++;
   });
@@ -1287,6 +1289,8 @@ function renderTransactions(){
   );
   rows.sort((a,b) => {
     let av = a[txSort.key], bv = b[txSort.key];
+    if (av === null || av === undefined || av === '') av = -Infinity;
+    if (bv === null || bv === undefined || bv === '') bv = -Infinity;
     if (typeof av === 'string') av = av.toLowerCase();
     if (typeof bv === 'string') bv = bv.toLowerCase();
     if (av < bv) return -1*txSort.dir;
@@ -1302,11 +1306,12 @@ function renderTransactions(){
       <td class="num">${fmtNum(r.splints,2)}</td>
       <td class="num">${fmtMoney(r.amount, r.currency)}</td>
       <td class="num">${fmtMoney(r.pricePerSplint, r.currency)}</td>
+      <td class="num"><input type="number" step="0.01" class="day1profit-input" data-tx-id="${escapeHtml(r.id)}" value="${(r.day1Profit===''||r.day1Profit===undefined||r.day1Profit===null)?'':r.day1Profit}" placeholder="—" style="width:72px;text-align:right;"> %</td>
       <td class="num">${fmtMoney(r.fees, r.currency)}</td>
       <td class="mono">${r.id}</td>
       <td>${r.confirmation ? `<span class="hint mono" title="${escapeHtml(r.confirmation)}">Beleg</span>` : ''}</td>
     </tr>
-  `).join('') || `<tr><td colspan="9" class="hint">Keine Transaktionen gefunden.</td></tr>`;
+  `).join('') || `<tr><td colspan="10" class="hint">Keine Transaktionen gefunden.</td></tr>`;
 
   // header sort arrows
   document.querySelectorAll('#tx-table thead th').forEach(th => {
@@ -1389,9 +1394,10 @@ function renderSecurityDetail(assetId){
       <td class="num">${fmtNum(t.splints,2)}</td>
       <td class="num">${fmtMoney(t.amount, t.currency)}</td>
       <td class="num">${fmtMoney(t.pricePerSplint, t.currency)}</td>
+      <td class="num">${(t.day1Profit===''||t.day1Profit===undefined||t.day1Profit===null||isNaN(t.day1Profit))?'<span class="hint">—</span>':fmtPct(Number(t.day1Profit),2)}</td>
       <td class="num">${fmtMoney(t.fees, t.currency)}</td>
     </tr>
-  `).join('') || `<tr><td colspan="6" class="hint">Keine Transaktionen.</td></tr>`;
+  `).join('') || `<tr><td colspan="7" class="hint">Keine Transaktionen.</td></tr>`;
 }
 
 // ---------------------------------------------------------------- RENDER: PERFORMANCE --
@@ -1570,6 +1576,15 @@ document.querySelectorAll('nav.tabs button').forEach(btn => {
 
 document.getElementById('tx-search').addEventListener('input', renderTransactions);
 document.getElementById('tx-type-filter').addEventListener('change', renderTransactions);
+document.querySelector('#tx-table tbody').addEventListener('change', async (e) => {
+  const input = e.target.closest('.day1profit-input');
+  if (!input) return;
+  const tx = DB.transactions.find(t => t.id === input.dataset.txId);
+  if (!tx) return;
+  const raw = input.value.trim();
+  tx.day1Profit = raw === '' ? '' : parseFloat(raw);
+  await autoSyncToGitHub('Day1Profit-Bearbeitung');
+});
 
 document.getElementById('portfolio-search').addEventListener('input', renderPortfolio);
 document.querySelectorAll('#portfolio-table thead th[data-key]').forEach(th => {
@@ -1702,8 +1717,9 @@ function buildTransactionsCSV(){
       'Date Of Transaction': t.dateDMY, 'Money Amount': `${t.amount.toFixed(2)} ${t.currency}`,
       'Purchase/Sale Price Per Splint': `${t.pricePerSplint.toFixed(2)} ${t.currency}`,
       'Fees': `${t.fees.toFixed(2)} ${t.currency}`, 'Purchase/Sale Confirmation': t.confirmation,
+      'Day1Profit': t.day1Profit ?? '',
     }));
-  return toCSV(['Transaction ID','Transaction Type','Asset ID','Date Of Transaction','Money Amount','Purchase/Sale Price Per Splint','Fees','Purchase/Sale Confirmation'], rows);
+  return toCSV(['Transaction ID','Transaction Type','Asset ID','Date Of Transaction','Money Amount','Purchase/Sale Price Per Splint','Fees','Purchase/Sale Confirmation','Day1Profit'], rows);
 }
 function buildMasterCSV(){
   const rows = Object.values(DB.master).sort((a,b)=>a.assetName.localeCompare(b.assetName))
