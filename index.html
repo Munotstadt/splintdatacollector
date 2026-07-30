@@ -305,6 +305,7 @@
             <th data-key="irr" class="num">IRR p.a.</th>
             <th data-key="firstBuy">1. Kauf</th>
             <th data-key="exitDate">Exit/Verkauf</th>
+            <th data-key="targetExitYear" class="num">Horizont bis</th>
             <th data-key="category">Kategorie</th>
             <th data-key="subCategory">Subkategorie</th>
           </tr>
@@ -438,6 +439,27 @@
       <div class="table-wrap">
         <table id="sec-tx-table">
           <thead><tr><th>Datum</th><th>Typ</th><th class="num">Splints</th><th class="num">Betrag</th><th class="num">Preis/Splint</th><th class="num">Day1Profit</th><th class="num">Gebühren</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div class="section-title"><h2>Ähnliche Investments</h2><span class="hint" id="sec-similar-hint">Gleiche Kategorie &amp; Subkategorie</span></div>
+      <div class="table-wrap">
+        <table id="sec-similar-table">
+          <thead>
+            <tr>
+              <th>Security</th>
+              <th class="num">Splints</th>
+              <th class="num">Wert</th>
+              <th class="num">Kosten</th>
+              <th class="num">Return abs.</th>
+              <th class="num">Return rel.</th>
+              <th class="num">IRR p.a.</th>
+              <th>1. Kauf</th>
+              <th>Exit/Verkauf</th>
+              <th class="num">Horizont bis</th>
+            </tr>
+          </thead>
           <tbody></tbody>
         </table>
       </div>
@@ -659,6 +681,11 @@ function signColor(n){
   if (n === undefined || n === null || isNaN(n) || n === 0) return 'var(--ink-soft)';
   return n > 0 ? 'var(--green)' : 'var(--red)';
 }
+// Soft pastel red→yellow→green background for a value t normalized to [0,1] within its row's range.
+function heatColor(t){
+  const hue = Math.max(0, Math.min(1, t)) * 120; // 0=red, 60=yellow, 120=green
+  return `hsl(${hue.toFixed(0)}, 70%, 88%)`;
+}
 function todayISO(){
   const d = new Date();
   return d.toISOString().slice(0,10);
@@ -675,7 +702,7 @@ function log(msg, isErr){
 
 function ensureMaster(assetId, assetName){
   if (!DB.master[assetId]){
-    DB.master[assetId] = {assetId, assetName: assetName || assetId, category:'', subCategory:'', categoryOld:'', notes:''};
+    DB.master[assetId] = {assetId, assetName: assetName || assetId, category:'', subCategory:'', categoryOld:'', notes:'', releaseDate:'', minHorizon:'', maxHorizon:''};
   } else if (assetName && (!DB.master[assetId].assetName || DB.master[assetId].assetName === assetId)) {
     DB.master[assetId].assetName = assetName;
   }
@@ -743,6 +770,9 @@ function importMasterCSV(text){
       subCategory: r['Asset SubCategory'] || '',
       categoryOld: r['Asset Category_old'] || '',
       notes: r['Notes'] || '',
+      releaseDate: r['Release Date'] || '',
+      minHorizon: r['Min Horizon'] || '',
+      maxHorizon: r['Max Horizon'] || '',
     };
   });
   log(`stammdaten.csv geladen: ${rows.length} Assets.`);
@@ -759,11 +789,17 @@ function importOpportunitiesCSV(text, asOfISO){
     if (!assetId) return;
     const name = r['Asset Name'];
     ensureMaster(assetId, name);
+    const releaseDate = (r['Release Date']||'').slice(0,10);
+    const minHorizon = r['Minimum Investment Horizon'];
+    const maxHorizon = r['Maximum Investment Horizon'];
+    if (releaseDate) DB.master[assetId].releaseDate = releaseDate;
+    if (minHorizon) DB.master[assetId].minHorizon = minHorizon;
+    if (maxHorizon) DB.master[assetId].maxHorizon = maxHorizon;
     DB.holdings[assetId] = {
       assetName: name,
-      releaseDate: (r['Release Date']||'').slice(0,10),
-      minHorizon: r['Minimum Investment Horizon'],
-      maxHorizon: r['Maximum Investment Horizon'],
+      releaseDate,
+      minHorizon,
+      maxHorizon,
       owned: parseFloat(r['Owned Splints']) || 0,
       currentValue: parseFloat(r['Current Splint Value']) || 0,
       avgPurchasePrice: parseFloat(r['Average Purchase Price Per Splint']) || 0,
@@ -827,6 +863,17 @@ function currentPricePerSplint(assetId){
 }
 function isCurrentlyHeld(assetId){
   return computeOpenPosition(assetId).qty > 0.0001;
+}
+// Estimated target-exit year: release year + average of min/max investment horizon (rounded).
+// e.g. Release 2023, Horizont 5-7 Jahre -> Schnitt 6 Jahre -> 2023 + 6 = 2029.
+function computeTargetExitYear(assetId){
+  const m = DB.master[assetId];
+  if (!m || !m.releaseDate) return null;
+  const releaseYear = parseInt(m.releaseDate.slice(0,4), 10);
+  const minH = parseFloat(m.minHorizon), maxH = parseFloat(m.maxHorizon);
+  if (!releaseYear || isNaN(minH) || isNaN(maxH)) return null;
+  const avgH = Math.round((minH + maxH) / 2);
+  return releaseYear + avgH;
 }
 function latestPrice(assetId){
   const list = DB.prices.filter(p => p.assetId === assetId).sort((a,b)=> a.month < b.month ? -1 : 1);
@@ -1063,6 +1110,87 @@ function svgLineChart(points, opts={}){
   return `<svg viewBox="0 0 ${w} ${h}" width="100%" height="${h}" preserveAspectRatio="xMidYMid meet">
     ${ticksY}
     <polygon points="${areaPts}" fill="#E30613" opacity="0.07"/>
+    <polyline points="${linePts}" fill="none" stroke="#E30613" stroke-width="2"/>
+    ${dots}
+    ${labelsX}
+  </svg>`;
+}
+
+// Kursverlauf: price line on the right axis (2 decimals) + month-over-month % change as
+// bars on the left axis (green = up, red = down, grey = flat), sharing the same x-axis.
+function svgPriceChangeChart(series, opts={}){
+  // series: [{month, price}] ascending by month
+  const w = opts.width || 900, h = opts.height || 240;
+  const padL = 54, padR = 54, padT = 16, padB = 28;
+  const innerW = w - padL - padR, innerH = h - padT - padB;
+  if (!series.length) return `<div class="empty-state" style="border:none;padding:30px;">Keine Kursdaten vorhanden.</div>`;
+  const n = series.length;
+  const prices = series.map(p=>p.price);
+  let pMin = Math.min(...prices), pMax = Math.max(...prices);
+  if (pMin === pMax){ pMin -= 1; pMax += 1; }
+  const pPad = (pMax-pMin)*0.1 || 1;
+  pMin -= pPad; pMax += pPad;
+  const pRange = pMax - pMin;
+
+  const changes = series.map((p,i)=> i===0 ? null : (series[i-1].price ? ((p.price - series[i-1].price)/series[i-1].price*100) : null));
+  const changeVals = changes.filter(v=>v!==null);
+  let cMax = changeVals.length ? Math.max(...changeVals.map(Math.abs)) : 1;
+  if (cMax === 0) cMax = 1;
+  cMax *= 1.2;
+  const cRange = cMax*2;
+
+  const x = i => padL + (n===1 ? innerW/2 : (i/(n-1))*innerW);
+  const yPrice = v => padT + innerH - ((v-pMin)/pRange)*innerH;
+  const yChange = v => padT + innerH - ((v+cMax)/cRange)*innerH;
+  const zeroY = yChange(0);
+
+  let ticksRight = '', ticksLeft = '';
+  const nTicks = 4;
+  for(let i=0;i<=nTicks;i++){
+    const v = pMin + (pRange*i/nTicks);
+    const yy = yPrice(v);
+    if (i>0 && i<nTicks) ticksRight += `<line x1="${padL}" y1="${yy.toFixed(1)}" x2="${w-padR}" y2="${yy.toFixed(1)}" stroke="#eceef0" stroke-width="1"/>`;
+    ticksRight += `<text x="${w-padR+8}" y="${(yy+3).toFixed(1)}" text-anchor="start" class="chart-tooltip-label">${fmtNum(v,2)}</text>`;
+  }
+  for(let i=0;i<=nTicks;i++){
+    const v = -cMax + (cRange*i/nTicks);
+    const yy = yChange(v);
+    ticksLeft += `<text x="${padL-8}" y="${(yy+3).toFixed(1)}" text-anchor="end" class="chart-tooltip-label">${fmtNum(v,0)}%</text>`;
+  }
+  ticksLeft += `<line x1="${padL}" y1="${zeroY.toFixed(1)}" x2="${w-padR}" y2="${zeroY.toFixed(1)}" stroke="#d8dadd" stroke-width="1" stroke-dasharray="3,3"/>`;
+
+  let labelsX = '';
+  const step = Math.max(1, Math.ceil(n/8));
+  series.forEach((p,i)=>{
+    if (i % step === 0 || i === n-1){
+      labelsX += `<text x="${x(i).toFixed(1)}" y="${h-8}" text-anchor="middle" class="chart-tooltip-label">${monthLabel(p.month)}</text>`;
+    }
+  });
+
+  const barW = Math.max(4, (innerW/n)*0.5);
+  let bars = '';
+  changes.forEach((c,i)=>{
+    if (c === null) return;
+    const yTop = Math.min(yChange(c), zeroY);
+    const barH = Math.max(1, Math.abs(yChange(c) - zeroY));
+    bars += `<rect x="${(x(i)-barW/2).toFixed(1)}" y="${yTop.toFixed(1)}" width="${barW.toFixed(1)}" height="${barH.toFixed(1)}" fill="${signColor(c)}" opacity="0.85"><title>${monthLabel(series[i].month)}: ${fmtPct(c,1)}</title></rect>`;
+  });
+
+  const linePts = series.map((p,i)=>`${x(i).toFixed(1)},${yPrice(p.price).toFixed(1)}`).join(' ');
+  let dots = '';
+  series.forEach((p,i)=>{
+    dots += `<circle cx="${x(i).toFixed(1)}" cy="${yPrice(p.price).toFixed(1)}" r="2.6" fill="#E30613"><title>${monthLabel(p.month)}: ${fmtNum(p.price,2)}</title></circle>`;
+  });
+
+  const legend = `<div style="display:flex;gap:16px;margin-bottom:6px;">
+    <span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-soft);"><span style="width:10px;height:10px;border-radius:2px;background:#E30613;display:inline-block;"></span>Kurs (rechts)</span>
+    <span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-soft);"><span style="width:10px;height:8px;border-radius:2px;background:var(--ink-soft);display:inline-block;"></span>Δ% zum Vormonat (links)</span>
+  </div>`;
+
+  return `${legend}<svg viewBox="0 0 ${w} ${h}" width="100%" height="${h}" preserveAspectRatio="xMidYMid meet">
+    ${ticksRight}
+    ${ticksLeft}
+    ${bars}
     <polyline points="${linePts}" fill="none" stroke="#E30613" stroke-width="2"/>
     ${dots}
     ${labelsX}
@@ -1306,7 +1434,7 @@ function renderTransactions(){
       <td class="num">${fmtNum(r.splints,2)}</td>
       <td class="num">${fmtMoney(r.amount, r.currency)}</td>
       <td class="num">${fmtMoney(r.pricePerSplint, r.currency)}</td>
-      <td class="num"><input type="number" step="0.01" class="day1profit-input" data-tx-id="${escapeHtml(r.id)}" value="${(r.day1Profit===''||r.day1Profit===undefined||r.day1Profit===null)?'':r.day1Profit}" placeholder="—" style="width:72px;text-align:right;"> %</td>
+      <td class="num"><input type="number" step="0.01" class="day1profit-input" data-tx-id="${escapeHtml(r.id)}" value="${(r.day1Profit===''||r.day1Profit===undefined||r.day1Profit===null)?'':r.day1Profit}" placeholder="—" style="width:80px;text-align:right;"> ${escapeHtml(r.currency)}</td>
       <td class="num">${fmtMoney(r.fees, r.currency)}</td>
       <td class="mono">${r.id}</td>
       <td>${r.confirmation ? `<span class="hint mono" title="${escapeHtml(r.confirmation)}">Beleg</span>` : ''}</td>
@@ -1351,7 +1479,10 @@ function renderSecurityDetail(assetId){
   const cp = currentPricePerSplint(assetId);
   const hasRealName = m.assetName && m.assetName !== assetId;
   document.getElementById('sec-name').textContent = hasRealName ? m.assetName : 'Ohne Namen';
-  document.getElementById('sec-meta').textContent = `Asset-ID: ${assetId}` + (h && h.releaseDate ? ` · Release: ${isoToDMY(h.releaseDate)}` : '') + (h ? ` · Horizont ${h.minHorizon}-${h.maxHorizon} Jahre` : '');
+  const releaseDate = (h && h.releaseDate) || m.releaseDate || '';
+  const minHorizon = (h && h.minHorizon) || m.minHorizon || '';
+  const maxHorizon = (h && h.maxHorizon) || m.maxHorizon || '';
+  document.getElementById('sec-meta').textContent = `Asset-ID: ${assetId}` + (releaseDate ? ` · Release: ${isoToDMY(releaseDate)}` : '') + ((minHorizon&&maxHorizon) ? ` · Horizont ${minHorizon}-${maxHorizon} Jahre` : '');
   document.getElementById('sec-owned').textContent = fmtNum(pos.qty,0);
   document.getElementById('sec-value').textContent = pos.qty>0.0001 ? (cp.price===null ? '—' : fmtMoney(pos.qty*cp.price, cp.currency)) : fmtMoney(0);
   document.getElementById('sec-value-per-splint').textContent = cp.price===null ? '—' : fmtMoney(cp.price, cp.currency);
@@ -1383,7 +1514,7 @@ function renderSecurityDetail(assetId){
 
   // price chart
   const series = assetPriceSeries(assetId);
-  document.getElementById('sec-chart-card').innerHTML = svgLineChart(series.map(p=>({label:monthLabel(p.month), value:p.price})));
+  document.getElementById('sec-chart-card').innerHTML = svgPriceChangeChart(series);
 
   // transactions for this asset
   const txs = DB.transactions.filter(t=>t.assetId===assetId).sort((a,b)=> a.dateISO < b.dateISO ? 1 : -1);
@@ -1391,13 +1522,42 @@ function renderSecurityDetail(assetId){
     <tr>
       <td class="mono">${t.dateDMY}</td>
       <td><span class="tag ${/purchase/i.test(t.type)?'buy':'sell'}">${t.type}</span></td>
-      <td class="num">${fmtNum(t.splints,2)}</td>
+      <td class="num">${fmtNum(t.splints,0)}</td>
       <td class="num">${fmtMoney(t.amount, t.currency)}</td>
       <td class="num">${fmtMoney(t.pricePerSplint, t.currency)}</td>
-      <td class="num">${(t.day1Profit===''||t.day1Profit===undefined||t.day1Profit===null||isNaN(t.day1Profit))?'<span class="hint">—</span>':fmtPct(Number(t.day1Profit),2)}</td>
+      <td class="num">${(t.day1Profit===''||t.day1Profit===undefined||t.day1Profit===null||isNaN(t.day1Profit))?'<span class="hint">—</span>':fmtMoney(Number(t.day1Profit), t.currency, 2)}</td>
       <td class="num">${fmtMoney(t.fees, t.currency)}</td>
     </tr>
   `).join('') || `<tr><td colspan="7" class="hint">Keine Transaktionen.</td></tr>`;
+
+  // similar investments: same category & subcategory, excluding this asset itself
+  const myCat = m.category || '';
+  const mySub = m.subCategory || '';
+  let simIds = allAssetIds().filter(otherId => otherId !== assetId);
+  if (myCat || mySub){
+    simIds = simIds.filter(otherId => {
+      const om = DB.master[otherId];
+      return om && (om.category||'') === myCat && (om.subCategory||'') === mySub;
+    });
+  } else {
+    simIds = []; // no category/subcategory set on this asset -> nothing meaningful to compare
+  }
+  const simRows = simIds.map(computePortfolioRow).sort((a,b)=>b.value-a.value);
+  document.getElementById('sec-similar-hint').textContent = (myCat||mySub) ? `Gleiche Kategorie & Subkategorie: ${[myCat,mySub].filter(Boolean).join(' / ')}` : 'Keine Kategorie/Subkategorie hinterlegt';
+  document.querySelector('#sec-similar-table tbody').innerHTML = simRows.map(r => `
+    <tr>
+      <td>${assetLinkHTML(r.id, r.name)}${r.held?'':' <span class="hint">(verkauft)</span>'}</td>
+      <td class="num">${fmtNum(r.splints,0)}</td>
+      <td class="num">${fmtMoney(r.value)}</td>
+      <td class="num">${fmtMoney(r.cost)}</td>
+      <td class="num" style="color:${signColor(r.returnAbs)}">${fmtMoney(r.returnAbs)}</td>
+      <td class="num" style="color:${signColor(r.returnRel)}">${r.returnRel===null?'—':fmtPct(r.returnRel)}</td>
+      <td class="num" style="color:${signColor(r.irr)}">${r.irr===null?'—':fmtPct(r.irr*100)}</td>
+      <td class="mono">${r.firstBuy?isoToDMY(r.firstBuy):'—'}</td>
+      <td class="mono">${r.exitDate?isoToDMY(r.exitDate):'—'}</td>
+      <td class="num">${r.targetExitYear===null?'—':r.targetExitYear}</td>
+    </tr>
+  `).join('') || `<tr><td colspan="10" class="hint">Keine ähnlichen Investments gefunden.</td></tr>`;
 }
 
 // ---------------------------------------------------------------- RENDER: PERFORMANCE --
@@ -1420,12 +1580,19 @@ function renderPerformance(){
     // months oldest-to-newest first, then render the resulting cells newest-to-oldest (left to right).
     let lastVal = null;
     const cellsByMonth = {};
+    const rowVals = monthsAsc.map(m=>series[m]).filter(v=>v!==undefined);
+    const rowMin = rowVals.length ? Math.min(...rowVals) : null;
+    const rowMax = rowVals.length ? Math.max(...rowVals) : null;
     monthsAsc.forEach(m => {
       const v = series[m];
       if (v === undefined){ cellsByMonth[m] = `<td class="num hint">—</td>`; return; }
-      let display;
+      let display, bg = '';
       if (perfMode === 'price'){
         display = fmtNum(v);
+        if (rowMin !== null && rowMax !== null){
+          const t = rowMax === rowMin ? 0.5 : (v - rowMin) / (rowMax - rowMin);
+          bg = ` style="background:${heatColor(t)}"`;
+        }
       } else {
         if (lastVal === null || lastVal === 0){ display = '—'; }
         else {
@@ -1434,7 +1601,7 @@ function renderPerformance(){
         }
       }
       lastVal = v;
-      cellsByMonth[m] = `<td class="num">${display}</td>`;
+      cellsByMonth[m] = `<td class="num"${bg}>${display}</td>`;
     });
     const cells = monthsDesc.map(m => cellsByMonth[m]).join('');
     return `<tr><td>${assetLinkHTML(id, assetName(id))}${isCurrentlyHeld(id)?'':' <span class="hint">(verkauft)</span>'}</td>${cells}</tr>`;
@@ -1454,33 +1621,35 @@ function updateHeaderStatus(){
 let portfolioSort = {key:'value', dir:-1};
 let portfolioFilter = 'all';
 
+function computePortfolioRow(id){
+  const pos = computeOpenPosition(id);
+  const held = pos.qty > 0.0001;
+  const cp = currentPricePerSplint(id);
+  const value = held && cp.price !== null ? pos.qty * cp.price : 0;
+  const perf = computeSecurityPerformance(id);
+  const m = DB.master[id];
+  return {
+    id,
+    name: assetName(id),
+    held,
+    splints: held ? pos.qty : 0,
+    value,
+    cost: perf.invested,
+    returnAbs: perf.absolute,
+    returnRel: perf.relativePct,
+    irr: perf.irr,
+    firstBuy: assetFirstBuyDate(id),
+    exitDate: held ? null : assetLastExitDate(id),
+    targetExitYear: computeTargetExitYear(id),
+    category: m ? m.category : '',
+    subCategory: m ? m.subCategory : '',
+  };
+}
 function renderPortfolio(){
   const search = document.getElementById('portfolio-search').value.trim().toLowerCase();
   let ids = allAssetIds();
 
-  let rows = ids.map(id => {
-    const pos = computeOpenPosition(id);
-    const held = pos.qty > 0.0001;
-    const cp = currentPricePerSplint(id);
-    const value = held && cp.price !== null ? pos.qty * cp.price : 0;
-    const perf = computeSecurityPerformance(id);
-    const m = DB.master[id];
-    return {
-      id,
-      name: assetName(id),
-      held,
-      splints: held ? pos.qty : 0,
-      value,
-      cost: perf.invested,
-      returnAbs: perf.absolute,
-      returnRel: perf.relativePct,
-      irr: perf.irr,
-      firstBuy: assetFirstBuyDate(id),
-      exitDate: held ? null : assetLastExitDate(id),
-      category: m ? m.category : '',
-      subCategory: m ? m.subCategory : '',
-    };
-  });
+  let rows = ids.map(computePortfolioRow);
 
   if (portfolioFilter === 'held') rows = rows.filter(r => r.held);
   else if (portfolioFilter === 'sold') rows = rows.filter(r => !r.held);
@@ -1518,10 +1687,11 @@ function renderPortfolio(){
       <td class="num" style="color:${signColor(r.irr)}">${r.irr===null?'—':fmtPct(r.irr*100)}</td>
       <td class="mono">${r.firstBuy?isoToDMY(r.firstBuy):'—'}</td>
       <td class="mono">${r.exitDate?isoToDMY(r.exitDate):'—'}</td>
+      <td class="num">${r.targetExitYear===null?'—':r.targetExitYear}</td>
       <td>${escapeHtml(r.category)||'<span class="hint">—</span>'}</td>
       <td>${escapeHtml(r.subCategory)||'<span class="hint">—</span>'}</td>
     </tr>
-  `).join('') || `<tr><td colspan="11" class="hint">Keine Assets gefunden.</td></tr>`;
+  `).join('') || `<tr><td colspan="12" class="hint">Keine Assets gefunden.</td></tr>`;
 
   // Total / Subtotal row — reflects whatever is currently filtered/searched
   const isFiltered = portfolioFilter !== 'all' || !!search;
@@ -1539,7 +1709,7 @@ function renderPortfolio(){
     <td class="num" style="color:${signColor(totalReturnAbs)}">${fmtMoney(totalReturnAbs)}</td>
     <td class="num" style="color:${signColor(totalReturnRel)}">${totalReturnRel===null?'—':fmtPct(totalReturnRel)}</td>
     <td class="num" style="color:${signColor(totalIrr)}">${totalIrr===null?'—':fmtPct(totalIrr*100)}</td>
-    <td></td><td></td><td></td><td></td>
+    <td></td><td></td><td></td><td></td><td></td>
   `;
 
   document.querySelectorAll('#portfolio-table thead th').forEach(th => {
@@ -1723,8 +1893,8 @@ function buildTransactionsCSV(){
 }
 function buildMasterCSV(){
   const rows = Object.values(DB.master).sort((a,b)=>a.assetName.localeCompare(b.assetName))
-    .map(m => ({AssetID:m.assetId, 'Asset Name':m.assetName, 'Asset Category':m.category, 'Asset SubCategory':m.subCategory, 'Asset Category_old':m.categoryOld||'', Notes:m.notes}));
-  return toCSV(['AssetID','Asset Name','Asset Category','Asset SubCategory','Asset Category_old','Notes'], rows);
+    .map(m => ({AssetID:m.assetId, 'Asset Name':m.assetName, 'Asset Category':m.category, 'Asset SubCategory':m.subCategory, 'Asset Category_old':m.categoryOld||'', Notes:m.notes, 'Release Date':m.releaseDate||'', 'Min Horizon':m.minHorizon||'', 'Max Horizon':m.maxHorizon||''}));
+  return toCSV(['AssetID','Asset Name','Asset Category','Asset SubCategory','Asset Category_old','Notes','Release Date','Min Horizon','Max Horizon'], rows);
 }
 
 document.getElementById('export-prices').addEventListener('click', () => { downloadText('prices.csv', buildPricesCSV()); log('prices.csv heruntergeladen.'); });
