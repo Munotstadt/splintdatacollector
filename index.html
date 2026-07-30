@@ -303,6 +303,8 @@
             <th data-key="returnAbs" class="num">Return abs.</th>
             <th data-key="returnRel" class="num">Return rel.</th>
             <th data-key="irr" class="num">IRR p.a.</th>
+            <th data-key="eroi" class="num">eROI</th>
+            <th data-key="eroiVsIrr" class="num">eROI vs IRR</th>
             <th data-key="firstBuy">1. Kauf</th>
             <th data-key="exitDate">Exit/Verkauf</th>
             <th data-key="targetExitYear" class="num">Horizont bis</th>
@@ -385,7 +387,7 @@
           </div>
         </div>
 
-        <div class="grid cols-3" style="margin-top:14px; border-top:1px solid var(--line-soft); padding-top:14px;">
+        <div class="grid cols-4" style="margin-top:14px; border-top:1px solid var(--line-soft); padding-top:14px;">
           <div class="card kpi" style="padding:10px 12px;">
             <div class="label">Return absolut</div>
             <div class="value" id="sec-return-abs" style="font-size:18px;">—</div>
@@ -397,6 +399,10 @@
           <div class="card kpi" style="padding:10px 12px;">
             <div class="label">IRR p.a. (zeitgewichtet)</div>
             <div class="value" id="sec-irr" style="font-size:18px;">—</div>
+          </div>
+          <div class="card kpi" style="padding:10px 12px;">
+            <div class="label">eROI vs. IRR</div>
+            <div class="value" id="sec-eroi-diff" style="font-size:18px;">—</div>
           </div>
         </div>
         <div class="hint" style="margin-top:8px; font-size:11.5px;">Return = alle Käufe/Verkäufe dieses Assets, bei offener Position zusätzlich der aktuelle Wert als fiktiver Verkauf zu heute. IRR ist die annualisierte Rendite dieser Zahlungsreihe (Newton-Verfahren), berücksichtigt also den genauen Zeitpunkt jeder Transaktion.</div>
@@ -420,6 +426,10 @@
             <label>Asset Category_old</label>
             <input type="text" id="sec-category-old" list="category-old-list" placeholder="frühere Kategorie-Zuordnung …">
             <datalist id="category-old-list"></datalist>
+          </div>
+          <div>
+            <label>eROI (%, erwartete Rendite)</label>
+            <input type="number" step="0.01" id="sec-eroi" placeholder="z. B. 12.5">
           </div>
           <div style="grid-column:1/-1;">
             <label>Notizen (Stammdaten, nicht aus Splint-Exporten)</label>
@@ -702,7 +712,7 @@ function log(msg, isErr){
 
 function ensureMaster(assetId, assetName){
   if (!DB.master[assetId]){
-    DB.master[assetId] = {assetId, assetName: assetName || assetId, category:'', subCategory:'', categoryOld:'', notes:'', releaseDate:'', minHorizon:'', maxHorizon:''};
+    DB.master[assetId] = {assetId, assetName: assetName || assetId, category:'', subCategory:'', categoryOld:'', notes:'', releaseDate:'', minHorizon:'', maxHorizon:'', eROI:''};
   } else if (assetName && (!DB.master[assetId].assetName || DB.master[assetId].assetName === assetId)) {
     DB.master[assetId].assetName = assetName;
   }
@@ -773,6 +783,7 @@ function importMasterCSV(text){
       releaseDate: r['Release Date'] || '',
       minHorizon: r['Min Horizon'] || '',
       maxHorizon: r['Max Horizon'] || '',
+      eROI: r['eROI'] || '',
     };
   });
   log(`stammdaten.csv geladen: ${rows.length} Assets.`);
@@ -874,6 +885,16 @@ function computeTargetExitYear(assetId){
   if (!releaseYear || isNaN(minH) || isNaN(maxH)) return null;
   const avgH = Math.round((minH + maxH) / 2);
   return releaseYear + avgH;
+}
+// eROI (manually entered expected ROI, in %) vs. the realized/current IRR p.a. (a decimal rate,
+// e.g. 0.15 = 15%). Returns eROI% - IRR%, or null if eROI is missing or IRR can't be computed.
+function computeEroiVsIrr(assetId, irr){
+  const m = DB.master[assetId];
+  const eroiRaw = m ? m.eROI : '';
+  if (eroiRaw === '' || eroiRaw === undefined || eroiRaw === null) return null;
+  const eroi = parseFloat(eroiRaw);
+  if (isNaN(eroi) || irr === null || irr === undefined || isNaN(irr)) return null;
+  return eroi - irr * 100;
 }
 function latestPrice(assetId){
   const list = DB.prices.filter(p => p.assetId === assetId).sort((a,b)=> a.month < b.month ? -1 : 1);
@@ -1506,11 +1527,16 @@ function renderSecurityDetail(assetId){
   const irrEl = document.getElementById('sec-irr');
   irrEl.textContent = perf.irr === null ? '—' : fmtPct(perf.irr*100);
   irrEl.style.color = signColor(perf.irr);
+  const eroiDiff = computeEroiVsIrr(assetId, perf.irr);
+  const eroiDiffEl = document.getElementById('sec-eroi-diff');
+  eroiDiffEl.textContent = eroiDiff === null ? 'n/a' : fmtPct(eroiDiff,1);
+  eroiDiffEl.style.color = eroiDiff === null ? 'var(--ink-soft)' : signColor(eroiDiff);
 
   document.getElementById('sec-name-input').value = hasRealName ? m.assetName : '';
   document.getElementById('sec-category').value = m.category || '';
   document.getElementById('sec-subcategory').value = m.subCategory || '';
   document.getElementById('sec-category-old').value = m.categoryOld || '';
+  document.getElementById('sec-eroi').value = (m.eROI===''||m.eROI===undefined||m.eROI===null) ? '' : m.eROI;
   document.getElementById('sec-notes').value = m.notes || '';
   document.getElementById('sec-save-status').textContent = '';
 
@@ -1647,6 +1673,8 @@ function computePortfolioRow(id){
     returnAbs: perf.absolute,
     returnRel: perf.relativePct,
     irr: perf.irr,
+    eroi: m ? m.eROI : '',
+    eroiVsIrr: computeEroiVsIrr(id, perf.irr),
     firstBuy: assetFirstBuyDate(id),
     exitDate: held ? null : assetLastExitDate(id),
     targetExitYear: computeTargetExitYear(id),
@@ -1694,13 +1722,15 @@ function renderPortfolio(){
       <td class="num" style="color:${signColor(r.returnAbs)}">${fmtMoney(r.returnAbs)}</td>
       <td class="num" style="color:${signColor(r.returnRel)}">${r.returnRel===null?'—':fmtPct(r.returnRel)}</td>
       <td class="num" style="color:${signColor(r.irr)}">${r.irr===null?'—':fmtPct(r.irr*100)}</td>
+      <td class="num"><input type="number" step="0.01" class="eroi-input" data-asset-id="${escapeHtml(r.id)}" value="${(r.eroi===''||r.eroi===undefined||r.eroi===null)?'':r.eroi}" placeholder="—" style="width:64px;text-align:right;"> %</td>
+      <td class="num" data-eroi-diff-for="${escapeHtml(r.id)}" style="color:${r.eroiVsIrr===null?'var(--ink-soft)':signColor(r.eroiVsIrr)}">${r.eroiVsIrr===null?'n/a':fmtPct(r.eroiVsIrr,1)}</td>
       <td class="mono">${r.firstBuy?isoToDMY(r.firstBuy):'—'}</td>
       <td class="mono">${r.exitDate?isoToDMY(r.exitDate):'—'}</td>
       <td class="num">${!r.held?'n/a':(r.targetExitYear===null?'—':r.targetExitYear)}</td>
       <td>${escapeHtml(r.category)||'<span class="hint">—</span>'}</td>
       <td>${escapeHtml(r.subCategory)||'<span class="hint">—</span>'}</td>
     </tr>
-  `).join('') || `<tr><td colspan="12" class="hint">Keine Assets gefunden.</td></tr>`;
+  `).join('') || `<tr><td colspan="14" class="hint">Keine Assets gefunden.</td></tr>`;
 
   // Total / Subtotal row — reflects whatever is currently filtered/searched
   const isFiltered = portfolioFilter !== 'all' || !!search;
@@ -1718,7 +1748,7 @@ function renderPortfolio(){
     <td class="num" style="color:${signColor(totalReturnAbs)}">${fmtMoney(totalReturnAbs)}</td>
     <td class="num" style="color:${signColor(totalReturnRel)}">${totalReturnRel===null?'—':fmtPct(totalReturnRel)}</td>
     <td class="num" style="color:${signColor(totalIrr)}">${totalIrr===null?'—':fmtPct(totalIrr*100)}</td>
-    <td></td><td></td><td></td><td></td><td></td>
+    <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
   `;
 
   document.querySelectorAll('#portfolio-table thead th').forEach(th => {
@@ -1781,6 +1811,24 @@ document.getElementById('sec-chart-card').addEventListener('click', (e) => {
 });
 
 document.getElementById('portfolio-search').addEventListener('input', renderPortfolio);
+document.querySelector('#portfolio-table tbody').addEventListener('change', async (e) => {
+  const input = e.target.closest('.eroi-input');
+  if (!input) return;
+  const assetId = input.dataset.assetId;
+  const m = DB.master[assetId];
+  if (!m) return;
+  const raw = input.value.trim();
+  m.eROI = raw === '' ? '' : parseFloat(raw);
+  // live-update the dependent "eROI vs IRR" cell in this row without re-rendering the whole table
+  const perf = computeSecurityPerformance(assetId);
+  const diff = computeEroiVsIrr(assetId, perf.irr);
+  const diffCell = document.querySelector(`#portfolio-table td[data-eroi-diff-for="${assetId}"]`);
+  if (diffCell){
+    diffCell.textContent = diff===null ? 'n/a' : fmtPct(diff,1);
+    diffCell.style.color = diff===null ? 'var(--ink-soft)' : signColor(diff);
+  }
+  await autoSyncToGitHub('eROI-Bearbeitung');
+});
 document.querySelectorAll('#portfolio-table thead th[data-key]').forEach(th => {
   th.addEventListener('click', () => {
     if (portfolioSort.key === th.dataset.key) portfolioSort.dir *= -1;
@@ -1815,6 +1863,8 @@ document.getElementById('sec-save-btn').addEventListener('click', async () => {
   m.category = document.getElementById('sec-category').value.trim();
   m.subCategory = document.getElementById('sec-subcategory').value.trim();
   m.categoryOld = document.getElementById('sec-category-old').value.trim();
+  const eroiRaw = document.getElementById('sec-eroi').value.trim();
+  m.eROI = eroiRaw === '' ? '' : parseFloat(eroiRaw);
   m.notes = document.getElementById('sec-notes').value.trim();
   document.getElementById('sec-save-status').textContent = 'Gespeichert ✓';
   populateSecuritySelect();
@@ -1917,8 +1967,8 @@ function buildTransactionsCSV(){
 }
 function buildMasterCSV(){
   const rows = Object.values(DB.master).sort((a,b)=>a.assetName.localeCompare(b.assetName))
-    .map(m => ({AssetID:m.assetId, 'Asset Name':m.assetName, 'Asset Category':m.category, 'Asset SubCategory':m.subCategory, 'Asset Category_old':m.categoryOld||'', Notes:m.notes, 'Release Date':m.releaseDate||'', 'Min Horizon':m.minHorizon||'', 'Max Horizon':m.maxHorizon||''}));
-  return toCSV(['AssetID','Asset Name','Asset Category','Asset SubCategory','Asset Category_old','Notes','Release Date','Min Horizon','Max Horizon'], rows);
+    .map(m => ({AssetID:m.assetId, 'Asset Name':m.assetName, 'Asset Category':m.category, 'Asset SubCategory':m.subCategory, 'Asset Category_old':m.categoryOld||'', Notes:m.notes, 'Release Date':m.releaseDate||'', 'Min Horizon':m.minHorizon||'', 'Max Horizon':m.maxHorizon||'', 'eROI':m.eROI||''}));
+  return toCSV(['AssetID','Asset Name','Asset Category','Asset SubCategory','Asset Category_old','Notes','Release Date','Min Horizon','Max Horizon','eROI'], rows);
 }
 
 document.getElementById('export-prices').addEventListener('click', () => { downloadText('prices.csv', buildPricesCSV()); log('prices.csv heruntergeladen.'); });
