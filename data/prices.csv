@@ -6,7 +6,7 @@ AssetID,Asset Name,Month,Date,Price,Currency
 32bff738-cf09-457a-95af-1ae86afef6a8,1988 Porsche 911 (930) 3.2 SC Targa in Guards Red,2026-04,24.04.2026,52.07,EUR
 32bff738-cf09-457a-95af-1ae86afef6a8,1988 Porsche 911 (930) 3.2 SC Targa in Guards Red,2026-05,07.05.2026,52.07,EUR
 32bff738-cf09-457a-95af-1ae86afef6a8,1988 Porsche 911 (930) 3.2 SC Targa in Guards Red,2026-06,17.06.2026,51.89,EUR
-32bff738-cf09-457a-95af-1ae86afef6a8,1988 Porsche 911 (930) 3.2 SC Targa in Guards Red,2026-07,29.07.2026,51.89,EUR
+32bff738-cf09-457a-95af-1ae86afef6a8,1988 Porsche 911 (930) 3.2 SC Targa in Guards Red,2026-07,29.07.2026,51.86,EUR
 0a68e368-3993-47cc-b044-1d8c45b71788,2002 Ferrari 360 Modena Manual,2025-12,08.12.2025,50.99,EUR
 0a68e368-3993-47cc-b044-1d8c45b71788,2002 Ferrari 360 Modena Manual,2026-01,16.01.2026,50.99,EUR
 0a68e368-3993-47cc-b044-1d8c45b71788,2002 Ferrari 360 Modena Manual,2026-02,14.02.2026,50.99,EUR
@@ -14,7 +14,7 @@ AssetID,Asset Name,Month,Date,Price,Currency
 0a68e368-3993-47cc-b044-1d8c45b71788,2002 Ferrari 360 Modena Manual,2026-04,24.04.2026,52.39,EUR
 0a68e368-3993-47cc-b044-1d8c45b71788,2002 Ferrari 360 Modena Manual,2026-05,07.05.2026,52.39,EUR
 0a68e368-3993-47cc-b044-1d8c45b71788,2002 Ferrari 360 Modena Manual,2026-06,17.06.2026,52.38,EUR
-0a68e368-3993-47cc-b044-1d8c45b71788,2002 Ferrari 360 Modena Manual,2026-07,29.07.2026,52.38,EUR
+0a68e368-3993-47cc-b044-1d8c45b71788,2002 Ferrari 360 Modena Manual,2026-07,29.07.2026,52.27,EUR
 a4bbcf2f-b426-410f-b37c-6e0f5731b28d,"Albert Willem, The Very Wild West!, 2023",2025-12,08.12.2025,61.69,EUR
 a4bbcf2f-b426-410f-b37c-6e0f5731b28d,"Albert Willem, The Very Wild West!, 2023",2026-01,16.01.2026,61.69,EUR
 a4bbcf2f-b426-410f-b37c-6e0f5731b28d,"Albert Willem, The Very Wild West!, 2023",2026-02,14.02.2026,61.69,EUR
@@ -22,15 +22,15 @@ a4bbcf2f-b426-410f-b37c-6e0f5731b28d,"Albert Willem, The Very Wild West!, 2023",
 a4bbcf2f-b426-410f-b37c-6e0f5731b28d,"Albert Willem, The Very Wild West!, 2023",2026-04,24.04.2026,61.69,EUR
 a4bbcf2f-b426-410f-b37c-6e0f5731b28d,"Albert Willem, The Very Wild West!, 2023",2026-05,07.05.2026,61.69,EUR
 a4bbcf2f-b426-410f-b37c-6e0f5731b28d,"Albert Willem, The Very Wild West!, 2023",2026-06,17.06.2026,58.38,EUR
-a4bbcf2f-b426-410f-b37c-6e0f5731b28d,"Albert Willem, The Very Wild West!, 2023",2026-07,29.07.2026,58.38,EUR
+a4bbcf2f-b426-410f-b37c-6e0f5731b28d,"Albert Willem, The Very Wild West!, 2023",2026-07,29.07.2026,22.92,EUR
 164578a4-7644-4cb6-9df1-77330051de94,"Amanda Watt, The Ballroom, 2022",2026-04,24.04.2026,50.11,EUR
 164578a4-7644-4cb6-9df1-77330051de94,"Amanda Watt, The Ballroom, 2022",2026-05,07.05.2026,50.11,EUR
 164578a4-7644-4cb6-9df1-77330051de94,"Amanda Watt, The Ballroom, 2022",2026-06,17.06.2026,50.25,EUR
-164578a4-7644-4cb6-9df1-77330051de94,"Amanda Watt, The Ballroom, 2022",2026-07,29.07.2026,50.25,EUR
+164578a4-7644-4cb6-9df1-77330051de94,"Amanda Watt, The Ballroom, 2022",2026-07,29.07.2026,50.32,EUR
 a817302f-a842-41df-8a08-740242e385d8,"Anthony Daley, Epocate, 2022",2026-04,24.04.2026,58.09,EUR
 a817302f-a842-41df-8a08-740242e385d8,"Anthony Daley, Epocate, 2022",2026-05,07.05.2026,58.09,EUR
 a817302f-a842-41df-8a08-740242e385d8,"Anthony Daley, Epocate, 2022",2026-06,17.06.2026,58.26,EUR
-a817302f-a842-41df-8a08-740242e385d8,"Anthony Daley, Epocate, 2022",2026-07,29.07.2026,58.26,EUR
+a817302f-a842-41df-8a08-740242e385d8,"Anthony Daley, Epocate, 2022",2026-07,29.07.2026,58.34,EUR
 7db39931-690c-4d3d-b295-572ed743ce81,"Anthony James, 24” Dodecahedron (Jet Black), 2022",2025-12,08.12.2025,63.24,EUR
 7db39931-690c-4d3d-b295-572ed743ce81,"Anthony James, 24” Dodecahedron (Jet Black), 2022",2026-01,16.01.2026,63.24,EUR
 7db39931-690c-4d3d-b295-572ed743ce81,"Anthony James, 24” Dodecahedron (Jet Black), 2022",2026-02,14.02.2026,63.24,EUR
@@ -38,7 +38,7 @@ a817302f-a842-41df-8a08-740242e385d8,"Anthony Daley, Epocate, 2022",2026-07,29.0
 7db39931-690c-4d3d-b295-572ed743ce81,"Anthony James, 24” Dodecahedron (Jet Black), 2022",2026-04,24.04.2026,63.24,EUR
 7db39931-690c-4d3d-b295-572ed743ce81,"Anthony James, 24” Dodecahedron (Jet Black), 2022",2026-05,07.05.2026,63.24,EUR
 7db39931-690c-4d3d-b295-572ed743ce81,"Anthony James, 24” Dodecahedron (Jet Black), 2022",2026-06,17.06.2026,64.50,EUR
-7db39931-690c-4d3d-b295-572ed743ce81,"Anthony James, 24” Dodecahedron (Jet Black), 2022",2026-07,29.07.2026,64.50,EUR
+7db39931-690c-4d3d-b295-572ed743ce81,"Anthony James, 24” Dodecahedron (Jet Black), 2022",2026-07,29.07.2026,65.13,EUR
 25273f6a-1d6c-4e13-9493-282d7f8f35f2,"Aston Martin, V12 Vanquish, 2002",2025-12,08.12.2025,57.53,EUR
 25273f6a-1d6c-4e13-9493-282d7f8f35f2,"Aston Martin, V12 Vanquish, 2002",2026-01,16.01.2026,57.53,EUR
 25273f6a-1d6c-4e13-9493-282d7f8f35f2,"Aston Martin, V12 Vanquish, 2002",2026-02,14.02.2026,57.53,EUR
@@ -54,7 +54,7 @@ a817302f-a842-41df-8a08-740242e385d8,"Anthony Daley, Epocate, 2022",2026-07,29.0
 6015ac5b-8e18-4e41-8923-eae00637fae7,"Aston Martin, V12 Vantage Carbon Black Edition",2026-04,24.04.2026,53.10,EUR
 6015ac5b-8e18-4e41-8923-eae00637fae7,"Aston Martin, V12 Vantage Carbon Black Edition",2026-05,07.05.2026,53.10,EUR
 6015ac5b-8e18-4e41-8923-eae00637fae7,"Aston Martin, V12 Vantage Carbon Black Edition",2026-06,17.06.2026,53.70,EUR
-6015ac5b-8e18-4e41-8923-eae00637fae7,"Aston Martin, V12 Vantage Carbon Black Edition",2026-07,29.07.2026,53.70,EUR
+6015ac5b-8e18-4e41-8923-eae00637fae7,"Aston Martin, V12 Vantage Carbon Black Edition",2026-07,29.07.2026,48.19,EUR
 f5dd7d0d-6db6-4908-a97d-99fbfd103459,"Audemars Piguet, Royal Oak, Ref. 26331IP",2025-12,08.12.2025,35.54,EUR
 f5dd7d0d-6db6-4908-a97d-99fbfd103459,"Audemars Piguet, Royal Oak, Ref. 26331IP",2026-01,16.01.2026,35.04,EUR
 f5dd7d0d-6db6-4908-a97d-99fbfd103459,"Audemars Piguet, Royal Oak, Ref. 26331IP",2026-02,14.02.2026,35.04,EUR
@@ -62,7 +62,7 @@ f5dd7d0d-6db6-4908-a97d-99fbfd103459,"Audemars Piguet, Royal Oak, Ref. 26331IP",
 f5dd7d0d-6db6-4908-a97d-99fbfd103459,"Audemars Piguet, Royal Oak, Ref. 26331IP",2026-04,24.04.2026,34.12,EUR
 f5dd7d0d-6db6-4908-a97d-99fbfd103459,"Audemars Piguet, Royal Oak, Ref. 26331IP",2026-05,07.05.2026,34.12,EUR
 f5dd7d0d-6db6-4908-a97d-99fbfd103459,"Audemars Piguet, Royal Oak, Ref. 26331IP",2026-06,17.06.2026,34.50,EUR
-f5dd7d0d-6db6-4908-a97d-99fbfd103459,"Audemars Piguet, Royal Oak, Ref. 26331IP",2026-07,29.07.2026,34.50,EUR
+f5dd7d0d-6db6-4908-a97d-99fbfd103459,"Audemars Piguet, Royal Oak, Ref. 26331IP",2026-07,29.07.2026,34.49,EUR
 a2a9f436-c361-450d-a57a-5d3448b3f511,Audi R8 V10,2025-12,08.12.2025,51.63,EUR
 a2a9f436-c361-450d-a57a-5d3448b3f511,Audi R8 V10,2026-01,16.01.2026,51.63,EUR
 a2a9f436-c361-450d-a57a-5d3448b3f511,Audi R8 V10,2026-02,14.02.2026,51.63,EUR
@@ -100,9 +100,9 @@ f21b77ec-8ff4-49c1-ac98-17ff73146602,"Britt Boutros-Ghali, Portfolio Part 1",202
 40d33f88-4d3d-4370-90e8-c73e0e8e4bfe,"Britt Boutros-Ghali, Untitled (No 55-024), 2024",2026-04,24.04.2026,54.77,EUR
 40d33f88-4d3d-4370-90e8-c73e0e8e4bfe,"Britt Boutros-Ghali, Untitled (No 55-024), 2024",2026-05,07.05.2026,54.77,EUR
 40d33f88-4d3d-4370-90e8-c73e0e8e4bfe,"Britt Boutros-Ghali, Untitled (No 55-024), 2024",2026-06,17.06.2026,54.93,EUR
-40d33f88-4d3d-4370-90e8-c73e0e8e4bfe,"Britt Boutros-Ghali, Untitled (No 55-024), 2024",2026-07,29.07.2026,54.93,EUR
+40d33f88-4d3d-4370-90e8-c73e0e8e4bfe,"Britt Boutros-Ghali, Untitled (No 55-024), 2024",2026-07,29.07.2026,55.00,EUR
 023b106f-ad82-441e-9d1a-a0d21b358242,"Britt Boutros-Ghali, Untitled (No 94-024), 2024",2026-06,17.06.2026,59.18,EUR
-023b106f-ad82-441e-9d1a-a0d21b358242,"Britt Boutros-Ghali, Untitled (No 94-024), 2024",2026-07,29.07.2026,59.18,EUR
+023b106f-ad82-441e-9d1a-a0d21b358242,"Britt Boutros-Ghali, Untitled (No 94-024), 2024",2026-07,29.07.2026,59.27,EUR
 a61edda7-dc36-4de1-a125-27c7e92425e2,Caroni Rum Cask 1998 #2258,2025-12,08.12.2025,52.58,EUR
 a61edda7-dc36-4de1-a125-27c7e92425e2,Caroni Rum Cask 1998 #2258,2026-01,16.01.2026,53.19,EUR
 a61edda7-dc36-4de1-a125-27c7e92425e2,Caroni Rum Cask 1998 #2258,2026-02,14.02.2026,53.81,EUR
@@ -118,7 +118,7 @@ b0de4457-0175-4953-9a27-b48e74dcb779,"Champagne Stars, Collection",2026-03,24.03
 b0de4457-0175-4953-9a27-b48e74dcb779,"Champagne Stars, Collection",2026-04,24.04.2026,43.09,EUR
 b0de4457-0175-4953-9a27-b48e74dcb779,"Champagne Stars, Collection",2026-05,07.05.2026,43.09,EUR
 b0de4457-0175-4953-9a27-b48e74dcb779,"Champagne Stars, Collection",2026-06,17.06.2026,42.96,EUR
-b0de4457-0175-4953-9a27-b48e74dcb779,"Champagne Stars, Collection",2026-07,29.07.2026,42.96,EUR
+b0de4457-0175-4953-9a27-b48e74dcb779,"Champagne Stars, Collection",2026-07,29.07.2026,42.80,EUR
 4b155703-78d1-4b3f-b85f-459d1a2a240e,"Charles Leclerc Suit, Las Vegas Grand Prix (Signed)",2026-03,24.03.2026,50.00,EUR
 4b155703-78d1-4b3f-b85f-459d1a2a240e,"Charles Leclerc Suit, Las Vegas Grand Prix (Signed)",2026-04,24.04.2026,51.95,EUR
 4b155703-78d1-4b3f-b85f-459d1a2a240e,"Charles Leclerc Suit, Las Vegas Grand Prix (Signed)",2026-05,07.05.2026,51.95,EUR
@@ -131,7 +131,7 @@ bb91cb58-671f-4223-ba8c-96dcb4136abd,"Château Lafite Rothschild & Carruades de 
 bb91cb58-671f-4223-ba8c-96dcb4136abd,"Château Lafite Rothschild & Carruades de Lafite, 2023, En Primeur",2026-04,24.04.2026,60.50,EUR
 bb91cb58-671f-4223-ba8c-96dcb4136abd,"Château Lafite Rothschild & Carruades de Lafite, 2023, En Primeur",2026-05,07.05.2026,60.50,EUR
 bb91cb58-671f-4223-ba8c-96dcb4136abd,"Château Lafite Rothschild & Carruades de Lafite, 2023, En Primeur",2026-06,17.06.2026,60.63,EUR
-bb91cb58-671f-4223-ba8c-96dcb4136abd,"Château Lafite Rothschild & Carruades de Lafite, 2023, En Primeur",2026-07,29.07.2026,60.63,EUR
+bb91cb58-671f-4223-ba8c-96dcb4136abd,"Château Lafite Rothschild & Carruades de Lafite, 2023, En Primeur",2026-07,29.07.2026,60.47,EUR
 780970ba-c15f-4881-b370-b083dd1e4b14,"Damien Hirst, Dead Head III, 2009",2025-12,08.12.2025,53.52,EUR
 780970ba-c15f-4881-b370-b083dd1e4b14,"Damien Hirst, Dead Head III, 2009",2026-01,16.01.2026,53.52,EUR
 780970ba-c15f-4881-b370-b083dd1e4b14,"Damien Hirst, Dead Head III, 2009",2026-02,14.02.2026,53.52,EUR
@@ -139,7 +139,7 @@ bb91cb58-671f-4223-ba8c-96dcb4136abd,"Château Lafite Rothschild & Carruades de 
 780970ba-c15f-4881-b370-b083dd1e4b14,"Damien Hirst, Dead Head III, 2009",2026-04,24.04.2026,53.52,EUR
 780970ba-c15f-4881-b370-b083dd1e4b14,"Damien Hirst, Dead Head III, 2009",2026-05,07.05.2026,53.52,EUR
 780970ba-c15f-4881-b370-b083dd1e4b14,"Damien Hirst, Dead Head III, 2009",2026-06,17.06.2026,53.67,EUR
-780970ba-c15f-4881-b370-b083dd1e4b14,"Damien Hirst, Dead Head III, 2009",2026-07,29.07.2026,53.67,EUR
+780970ba-c15f-4881-b370-b083dd1e4b14,"Damien Hirst, Dead Head III, 2009",2026-07,29.07.2026,53.75,EUR
 e693145f-5b5c-4bbe-9292-7efe91da1312,"Damien Hirst, End of Days, 2003",2025-12,08.12.2025,56.14,EUR
 e693145f-5b5c-4bbe-9292-7efe91da1312,"Damien Hirst, End of Days, 2003",2026-01,16.01.2026,56.14,EUR
 e693145f-5b5c-4bbe-9292-7efe91da1312,"Damien Hirst, End of Days, 2003",2026-02,14.02.2026,56.14,EUR
@@ -183,7 +183,7 @@ e693145f-5b5c-4bbe-9292-7efe91da1312,"Damien Hirst, End of Days, 2003",2026-07,2
 7fb00fcd-bbc5-4c24-8abd-f97fcbb3b3ba,"Diamond, Brilliant, 1.62 carat, D-IF",2026-04,24.04.2026,38.89,EUR
 7fb00fcd-bbc5-4c24-8abd-f97fcbb3b3ba,"Diamond, Brilliant, 1.62 carat, D-IF",2026-05,07.05.2026,38.89,EUR
 7fb00fcd-bbc5-4c24-8abd-f97fcbb3b3ba,"Diamond, Brilliant, 1.62 carat, D-IF",2026-06,17.06.2026,39.73,EUR
-7fb00fcd-bbc5-4c24-8abd-f97fcbb3b3ba,"Diamond, Brilliant, 1.62 carat, D-IF",2026-07,29.07.2026,39.73,EUR
+7fb00fcd-bbc5-4c24-8abd-f97fcbb3b3ba,"Diamond, Brilliant, 1.62 carat, D-IF",2026-07,29.07.2026,38.42,EUR
 5069aa65-f12f-46a1-845c-4f299c37d84e,"Domaine Armand Rousseau, Chambertin Grand Cru, 2020",2025-12,08.12.2025,40.47,EUR
 5069aa65-f12f-46a1-845c-4f299c37d84e,"Domaine Armand Rousseau, Chambertin Grand Cru, 2020",2026-01,16.01.2026,38.17,EUR
 5069aa65-f12f-46a1-845c-4f299c37d84e,"Domaine Armand Rousseau, Chambertin Grand Cru, 2020",2026-02,14.02.2026,35.77,EUR
@@ -191,7 +191,7 @@ e693145f-5b5c-4bbe-9292-7efe91da1312,"Damien Hirst, End of Days, 2003",2026-07,2
 5069aa65-f12f-46a1-845c-4f299c37d84e,"Domaine Armand Rousseau, Chambertin Grand Cru, 2020",2026-04,24.04.2026,33.62,EUR
 5069aa65-f12f-46a1-845c-4f299c37d84e,"Domaine Armand Rousseau, Chambertin Grand Cru, 2020",2026-05,07.05.2026,33.62,EUR
 5069aa65-f12f-46a1-845c-4f299c37d84e,"Domaine Armand Rousseau, Chambertin Grand Cru, 2020",2026-06,17.06.2026,33.61,EUR
-5069aa65-f12f-46a1-845c-4f299c37d84e,"Domaine Armand Rousseau, Chambertin Grand Cru, 2020",2026-07,29.07.2026,33.61,EUR
+5069aa65-f12f-46a1-845c-4f299c37d84e,"Domaine Armand Rousseau, Chambertin Grand Cru, 2020",2026-07,29.07.2026,33.91,EUR
 55512356-30d3-43f8-ba37-c19f5cdeb1c6,"Domaine Leroy, Chambertin Grand Cru, 2013 & Romanee-Saint-Vivant Grand Cru, 2014",2025-12,08.12.2025,40.75,EUR
 55512356-30d3-43f8-ba37-c19f5cdeb1c6,"Domaine Leroy, Chambertin Grand Cru, 2013 & Romanee-Saint-Vivant Grand Cru, 2014",2026-01,16.01.2026,40.96,EUR
 55512356-30d3-43f8-ba37-c19f5cdeb1c6,"Domaine Leroy, Chambertin Grand Cru, 2013 & Romanee-Saint-Vivant Grand Cru, 2014",2026-02,14.02.2026,41.14,EUR
@@ -199,7 +199,7 @@ e693145f-5b5c-4bbe-9292-7efe91da1312,"Damien Hirst, End of Days, 2003",2026-07,2
 55512356-30d3-43f8-ba37-c19f5cdeb1c6,"Domaine Leroy, Chambertin Grand Cru, 2013 & Romanee-Saint-Vivant Grand Cru, 2014",2026-04,24.04.2026,42.25,EUR
 55512356-30d3-43f8-ba37-c19f5cdeb1c6,"Domaine Leroy, Chambertin Grand Cru, 2013 & Romanee-Saint-Vivant Grand Cru, 2014",2026-05,07.05.2026,42.25,EUR
 55512356-30d3-43f8-ba37-c19f5cdeb1c6,"Domaine Leroy, Chambertin Grand Cru, 2013 & Romanee-Saint-Vivant Grand Cru, 2014",2026-06,17.06.2026,42.23,EUR
-55512356-30d3-43f8-ba37-c19f5cdeb1c6,"Domaine Leroy, Chambertin Grand Cru, 2013 & Romanee-Saint-Vivant Grand Cru, 2014",2026-07,29.07.2026,42.23,EUR
+55512356-30d3-43f8-ba37-c19f5cdeb1c6,"Domaine Leroy, Chambertin Grand Cru, 2013 & Romanee-Saint-Vivant Grand Cru, 2014",2026-07,29.07.2026,42.61,EUR
 db8e27aa-5b38-4148-bc05-6e236e653e7e,"Domaine Leroy, Nuits-Saint-Georges aux Boudots, 2014",2025-12,08.12.2025,37.85,EUR
 db8e27aa-5b38-4148-bc05-6e236e653e7e,"Domaine Leroy, Nuits-Saint-Georges aux Boudots, 2014",2026-01,16.01.2026,37.85,EUR
 db8e27aa-5b38-4148-bc05-6e236e653e7e,"Domaine Leroy, Nuits-Saint-Georges aux Boudots, 2014",2026-02,14.02.2026,37.85,EUR
@@ -207,7 +207,7 @@ db8e27aa-5b38-4148-bc05-6e236e653e7e,"Domaine Leroy, Nuits-Saint-Georges aux Bou
 db8e27aa-5b38-4148-bc05-6e236e653e7e,"Domaine Leroy, Nuits-Saint-Georges aux Boudots, 2014",2026-04,24.04.2026,37.85,EUR
 db8e27aa-5b38-4148-bc05-6e236e653e7e,"Domaine Leroy, Nuits-Saint-Georges aux Boudots, 2014",2026-05,07.05.2026,37.85,EUR
 db8e27aa-5b38-4148-bc05-6e236e653e7e,"Domaine Leroy, Nuits-Saint-Georges aux Boudots, 2014",2026-06,17.06.2026,37.83,EUR
-db8e27aa-5b38-4148-bc05-6e236e653e7e,"Domaine Leroy, Nuits-Saint-Georges aux Boudots, 2014",2026-07,29.07.2026,37.83,EUR
+db8e27aa-5b38-4148-bc05-6e236e653e7e,"Domaine Leroy, Nuits-Saint-Georges aux Boudots, 2014",2026-07,29.07.2026,38.18,EUR
 5133f379-d243-433f-be45-9d97d366ad39,"Duncan Robert McCormick, NY View, 2022",2025-12,08.12.2025,63.94,EUR
 5133f379-d243-433f-be45-9d97d366ad39,"Duncan Robert McCormick, NY View, 2022",2026-01,16.01.2026,63.94,EUR
 5133f379-d243-433f-be45-9d97d366ad39,"Duncan Robert McCormick, NY View, 2022",2026-02,14.02.2026,63.94,EUR
@@ -215,7 +215,7 @@ db8e27aa-5b38-4148-bc05-6e236e653e7e,"Domaine Leroy, Nuits-Saint-Georges aux Bou
 5133f379-d243-433f-be45-9d97d366ad39,"Duncan Robert McCormick, NY View, 2022",2026-04,24.04.2026,63.94,EUR
 5133f379-d243-433f-be45-9d97d366ad39,"Duncan Robert McCormick, NY View, 2022",2026-05,07.05.2026,63.94,EUR
 5133f379-d243-433f-be45-9d97d366ad39,"Duncan Robert McCormick, NY View, 2022",2026-06,17.06.2026,64.12,EUR
-5133f379-d243-433f-be45-9d97d366ad39,"Duncan Robert McCormick, NY View, 2022",2026-07,29.07.2026,64.12,EUR
+5133f379-d243-433f-be45-9d97d366ad39,"Duncan Robert McCormick, NY View, 2022",2026-07,29.07.2026,47.74,EUR
 726ed2f0-6376-46b4-84b5-fa5ae1eaf24b,"Elitsa Ristova, No Heaven No Skies, 2020",2025-12,08.12.2025,74.42,EUR
 726ed2f0-6376-46b4-84b5-fa5ae1eaf24b,"Elitsa Ristova, No Heaven No Skies, 2020",2026-01,16.01.2026,74.42,EUR
 726ed2f0-6376-46b4-84b5-fa5ae1eaf24b,"Elitsa Ristova, No Heaven No Skies, 2020",2026-02,14.02.2026,74.42,EUR
@@ -223,7 +223,7 @@ db8e27aa-5b38-4148-bc05-6e236e653e7e,"Domaine Leroy, Nuits-Saint-Georges aux Bou
 726ed2f0-6376-46b4-84b5-fa5ae1eaf24b,"Elitsa Ristova, No Heaven No Skies, 2020",2026-04,24.04.2026,74.42,EUR
 726ed2f0-6376-46b4-84b5-fa5ae1eaf24b,"Elitsa Ristova, No Heaven No Skies, 2020",2026-05,07.05.2026,74.42,EUR
 726ed2f0-6376-46b4-84b5-fa5ae1eaf24b,"Elitsa Ristova, No Heaven No Skies, 2020",2026-06,17.06.2026,74.63,EUR
-726ed2f0-6376-46b4-84b5-fa5ae1eaf24b,"Elitsa Ristova, No Heaven No Skies, 2020",2026-07,29.07.2026,74.63,EUR
+726ed2f0-6376-46b4-84b5-fa5ae1eaf24b,"Elitsa Ristova, No Heaven No Skies, 2020",2026-07,29.07.2026,74.74,EUR
 8cf13993-c475-4452-ae6c-c94557b5a90d,"F.P. Journe, Octa Automatique Lune, Ref. AL PT 40 A SI",2025-12,08.12.2025,52.34,EUR
 8cf13993-c475-4452-ae6c-c94557b5a90d,"F.P. Journe, Octa Automatique Lune, Ref. AL PT 40 A SI",2026-01,16.01.2026,52.34,EUR
 fd0b5669-3740-4710-b93c-deab9c0d1ba7,"Feng Xiao-Min, Composition N°20.05.13, 2013",2025-12,08.12.2025,57.63,EUR
@@ -233,12 +233,12 @@ fd0b5669-3740-4710-b93c-deab9c0d1ba7,"Feng Xiao-Min, Composition N°20.05.13, 20
 fd0b5669-3740-4710-b93c-deab9c0d1ba7,"Feng Xiao-Min, Composition N°20.05.13, 2013",2026-04,24.04.2026,60.33,EUR
 fd0b5669-3740-4710-b93c-deab9c0d1ba7,"Feng Xiao-Min, Composition N°20.05.13, 2013",2026-05,07.05.2026,60.33,EUR
 fd0b5669-3740-4710-b93c-deab9c0d1ba7,"Feng Xiao-Min, Composition N°20.05.13, 2013",2026-06,17.06.2026,60.50,EUR
-fd0b5669-3740-4710-b93c-deab9c0d1ba7,"Feng Xiao-Min, Composition N°20.05.13, 2013",2026-07,29.07.2026,60.50,EUR
+fd0b5669-3740-4710-b93c-deab9c0d1ba7,"Feng Xiao-Min, Composition N°20.05.13, 2013",2026-07,29.07.2026,60.59,EUR
 82d1b9cc-fb06-40e7-bb8f-01f827f38432,"Fernando Botero, Flautista, 2023",2026-03,24.03.2026,53.49,EUR
 82d1b9cc-fb06-40e7-bb8f-01f827f38432,"Fernando Botero, Flautista, 2023",2026-04,24.04.2026,57.01,EUR
 82d1b9cc-fb06-40e7-bb8f-01f827f38432,"Fernando Botero, Flautista, 2023",2026-05,07.05.2026,57.01,EUR
 82d1b9cc-fb06-40e7-bb8f-01f827f38432,"Fernando Botero, Flautista, 2023",2026-06,17.06.2026,57.18,EUR
-82d1b9cc-fb06-40e7-bb8f-01f827f38432,"Fernando Botero, Flautista, 2023",2026-07,29.07.2026,57.18,EUR
+82d1b9cc-fb06-40e7-bb8f-01f827f38432,"Fernando Botero, Flautista, 2023",2026-07,29.07.2026,57.26,EUR
 4b354942-b3b9-4237-b7d0-df9cf1f3a79e,"Fernando Botero, Seated woman, 2003",2026-01,16.01.2026,55.09,EUR
 4b354942-b3b9-4237-b7d0-df9cf1f3a79e,"Fernando Botero, Seated woman, 2003",2026-02,14.02.2026,55.09,EUR
 4b354942-b3b9-4237-b7d0-df9cf1f3a79e,"Fernando Botero, Seated woman, 2003",2026-03,24.03.2026,55.09,EUR
@@ -253,7 +253,7 @@ de7a7b19-51b3-4ce4-9093-a48db4863e38,"Ferrari 348 TS, 1991",2026-03,24.03.2026,5
 de7a7b19-51b3-4ce4-9093-a48db4863e38,"Ferrari 348 TS, 1991",2026-04,24.04.2026,58.74,EUR
 de7a7b19-51b3-4ce4-9093-a48db4863e38,"Ferrari 348 TS, 1991",2026-05,07.05.2026,58.74,EUR
 de7a7b19-51b3-4ce4-9093-a48db4863e38,"Ferrari 348 TS, 1991",2026-06,17.06.2026,58.72,EUR
-de7a7b19-51b3-4ce4-9093-a48db4863e38,"Ferrari 348 TS, 1991",2026-07,29.07.2026,58.72,EUR
+de7a7b19-51b3-4ce4-9093-a48db4863e38,"Ferrari 348 TS, 1991",2026-07,29.07.2026,58.60,EUR
 97cb3aa5-02e2-4fb8-9c6a-23bcda3388b8,"Ferrari, 328 GTS, 1988",2025-12,08.12.2025,61.41,EUR
 97cb3aa5-02e2-4fb8-9c6a-23bcda3388b8,"Ferrari, 328 GTS, 1988",2026-01,16.01.2026,61.41,EUR
 97cb3aa5-02e2-4fb8-9c6a-23bcda3388b8,"Ferrari, 328 GTS, 1988",2026-02,14.02.2026,61.41,EUR
@@ -281,7 +281,7 @@ bd92e467-6cbb-4283-af1e-fd47d6b8b40c,"Frida Kahlo, Corporeal Field II",2026-07,2
 986cab76-e434-443b-96a9-287606b8d0b4,"George Morton-Clark, Portfolio of three Works, 2024",2026-04,24.04.2026,54.95,EUR
 986cab76-e434-443b-96a9-287606b8d0b4,"George Morton-Clark, Portfolio of three Works, 2024",2026-05,07.05.2026,54.95,EUR
 986cab76-e434-443b-96a9-287606b8d0b4,"George Morton-Clark, Portfolio of three Works, 2024",2026-06,17.06.2026,55.11,EUR
-986cab76-e434-443b-96a9-287606b8d0b4,"George Morton-Clark, Portfolio of three Works, 2024",2026-07,29.07.2026,55.11,EUR
+986cab76-e434-443b-96a9-287606b8d0b4,"George Morton-Clark, Portfolio of three Works, 2024",2026-07,29.07.2026,55.18,EUR
 b0f9829c-8ba1-4d3f-8d78-dfff260a0e00,Glen Grant 60 YO – Dennis Malcolm 60th Anniv. – Bottle Nr. 184,2025-12,08.12.2025,9.41,EUR
 b0f9829c-8ba1-4d3f-8d78-dfff260a0e00,Glen Grant 60 YO – Dennis Malcolm 60th Anniv. – Bottle Nr. 184,2026-01,16.01.2026,9.28,EUR
 b0f9829c-8ba1-4d3f-8d78-dfff260a0e00,Glen Grant 60 YO – Dennis Malcolm 60th Anniv. – Bottle Nr. 184,2026-02,14.02.2026,9.24,EUR
@@ -289,7 +289,7 @@ b0f9829c-8ba1-4d3f-8d78-dfff260a0e00,Glen Grant 60 YO – Dennis Malcolm 60th An
 b0f9829c-8ba1-4d3f-8d78-dfff260a0e00,Glen Grant 60 YO – Dennis Malcolm 60th Anniv. – Bottle Nr. 184,2026-04,24.04.2026,9.33,EUR
 b0f9829c-8ba1-4d3f-8d78-dfff260a0e00,Glen Grant 60 YO – Dennis Malcolm 60th Anniv. – Bottle Nr. 184,2026-05,07.05.2026,9.33,EUR
 b0f9829c-8ba1-4d3f-8d78-dfff260a0e00,Glen Grant 60 YO – Dennis Malcolm 60th Anniv. – Bottle Nr. 184,2026-06,17.06.2026,9.27,EUR
-b0f9829c-8ba1-4d3f-8d78-dfff260a0e00,Glen Grant 60 YO – Dennis Malcolm 60th Anniv. – Bottle Nr. 184,2026-07,29.07.2026,9.27,EUR
+b0f9829c-8ba1-4d3f-8d78-dfff260a0e00,Glen Grant 60 YO – Dennis Malcolm 60th Anniv. – Bottle Nr. 184,2026-07,29.07.2026,8.62,EUR
 271f0e9b-8210-4385-bd63-972e1ab080e2,"Gregory de la Haba, 4 paintings from the ""Easy Suite"" series 2024 & 3 paintings from the “Everything is Made of Light” series 2023",2026-02,14.02.2026,62.22,EUR
 271f0e9b-8210-4385-bd63-972e1ab080e2,"Gregory de la Haba, 4 paintings from the ""Easy Suite"" series 2024 & 3 paintings from the “Everything is Made of Light” series 2023",2026-03,24.03.2026,62.22,EUR
 271f0e9b-8210-4385-bd63-972e1ab080e2,"Gregory de la Haba, 4 paintings from the ""Easy Suite"" series 2024 & 3 paintings from the “Everything is Made of Light” series 2023",2026-04,24.04.2026,62.22,EUR
@@ -303,7 +303,7 @@ b0f9829c-8ba1-4d3f-8d78-dfff260a0e00,Glen Grant 60 YO – Dennis Malcolm 60th An
 64eae5ed-ac3e-4311-a070-558d57dcfa36,"Gregory de la Haba, 6 paintings from the ""Easy Suite"" series 2024",2026-04,24.04.2026,65.32,EUR
 64eae5ed-ac3e-4311-a070-558d57dcfa36,"Gregory de la Haba, 6 paintings from the ""Easy Suite"" series 2024",2026-05,07.05.2026,65.32,EUR
 64eae5ed-ac3e-4311-a070-558d57dcfa36,"Gregory de la Haba, 6 paintings from the ""Easy Suite"" series 2024",2026-06,17.06.2026,65.51,EUR
-64eae5ed-ac3e-4311-a070-558d57dcfa36,"Gregory de la Haba, 6 paintings from the ""Easy Suite"" series 2024",2026-07,29.07.2026,65.51,EUR
+64eae5ed-ac3e-4311-a070-558d57dcfa36,"Gregory de la Haba, 6 paintings from the ""Easy Suite"" series 2024",2026-07,29.07.2026,65.60,EUR
 7a84b983-0dfb-4303-9547-a5f9e2cca8e1,"Gregory de la Haba, Locust Of Being #18 / In The Name Of…de la Haba #5 / Formula One (Easy Diptych #20), 2024-2025",2025-12,08.12.2025,52.70,EUR
 7a84b983-0dfb-4303-9547-a5f9e2cca8e1,"Gregory de la Haba, Locust Of Being #18 / In The Name Of…de la Haba #5 / Formula One (Easy Diptych #20), 2024-2025",2026-01,16.01.2026,59.99,EUR
 7a84b983-0dfb-4303-9547-a5f9e2cca8e1,"Gregory de la Haba, Locust Of Being #18 / In The Name Of…de la Haba #5 / Formula One (Easy Diptych #20), 2024-2025",2026-02,14.02.2026,59.99,EUR
@@ -311,7 +311,7 @@ b0f9829c-8ba1-4d3f-8d78-dfff260a0e00,Glen Grant 60 YO – Dennis Malcolm 60th An
 7a84b983-0dfb-4303-9547-a5f9e2cca8e1,"Gregory de la Haba, Locust Of Being #18 / In The Name Of…de la Haba #5 / Formula One (Easy Diptych #20), 2024-2025",2026-04,24.04.2026,59.99,EUR
 7a84b983-0dfb-4303-9547-a5f9e2cca8e1,"Gregory de la Haba, Locust Of Being #18 / In The Name Of…de la Haba #5 / Formula One (Easy Diptych #20), 2024-2025",2026-05,07.05.2026,59.99,EUR
 7a84b983-0dfb-4303-9547-a5f9e2cca8e1,"Gregory de la Haba, Locust Of Being #18 / In The Name Of…de la Haba #5 / Formula One (Easy Diptych #20), 2024-2025",2026-06,17.06.2026,60.16,EUR
-7a84b983-0dfb-4303-9547-a5f9e2cca8e1,"Gregory de la Haba, Locust Of Being #18 / In The Name Of…de la Haba #5 / Formula One (Easy Diptych #20), 2024-2025",2026-07,29.07.2026,60.16,EUR
+7a84b983-0dfb-4303-9547-a5f9e2cca8e1,"Gregory de la Haba, Locust Of Being #18 / In The Name Of…de la Haba #5 / Formula One (Easy Diptych #20), 2024-2025",2026-07,29.07.2026,60.25,EUR
 3946d398-29c9-4943-a5d4-7103118fe998,"Hermès, Kelly 25 Padded",2025-12,08.12.2025,55.36,EUR
 3946d398-29c9-4943-a5d4-7103118fe998,"Hermès, Kelly 25 Padded",2026-01,16.01.2026,55.36,EUR
 3946d398-29c9-4943-a5d4-7103118fe998,"Hermès, Kelly 25 Padded",2026-02,14.02.2026,55.36,EUR
@@ -319,7 +319,7 @@ b0f9829c-8ba1-4d3f-8d78-dfff260a0e00,Glen Grant 60 YO – Dennis Malcolm 60th An
 3946d398-29c9-4943-a5d4-7103118fe998,"Hermès, Kelly 25 Padded",2026-04,24.04.2026,56.31,EUR
 3946d398-29c9-4943-a5d4-7103118fe998,"Hermès, Kelly 25 Padded",2026-05,07.05.2026,56.31,EUR
 3946d398-29c9-4943-a5d4-7103118fe998,"Hermès, Kelly 25 Padded",2026-06,17.06.2026,56.31,EUR
-3946d398-29c9-4943-a5d4-7103118fe998,"Hermès, Kelly 25 Padded",2026-07,29.07.2026,56.31,EUR
+3946d398-29c9-4943-a5d4-7103118fe998,"Hermès, Kelly 25 Padded",2026-07,29.07.2026,55.95,EUR
 a1cd95c8-c11c-4bcd-b1ee-6c828fcf8f38,"Hermès, Kelly, 20cm, Desordre, 2023",2025-12,08.12.2025,54.97,EUR
 a1cd95c8-c11c-4bcd-b1ee-6c828fcf8f38,"Hermès, Kelly, 20cm, Desordre, 2023",2026-01,16.01.2026,54.97,EUR
 a1cd95c8-c11c-4bcd-b1ee-6c828fcf8f38,"Hermès, Kelly, 20cm, Desordre, 2023",2026-02,14.02.2026,54.97,EUR
@@ -335,7 +335,7 @@ a1cd95c8-c11c-4bcd-b1ee-6c828fcf8f38,"Hermès, Kelly, 20cm, Desordre, 2023",2026
 05a9a7b4-ad4e-443f-bf99-fc5d0047749c,"Hermès, Kelly, Mini 20cm, Epsom, Vert Criquet",2026-04,24.04.2026,53.36,EUR
 05a9a7b4-ad4e-443f-bf99-fc5d0047749c,"Hermès, Kelly, Mini 20cm, Epsom, Vert Criquet",2026-05,07.05.2026,53.36,EUR
 05a9a7b4-ad4e-443f-bf99-fc5d0047749c,"Hermès, Kelly, Mini 20cm, Epsom, Vert Criquet",2026-06,17.06.2026,38.58,EUR
-05a9a7b4-ad4e-443f-bf99-fc5d0047749c,"Hermès, Kelly, Mini 20cm, Epsom, Vert Criquet",2026-07,29.07.2026,38.58,EUR
+05a9a7b4-ad4e-443f-bf99-fc5d0047749c,"Hermès, Kelly, Mini 20cm, Epsom, Vert Criquet",2026-07,29.07.2026,38.86,EUR
 9c7e8e40-c090-4869-986f-b913d6fd3ad7,"Hermès, Limited Edition Birkin Ostrich, 25cm , 2022",2025-12,08.12.2025,51.29,EUR
 9c7e8e40-c090-4869-986f-b913d6fd3ad7,"Hermès, Limited Edition Birkin Ostrich, 25cm , 2022",2026-01,16.01.2026,51.29,EUR
 9c7e8e40-c090-4869-986f-b913d6fd3ad7,"Hermès, Limited Edition Birkin Ostrich, 25cm , 2022",2026-02,14.02.2026,51.29,EUR
@@ -343,7 +343,7 @@ a1cd95c8-c11c-4bcd-b1ee-6c828fcf8f38,"Hermès, Kelly, 20cm, Desordre, 2023",2026
 9c7e8e40-c090-4869-986f-b913d6fd3ad7,"Hermès, Limited Edition Birkin Ostrich, 25cm , 2022",2026-04,24.04.2026,52.47,EUR
 9c7e8e40-c090-4869-986f-b913d6fd3ad7,"Hermès, Limited Edition Birkin Ostrich, 25cm , 2022",2026-05,07.05.2026,52.47,EUR
 9c7e8e40-c090-4869-986f-b913d6fd3ad7,"Hermès, Limited Edition Birkin Ostrich, 25cm , 2022",2026-06,17.06.2026,48.91,EUR
-9c7e8e40-c090-4869-986f-b913d6fd3ad7,"Hermès, Limited Edition Birkin Ostrich, 25cm , 2022",2026-07,29.07.2026,48.91,EUR
+9c7e8e40-c090-4869-986f-b913d6fd3ad7,"Hermès, Limited Edition Birkin Ostrich, 25cm , 2022",2026-07,29.07.2026,47.03,EUR
 d18900fc-87da-4fb3-8c32-608bb64fe909,"Hermès, Mini Kelly Ostrich, 20 cm, 2021",2025-12,08.12.2025,50.76,EUR
 d18900fc-87da-4fb3-8c32-608bb64fe909,"Hermès, Mini Kelly Ostrich, 20 cm, 2021",2026-01,16.01.2026,50.76,EUR
 d18900fc-87da-4fb3-8c32-608bb64fe909,"Hermès, Mini Kelly Ostrich, 20 cm, 2021",2026-02,14.02.2026,50.76,EUR
@@ -361,7 +361,7 @@ ba6d6b8a-7282-47df-a53b-f03f1ccedad5,"Jannis Kounellis, Untitled, 1983",2026-05,
 ba6d6b8a-7282-47df-a53b-f03f1ccedad5,"Jannis Kounellis, Untitled, 1983",2026-06,17.06.2026,59.63,EUR
 ba6d6b8a-7282-47df-a53b-f03f1ccedad5,"Jannis Kounellis, Untitled, 1983",2026-07,29.07.2026,59.63,EUR
 396b576c-100b-462a-97ca-55339ba4a03a,"Javier Calleja, Redhead",2026-06,17.06.2026,57.09,EUR
-396b576c-100b-462a-97ca-55339ba4a03a,"Javier Calleja, Redhead",2026-07,29.07.2026,57.09,EUR
+396b576c-100b-462a-97ca-55339ba4a03a,"Javier Calleja, Redhead",2026-07,29.07.2026,57.17,EUR
 d8aba370-c141-4ffa-87f7-7a8b0887cf0e,Jayson Tatum 2017 Immaculate Rookie Patch Auto LogoTag 2/3 with 5-Color BGS 9,2025-12,08.12.2025,54.90,EUR
 d8aba370-c141-4ffa-87f7-7a8b0887cf0e,Jayson Tatum 2017 Immaculate Rookie Patch Auto LogoTag 2/3 with 5-Color BGS 9,2026-01,16.01.2026,54.09,EUR
 d8aba370-c141-4ffa-87f7-7a8b0887cf0e,Jayson Tatum 2017 Immaculate Rookie Patch Auto LogoTag 2/3 with 5-Color BGS 9,2026-02,14.02.2026,54.75,EUR
@@ -369,7 +369,7 @@ d8aba370-c141-4ffa-87f7-7a8b0887cf0e,Jayson Tatum 2017 Immaculate Rookie Patch A
 d8aba370-c141-4ffa-87f7-7a8b0887cf0e,Jayson Tatum 2017 Immaculate Rookie Patch Auto LogoTag 2/3 with 5-Color BGS 9,2026-04,24.04.2026,61.00,EUR
 d8aba370-c141-4ffa-87f7-7a8b0887cf0e,Jayson Tatum 2017 Immaculate Rookie Patch Auto LogoTag 2/3 with 5-Color BGS 9,2026-05,07.05.2026,61.00,EUR
 d8aba370-c141-4ffa-87f7-7a8b0887cf0e,Jayson Tatum 2017 Immaculate Rookie Patch Auto LogoTag 2/3 with 5-Color BGS 9,2026-06,17.06.2026,66.23,EUR
-d8aba370-c141-4ffa-87f7-7a8b0887cf0e,Jayson Tatum 2017 Immaculate Rookie Patch Auto LogoTag 2/3 with 5-Color BGS 9,2026-07,29.07.2026,66.23,EUR
+d8aba370-c141-4ffa-87f7-7a8b0887cf0e,Jayson Tatum 2017 Immaculate Rookie Patch Auto LogoTag 2/3 with 5-Color BGS 9,2026-07,29.07.2026,72.27,EUR
 6b4ca014-689a-4373-9395-e70a7c0aed91,"Jayson Tatum, 2023 Prizm Logoman Auto 1 of 1 PSA 9 + 10 Auto",2025-12,08.12.2025,56.19,EUR
 6b4ca014-689a-4373-9395-e70a7c0aed91,"Jayson Tatum, 2023 Prizm Logoman Auto 1 of 1 PSA 9 + 10 Auto",2026-01,16.01.2026,55.36,EUR
 6b4ca014-689a-4373-9395-e70a7c0aed91,"Jayson Tatum, 2023 Prizm Logoman Auto 1 of 1 PSA 9 + 10 Auto",2026-02,14.02.2026,56.04,EUR
@@ -377,7 +377,7 @@ d8aba370-c141-4ffa-87f7-7a8b0887cf0e,Jayson Tatum 2017 Immaculate Rookie Patch A
 6b4ca014-689a-4373-9395-e70a7c0aed91,"Jayson Tatum, 2023 Prizm Logoman Auto 1 of 1 PSA 9 + 10 Auto",2026-04,24.04.2026,62.51,EUR
 6b4ca014-689a-4373-9395-e70a7c0aed91,"Jayson Tatum, 2023 Prizm Logoman Auto 1 of 1 PSA 9 + 10 Auto",2026-05,07.05.2026,62.51,EUR
 6b4ca014-689a-4373-9395-e70a7c0aed91,"Jayson Tatum, 2023 Prizm Logoman Auto 1 of 1 PSA 9 + 10 Auto",2026-06,17.06.2026,69.44,EUR
-6b4ca014-689a-4373-9395-e70a7c0aed91,"Jayson Tatum, 2023 Prizm Logoman Auto 1 of 1 PSA 9 + 10 Auto",2026-07,29.07.2026,69.44,EUR
+6b4ca014-689a-4373-9395-e70a7c0aed91,"Jayson Tatum, 2023 Prizm Logoman Auto 1 of 1 PSA 9 + 10 Auto",2026-07,29.07.2026,75.35,EUR
 df92271d-a60a-47d1-b8cd-1dc2a4ddc6d7,"Jean-Michel Basquiat, Odours of Punt, 2024",2025-12,08.12.2025,51.97,EUR
 df92271d-a60a-47d1-b8cd-1dc2a4ddc6d7,"Jean-Michel Basquiat, Odours of Punt, 2024",2026-01,16.01.2026,51.97,EUR
 df92271d-a60a-47d1-b8cd-1dc2a4ddc6d7,"Jean-Michel Basquiat, Odours of Punt, 2024",2026-02,14.02.2026,51.97,EUR
@@ -388,7 +388,7 @@ df92271d-a60a-47d1-b8cd-1dc2a4ddc6d7,"Jean-Michel Basquiat, Odours of Punt, 2024
 df92271d-a60a-47d1-b8cd-1dc2a4ddc6d7,"Jean-Michel Basquiat, Odours of Punt, 2024",2026-07,29.07.2026,52.12,EUR
 563eb0f2-d1fb-4745-aac5-1577a2ab7e68,"Jon Merz, Portfolio of 7 Works",2026-05,07.05.2026,54.33,EUR
 563eb0f2-d1fb-4745-aac5-1577a2ab7e68,"Jon Merz, Portfolio of 7 Works",2026-06,17.06.2026,54.49,EUR
-563eb0f2-d1fb-4745-aac5-1577a2ab7e68,"Jon Merz, Portfolio of 7 Works",2026-07,29.07.2026,54.49,EUR
+563eb0f2-d1fb-4745-aac5-1577a2ab7e68,"Jon Merz, Portfolio of 7 Works",2026-07,29.07.2026,54.57,EUR
 c7a351d3-5b8c-47ab-90c8-745a1d8836a9,"Jordan/Pippen 2005 Exquisite Collection Dual Scripted Auto Patch 5/5 BGS 8,5",2025-12,08.12.2025,66.27,EUR
 c7a351d3-5b8c-47ab-90c8-745a1d8836a9,"Jordan/Pippen 2005 Exquisite Collection Dual Scripted Auto Patch 5/5 BGS 8,5",2026-01,16.01.2026,67.12,EUR
 c7a351d3-5b8c-47ab-90c8-745a1d8836a9,"Jordan/Pippen 2005 Exquisite Collection Dual Scripted Auto Patch 5/5 BGS 8,5",2026-02,14.02.2026,67.36,EUR
@@ -396,14 +396,14 @@ c7a351d3-5b8c-47ab-90c8-745a1d8836a9,"Jordan/Pippen 2005 Exquisite Collection Du
 c7a351d3-5b8c-47ab-90c8-745a1d8836a9,"Jordan/Pippen 2005 Exquisite Collection Dual Scripted Auto Patch 5/5 BGS 8,5",2026-04,24.04.2026,69.21,EUR
 c7a351d3-5b8c-47ab-90c8-745a1d8836a9,"Jordan/Pippen 2005 Exquisite Collection Dual Scripted Auto Patch 5/5 BGS 8,5",2026-05,07.05.2026,69.21,EUR
 c7a351d3-5b8c-47ab-90c8-745a1d8836a9,"Jordan/Pippen 2005 Exquisite Collection Dual Scripted Auto Patch 5/5 BGS 8,5",2026-06,17.06.2026,75.14,EUR
-c7a351d3-5b8c-47ab-90c8-745a1d8836a9,"Jordan/Pippen 2005 Exquisite Collection Dual Scripted Auto Patch 5/5 BGS 8,5",2026-07,29.07.2026,75.14,EUR
+c7a351d3-5b8c-47ab-90c8-745a1d8836a9,"Jordan/Pippen 2005 Exquisite Collection Dual Scripted Auto Patch 5/5 BGS 8,5",2026-07,29.07.2026,82.00,EUR
 3a8b7778-7281-40dd-a6c0-f380149a6a3e,"Josh Sperling, Untitled (Tondo 1), 2017",2026-01,16.01.2026,50.00,EUR
 3a8b7778-7281-40dd-a6c0-f380149a6a3e,"Josh Sperling, Untitled (Tondo 1), 2017",2026-02,14.02.2026,50.00,EUR
 3a8b7778-7281-40dd-a6c0-f380149a6a3e,"Josh Sperling, Untitled (Tondo 1), 2017",2026-03,24.03.2026,50.60,EUR
 3a8b7778-7281-40dd-a6c0-f380149a6a3e,"Josh Sperling, Untitled (Tondo 1), 2017",2026-04,24.04.2026,50.60,EUR
 3a8b7778-7281-40dd-a6c0-f380149a6a3e,"Josh Sperling, Untitled (Tondo 1), 2017",2026-05,07.05.2026,50.60,EUR
 3a8b7778-7281-40dd-a6c0-f380149a6a3e,"Josh Sperling, Untitled (Tondo 1), 2017",2026-06,17.06.2026,50.75,EUR
-3a8b7778-7281-40dd-a6c0-f380149a6a3e,"Josh Sperling, Untitled (Tondo 1), 2017",2026-07,29.07.2026,50.75,EUR
+3a8b7778-7281-40dd-a6c0-f380149a6a3e,"Josh Sperling, Untitled (Tondo 1), 2017",2026-07,29.07.2026,50.82,EUR
 e1c98c29-d94f-48f8-930a-ed251b4a2936,"Katherine Bernhardt, Pepsi, 2019",2025-12,08.12.2025,73.00,EUR
 e1c98c29-d94f-48f8-930a-ed251b4a2936,"Katherine Bernhardt, Pepsi, 2019",2026-01,16.01.2026,73.00,EUR
 e1c98c29-d94f-48f8-930a-ed251b4a2936,"Katherine Bernhardt, Pepsi, 2019",2026-02,14.02.2026,73.00,EUR
@@ -411,7 +411,7 @@ e1c98c29-d94f-48f8-930a-ed251b4a2936,"Katherine Bernhardt, Pepsi, 2019",2026-03,
 e1c98c29-d94f-48f8-930a-ed251b4a2936,"Katherine Bernhardt, Pepsi, 2019",2026-04,24.04.2026,73.00,EUR
 e1c98c29-d94f-48f8-930a-ed251b4a2936,"Katherine Bernhardt, Pepsi, 2019",2026-05,07.05.2026,73.00,EUR
 e1c98c29-d94f-48f8-930a-ed251b4a2936,"Katherine Bernhardt, Pepsi, 2019",2026-06,17.06.2026,73.21,EUR
-e1c98c29-d94f-48f8-930a-ed251b4a2936,"Katherine Bernhardt, Pepsi, 2019",2026-07,29.07.2026,73.21,EUR
+e1c98c29-d94f-48f8-930a-ed251b4a2936,"Katherine Bernhardt, Pepsi, 2019",2026-07,29.07.2026,73.31,EUR
 8bcbfeda-080a-44a4-9421-9807cdef214a,"KAWS x Dior, BFF Plush Set",2025-12,08.12.2025,52.80,EUR
 8bcbfeda-080a-44a4-9421-9807cdef214a,"KAWS x Dior, BFF Plush Set",2026-01,16.01.2026,52.80,EUR
 8bcbfeda-080a-44a4-9421-9807cdef214a,"KAWS x Dior, BFF Plush Set",2026-02,14.02.2026,52.80,EUR
@@ -419,7 +419,7 @@ e1c98c29-d94f-48f8-930a-ed251b4a2936,"Katherine Bernhardt, Pepsi, 2019",2026-07,
 8bcbfeda-080a-44a4-9421-9807cdef214a,"KAWS x Dior, BFF Plush Set",2026-04,24.04.2026,52.80,EUR
 8bcbfeda-080a-44a4-9421-9807cdef214a,"KAWS x Dior, BFF Plush Set",2026-05,07.05.2026,52.80,EUR
 8bcbfeda-080a-44a4-9421-9807cdef214a,"KAWS x Dior, BFF Plush Set",2026-06,17.06.2026,52.80,EUR
-8bcbfeda-080a-44a4-9421-9807cdef214a,"KAWS x Dior, BFF Plush Set",2026-07,29.07.2026,52.80,EUR
+8bcbfeda-080a-44a4-9421-9807cdef214a,"KAWS x Dior, BFF Plush Set",2026-07,29.07.2026,45.10,EUR
 2e3a7629-499c-4d11-8cd0-0d718f34f36b,"Keith Haring, Untitled, 1985 (Part II)",2026-02,14.02.2026,50.00,EUR
 2e3a7629-499c-4d11-8cd0-0d718f34f36b,"Keith Haring, Untitled, 1985 (Part II)",2026-03,24.03.2026,52.21,EUR
 2e3a7629-499c-4d11-8cd0-0d718f34f36b,"Keith Haring, Untitled, 1985 (Part II)",2026-04,24.04.2026,55.94,EUR
@@ -433,13 +433,13 @@ f7f0b7a4-ca0c-44c4-a746-5b7e63aa0149,"Kenny Scharf, Kamo, 2020",2026-03,24.03.20
 f7f0b7a4-ca0c-44c4-a746-5b7e63aa0149,"Kenny Scharf, Kamo, 2020",2026-04,24.04.2026,74.96,EUR
 f7f0b7a4-ca0c-44c4-a746-5b7e63aa0149,"Kenny Scharf, Kamo, 2020",2026-05,07.05.2026,74.96,EUR
 f7f0b7a4-ca0c-44c4-a746-5b7e63aa0149,"Kenny Scharf, Kamo, 2020",2026-06,17.06.2026,75.17,EUR
-f7f0b7a4-ca0c-44c4-a746-5b7e63aa0149,"Kenny Scharf, Kamo, 2020",2026-07,29.07.2026,75.17,EUR
+f7f0b7a4-ca0c-44c4-a746-5b7e63aa0149,"Kenny Scharf, Kamo, 2020",2026-07,29.07.2026,75.28,EUR
 e7a786fe-6784-42ee-8404-4dd38682bc4c,Kobe Bryant 2012 Panini Prizm Gold Most Valuable Player (MVP) 1/10 PSA 10,2026-02,14.02.2026,50.27,EUR
 e7a786fe-6784-42ee-8404-4dd38682bc4c,Kobe Bryant 2012 Panini Prizm Gold Most Valuable Player (MVP) 1/10 PSA 10,2026-03,24.03.2026,51.44,EUR
 e7a786fe-6784-42ee-8404-4dd38682bc4c,Kobe Bryant 2012 Panini Prizm Gold Most Valuable Player (MVP) 1/10 PSA 10,2026-04,24.04.2026,52.72,EUR
 e7a786fe-6784-42ee-8404-4dd38682bc4c,Kobe Bryant 2012 Panini Prizm Gold Most Valuable Player (MVP) 1/10 PSA 10,2026-05,07.05.2026,52.72,EUR
 e7a786fe-6784-42ee-8404-4dd38682bc4c,Kobe Bryant 2012 Panini Prizm Gold Most Valuable Player (MVP) 1/10 PSA 10,2026-06,17.06.2026,57.24,EUR
-e7a786fe-6784-42ee-8404-4dd38682bc4c,Kobe Bryant 2012 Panini Prizm Gold Most Valuable Player (MVP) 1/10 PSA 10,2026-07,29.07.2026,57.24,EUR
+e7a786fe-6784-42ee-8404-4dd38682bc4c,Kobe Bryant 2012 Panini Prizm Gold Most Valuable Player (MVP) 1/10 PSA 10,2026-07,29.07.2026,62.46,EUR
 455f43f8-191b-4a87-bccf-d111ed52ab9f,"Kobe Bryant, 2015 Flawless Now & Then (signed), #8/25, PSA 8",2025-12,08.12.2025,50.00,EUR
 455f43f8-191b-4a87-bccf-d111ed52ab9f,"Kobe Bryant, 2015 Flawless Now & Then (signed), #8/25, PSA 8",2026-01,16.01.2026,50.42,EUR
 455f43f8-191b-4a87-bccf-d111ed52ab9f,"Kobe Bryant, 2015 Flawless Now & Then (signed), #8/25, PSA 8",2026-02,14.02.2026,50.68,EUR
@@ -447,14 +447,14 @@ e7a786fe-6784-42ee-8404-4dd38682bc4c,Kobe Bryant 2012 Panini Prizm Gold Most Val
 455f43f8-191b-4a87-bccf-d111ed52ab9f,"Kobe Bryant, 2015 Flawless Now & Then (signed), #8/25, PSA 8",2026-04,24.04.2026,51.46,EUR
 455f43f8-191b-4a87-bccf-d111ed52ab9f,"Kobe Bryant, 2015 Flawless Now & Then (signed), #8/25, PSA 8",2026-05,07.05.2026,51.46,EUR
 455f43f8-191b-4a87-bccf-d111ed52ab9f,"Kobe Bryant, 2015 Flawless Now & Then (signed), #8/25, PSA 8",2026-06,17.06.2026,55.87,EUR
-455f43f8-191b-4a87-bccf-d111ed52ab9f,"Kobe Bryant, 2015 Flawless Now & Then (signed), #8/25, PSA 8",2026-07,29.07.2026,55.87,EUR
+455f43f8-191b-4a87-bccf-d111ed52ab9f,"Kobe Bryant, 2015 Flawless Now & Then (signed), #8/25, PSA 8",2026-07,29.07.2026,60.97,EUR
 74010d65-6962-4c1f-98e7-0c1aeb763a53,"Krug, Rosé & Champagne Portfolio",2026-01,16.01.2026,54.21,EUR
 74010d65-6962-4c1f-98e7-0c1aeb763a53,"Krug, Rosé & Champagne Portfolio",2026-02,14.02.2026,57.46,EUR
 74010d65-6962-4c1f-98e7-0c1aeb763a53,"Krug, Rosé & Champagne Portfolio",2026-03,24.03.2026,57.66,EUR
 74010d65-6962-4c1f-98e7-0c1aeb763a53,"Krug, Rosé & Champagne Portfolio",2026-04,24.04.2026,57.44,EUR
 74010d65-6962-4c1f-98e7-0c1aeb763a53,"Krug, Rosé & Champagne Portfolio",2026-05,07.05.2026,57.44,EUR
 74010d65-6962-4c1f-98e7-0c1aeb763a53,"Krug, Rosé & Champagne Portfolio",2026-06,17.06.2026,57.27,EUR
-74010d65-6962-4c1f-98e7-0c1aeb763a53,"Krug, Rosé & Champagne Portfolio",2026-07,29.07.2026,57.27,EUR
+74010d65-6962-4c1f-98e7-0c1aeb763a53,"Krug, Rosé & Champagne Portfolio",2026-07,29.07.2026,57.06,EUR
 b0c360e7-a401-4517-8426-e880ee516119,"Ksenia Pasyura, Ceremony, 2023",2025-12,08.12.2025,69.83,EUR
 b0c360e7-a401-4517-8426-e880ee516119,"Ksenia Pasyura, Ceremony, 2023",2026-01,16.01.2026,69.83,EUR
 b0c360e7-a401-4517-8426-e880ee516119,"Ksenia Pasyura, Ceremony, 2023",2026-02,14.02.2026,69.83,EUR
@@ -462,7 +462,7 @@ b0c360e7-a401-4517-8426-e880ee516119,"Ksenia Pasyura, Ceremony, 2023",2026-03,24
 b0c360e7-a401-4517-8426-e880ee516119,"Ksenia Pasyura, Ceremony, 2023",2026-04,24.04.2026,69.83,EUR
 b0c360e7-a401-4517-8426-e880ee516119,"Ksenia Pasyura, Ceremony, 2023",2026-05,07.05.2026,69.83,EUR
 b0c360e7-a401-4517-8426-e880ee516119,"Ksenia Pasyura, Ceremony, 2023",2026-06,17.06.2026,70.03,EUR
-b0c360e7-a401-4517-8426-e880ee516119,"Ksenia Pasyura, Ceremony, 2023",2026-07,29.07.2026,70.03,EUR
+b0c360e7-a401-4517-8426-e880ee516119,"Ksenia Pasyura, Ceremony, 2023",2026-07,29.07.2026,70.13,EUR
 6b0a2283-e11b-47c9-9cf3-3a999ce09ec1,"Ksenia Pasyura, New Statement, 2024",2025-12,08.12.2025,76.80,EUR
 6b0a2283-e11b-47c9-9cf3-3a999ce09ec1,"Ksenia Pasyura, New Statement, 2024",2026-01,16.01.2026,76.80,EUR
 6b0a2283-e11b-47c9-9cf3-3a999ce09ec1,"Ksenia Pasyura, New Statement, 2024",2026-02,14.02.2026,76.80,EUR
@@ -605,13 +605,13 @@ b8a049c6-7bc7-48e2-81fe-b2706a46fac6,"LEGO, Star Wars UCS Bundle, 25 sets each",
 326925af-ad63-4d20-87cf-303d06fa585b,Luka Dončić 2023 National Treasures Game Used Logoman Auto 1of1 BGS 9,2026-04,24.04.2026,53.02,EUR
 326925af-ad63-4d20-87cf-303d06fa585b,Luka Dončić 2023 National Treasures Game Used Logoman Auto 1of1 BGS 9,2026-05,07.05.2026,53.02,EUR
 326925af-ad63-4d20-87cf-303d06fa585b,Luka Dončić 2023 National Treasures Game Used Logoman Auto 1of1 BGS 9,2026-06,17.06.2026,57.57,EUR
-326925af-ad63-4d20-87cf-303d06fa585b,Luka Dončić 2023 National Treasures Game Used Logoman Auto 1of1 BGS 9,2026-07,29.07.2026,57.57,EUR
+326925af-ad63-4d20-87cf-303d06fa585b,Luka Dončić 2023 National Treasures Game Used Logoman Auto 1of1 BGS 9,2026-07,29.07.2026,62.82,EUR
 d467a92e-3d34-40e2-8882-c853229aa727,Luka Dončić 2023 Prizm Logoman Auto 1of1 Encased,2026-02,14.02.2026,50.00,EUR
 d467a92e-3d34-40e2-8882-c853229aa727,Luka Dončić 2023 Prizm Logoman Auto 1of1 Encased,2026-03,24.03.2026,50.17,EUR
 d467a92e-3d34-40e2-8882-c853229aa727,Luka Dončić 2023 Prizm Logoman Auto 1of1 Encased,2026-04,24.04.2026,50.82,EUR
 d467a92e-3d34-40e2-8882-c853229aa727,Luka Dončić 2023 Prizm Logoman Auto 1of1 Encased,2026-05,07.05.2026,50.82,EUR
 d467a92e-3d34-40e2-8882-c853229aa727,Luka Dončić 2023 Prizm Logoman Auto 1of1 Encased,2026-06,17.06.2026,55.17,EUR
-d467a92e-3d34-40e2-8882-c853229aa727,Luka Dončić 2023 Prizm Logoman Auto 1of1 Encased,2026-07,29.07.2026,55.17,EUR
+d467a92e-3d34-40e2-8882-c853229aa727,Luka Dončić 2023 Prizm Logoman Auto 1of1 Encased,2026-07,29.07.2026,60.21,EUR
 740c7090-15ac-4d86-9c32-444b3481e11e,"Mary Poppins, First Edition, signed by P.L. Travers, 1934",2025-12,08.12.2025,51.50,EUR
 740c7090-15ac-4d86-9c32-444b3481e11e,"Mary Poppins, First Edition, signed by P.L. Travers, 1934",2026-01,16.01.2026,51.50,EUR
 740c7090-15ac-4d86-9c32-444b3481e11e,"Mary Poppins, First Edition, signed by P.L. Travers, 1934",2026-02,14.02.2026,51.50,EUR
@@ -624,7 +624,7 @@ d467a92e-3d34-40e2-8882-c853229aa727,Luka Dončić 2023 Prizm Logoman Auto 1of1 
 21f735b6-6060-4db4-9294-4c12b39df750,"Maurice Mboa, Transition Énergétique",2026-04,24.04.2026,50.87,EUR
 21f735b6-6060-4db4-9294-4c12b39df750,"Maurice Mboa, Transition Énergétique",2026-05,07.05.2026,50.87,EUR
 21f735b6-6060-4db4-9294-4c12b39df750,"Maurice Mboa, Transition Énergétique",2026-06,17.06.2026,51.02,EUR
-21f735b6-6060-4db4-9294-4c12b39df750,"Maurice Mboa, Transition Énergétique",2026-07,29.07.2026,51.02,EUR
+21f735b6-6060-4db4-9294-4c12b39df750,"Maurice Mboa, Transition Énergétique",2026-07,29.07.2026,51.09,EUR
 f8fdee45-ec64-4081-87ff-13679e757d88,"McLaren, MP4-12C, 2013",2026-01,16.01.2026,57.45,EUR
 f8fdee45-ec64-4081-87ff-13679e757d88,"McLaren, MP4-12C, 2013",2026-02,14.02.2026,57.45,EUR
 f8fdee45-ec64-4081-87ff-13679e757d88,"McLaren, MP4-12C, 2013",2026-03,24.03.2026,57.41,EUR
@@ -639,7 +639,7 @@ f8fdee45-ec64-4081-87ff-13679e757d88,"McLaren, MP4-12C, 2013",2026-07,29.07.2026
 5d68c85d-b9b3-4d2e-bdda-49233cb8a086,Michael Jordan 2006 Exquisite Collection Base 23/225 Jersey Number PSA 5,2026-04,24.04.2026,57.68,EUR
 5d68c85d-b9b3-4d2e-bdda-49233cb8a086,Michael Jordan 2006 Exquisite Collection Base 23/225 Jersey Number PSA 5,2026-05,07.05.2026,57.68,EUR
 5d68c85d-b9b3-4d2e-bdda-49233cb8a086,Michael Jordan 2006 Exquisite Collection Base 23/225 Jersey Number PSA 5,2026-06,17.06.2026,62.62,EUR
-5d68c85d-b9b3-4d2e-bdda-49233cb8a086,Michael Jordan 2006 Exquisite Collection Base 23/225 Jersey Number PSA 5,2026-07,29.07.2026,62.62,EUR
+5d68c85d-b9b3-4d2e-bdda-49233cb8a086,Michael Jordan 2006 Exquisite Collection Base 23/225 Jersey Number PSA 5,2026-07,29.07.2026,68.34,EUR
 6efc7dfb-9a13-4dcd-bb2d-7583d6cbb994,"Michael Jordan Autographed Nike Air Jordan 1 Retro High Off-White ""UNC"" Shoes",2025-12,08.12.2025,51.47,EUR
 6efc7dfb-9a13-4dcd-bb2d-7583d6cbb994,"Michael Jordan Autographed Nike Air Jordan 1 Retro High Off-White ""UNC"" Shoes",2026-01,16.01.2026,51.47,EUR
 6efc7dfb-9a13-4dcd-bb2d-7583d6cbb994,"Michael Jordan Autographed Nike Air Jordan 1 Retro High Off-White ""UNC"" Shoes",2026-02,14.02.2026,51.47,EUR
@@ -663,9 +663,9 @@ f8fdee45-ec64-4081-87ff-13679e757d88,"McLaren, MP4-12C, 2013",2026-07,29.07.2026
 203a6e72-7221-4df0-9583-f1e8b8a13450,"Móyòsóré Martins, How I See It  (Triptych), 2023",2026-07,29.07.2026,60.03,EUR
 e2bc0133-ffde-41f4-93a5-df858b0849b3,"Móyòsóré Martins, Portfolio I",2026-05,07.05.2026,65.22,EUR
 e2bc0133-ffde-41f4-93a5-df858b0849b3,"Móyòsóré Martins, Portfolio I",2026-06,17.06.2026,65.22,EUR
-e2bc0133-ffde-41f4-93a5-df858b0849b3,"Móyòsóré Martins, Portfolio I",2026-07,29.07.2026,65.22,EUR
+e2bc0133-ffde-41f4-93a5-df858b0849b3,"Móyòsóré Martins, Portfolio I",2026-07,29.07.2026,59.72,EUR
 87dd696a-488d-48cb-b6bc-87152ef0ed95,"Móyòsóré Martins, Pursuit of Grace II, 2024",2026-06,17.06.2026,50.60,EUR
-87dd696a-488d-48cb-b6bc-87152ef0ed95,"Móyòsóré Martins, Pursuit of Grace II, 2024",2026-07,29.07.2026,50.60,EUR
+87dd696a-488d-48cb-b6bc-87152ef0ed95,"Móyòsóré Martins, Pursuit of Grace II, 2024",2026-07,29.07.2026,50.67,EUR
 262a2bf1-b4a0-49ef-8e70-709b43758d8d,Nike Air Jordan 1 OG 1985 Bred,2025-12,08.12.2025,53.38,EUR
 262a2bf1-b4a0-49ef-8e70-709b43758d8d,Nike Air Jordan 1 OG 1985 Bred,2026-01,16.01.2026,53.38,EUR
 262a2bf1-b4a0-49ef-8e70-709b43758d8d,Nike Air Jordan 1 OG 1985 Bred,2026-02,14.02.2026,53.38,EUR
@@ -760,7 +760,7 @@ dbdf2243-c2ec-4e37-8dee-d36cb2e503a3,"Omega, Speedmaster Moonwatch “Snoopy”"
 dbdf2243-c2ec-4e37-8dee-d36cb2e503a3,"Omega, Speedmaster Moonwatch “Snoopy”",2026-04,24.04.2026,44.93,EUR
 dbdf2243-c2ec-4e37-8dee-d36cb2e503a3,"Omega, Speedmaster Moonwatch “Snoopy”",2026-05,07.05.2026,44.93,EUR
 dbdf2243-c2ec-4e37-8dee-d36cb2e503a3,"Omega, Speedmaster Moonwatch “Snoopy”",2026-06,17.06.2026,44.97,EUR
-dbdf2243-c2ec-4e37-8dee-d36cb2e503a3,"Omega, Speedmaster Moonwatch “Snoopy”",2026-07,29.07.2026,44.97,EUR
+dbdf2243-c2ec-4e37-8dee-d36cb2e503a3,"Omega, Speedmaster Moonwatch “Snoopy”",2026-07,29.07.2026,44.64,EUR
 9dc2efa3-775c-49de-aaa1-62b48f6e722c,"Pablo Picasso, The Painter II, 1970",2025-12,08.12.2025,52.90,EUR
 9dc2efa3-775c-49de-aaa1-62b48f6e722c,"Pablo Picasso, The Painter II, 1970",2026-01,16.01.2026,52.90,EUR
 9dc2efa3-775c-49de-aaa1-62b48f6e722c,"Pablo Picasso, The Painter II, 1970",2026-02,14.02.2026,52.90,EUR
@@ -776,7 +776,7 @@ dbdf2243-c2ec-4e37-8dee-d36cb2e503a3,"Omega, Speedmaster Moonwatch “Snoopy”"
 11e084d7-164f-4501-91f1-e1a9b3372c5c,Patek Philippe - Aquanaut - Reference 5167R-001,2026-04,24.04.2026,52.54,EUR
 11e084d7-164f-4501-91f1-e1a9b3372c5c,Patek Philippe - Aquanaut - Reference 5167R-001,2026-05,07.05.2026,52.54,EUR
 11e084d7-164f-4501-91f1-e1a9b3372c5c,Patek Philippe - Aquanaut - Reference 5167R-001,2026-06,17.06.2026,53.18,EUR
-11e084d7-164f-4501-91f1-e1a9b3372c5c,Patek Philippe - Aquanaut - Reference 5167R-001,2026-07,29.07.2026,53.18,EUR
+11e084d7-164f-4501-91f1-e1a9b3372c5c,Patek Philippe - Aquanaut - Reference 5167R-001,2026-07,29.07.2026,53.39,EUR
 55e6dd03-5359-4ed9-b1b9-72693ae094bd,"Patek Philippe, Nautilus Travel Time Chronograph",2025-12,08.12.2025,43.97,EUR
 55e6dd03-5359-4ed9-b1b9-72693ae094bd,"Patek Philippe, Nautilus Travel Time Chronograph",2026-01,16.01.2026,44.12,EUR
 55e6dd03-5359-4ed9-b1b9-72693ae094bd,"Patek Philippe, Nautilus Travel Time Chronograph",2026-02,14.02.2026,45.00,EUR
@@ -784,12 +784,12 @@ dbdf2243-c2ec-4e37-8dee-d36cb2e503a3,"Omega, Speedmaster Moonwatch “Snoopy”"
 55e6dd03-5359-4ed9-b1b9-72693ae094bd,"Patek Philippe, Nautilus Travel Time Chronograph",2026-04,24.04.2026,46.50,EUR
 55e6dd03-5359-4ed9-b1b9-72693ae094bd,"Patek Philippe, Nautilus Travel Time Chronograph",2026-05,07.05.2026,46.50,EUR
 55e6dd03-5359-4ed9-b1b9-72693ae094bd,"Patek Philippe, Nautilus Travel Time Chronograph",2026-06,17.06.2026,47.06,EUR
-55e6dd03-5359-4ed9-b1b9-72693ae094bd,"Patek Philippe, Nautilus Travel Time Chronograph",2026-07,29.07.2026,47.06,EUR
+55e6dd03-5359-4ed9-b1b9-72693ae094bd,"Patek Philippe, Nautilus Travel Time Chronograph",2026-07,29.07.2026,47.24,EUR
 b7a01413-7405-4b74-a212-d4fd77331e1a,"Patek Philippe, Nautilus, 5711/1A-011",2026-03,24.03.2026,57.41,EUR
 b7a01413-7405-4b74-a212-d4fd77331e1a,"Patek Philippe, Nautilus, 5711/1A-011",2026-04,24.04.2026,58.06,EUR
 b7a01413-7405-4b74-a212-d4fd77331e1a,"Patek Philippe, Nautilus, 5711/1A-011",2026-05,07.05.2026,58.06,EUR
 b7a01413-7405-4b74-a212-d4fd77331e1a,"Patek Philippe, Nautilus, 5711/1A-011",2026-06,17.06.2026,58.76,EUR
-b7a01413-7405-4b74-a212-d4fd77331e1a,"Patek Philippe, Nautilus, 5711/1A-011",2026-07,29.07.2026,58.76,EUR
+b7a01413-7405-4b74-a212-d4fd77331e1a,"Patek Philippe, Nautilus, 5711/1A-011",2026-07,29.07.2026,58.99,EUR
 437960b4-2ca4-4a83-9325-bee17ffccba5,Peyton Manning 2006 Exquisite Game Used Rare Materials Signature 1of1 BGS 8.5 + 10 Auto,2025-12,08.12.2025,56.45,EUR
 437960b4-2ca4-4a83-9325-bee17ffccba5,Peyton Manning 2006 Exquisite Game Used Rare Materials Signature 1of1 BGS 8.5 + 10 Auto,2026-01,16.01.2026,56.99,EUR
 437960b4-2ca4-4a83-9325-bee17ffccba5,Peyton Manning 2006 Exquisite Game Used Rare Materials Signature 1of1 BGS 8.5 + 10 Auto,2026-02,14.02.2026,56.73,EUR
@@ -797,13 +797,13 @@ b7a01413-7405-4b74-a212-d4fd77331e1a,"Patek Philippe, Nautilus, 5711/1A-011",202
 437960b4-2ca4-4a83-9325-bee17ffccba5,Peyton Manning 2006 Exquisite Game Used Rare Materials Signature 1of1 BGS 8.5 + 10 Auto,2026-04,24.04.2026,57.39,EUR
 437960b4-2ca4-4a83-9325-bee17ffccba5,Peyton Manning 2006 Exquisite Game Used Rare Materials Signature 1of1 BGS 8.5 + 10 Auto,2026-05,07.05.2026,57.39,EUR
 437960b4-2ca4-4a83-9325-bee17ffccba5,Peyton Manning 2006 Exquisite Game Used Rare Materials Signature 1of1 BGS 8.5 + 10 Auto,2026-06,17.06.2026,60.05,EUR
-437960b4-2ca4-4a83-9325-bee17ffccba5,Peyton Manning 2006 Exquisite Game Used Rare Materials Signature 1of1 BGS 8.5 + 10 Auto,2026-07,29.07.2026,60.05,EUR
+437960b4-2ca4-4a83-9325-bee17ffccba5,Peyton Manning 2006 Exquisite Game Used Rare Materials Signature 1of1 BGS 8.5 + 10 Auto,2026-07,29.07.2026,62.14,EUR
 e10407fe-2c72-4490-a6df-a2fe786219ab,"Philip Tsiaras, Aqua Equus, 2023",2026-02,14.02.2026,59.05,EUR
 e10407fe-2c72-4490-a6df-a2fe786219ab,"Philip Tsiaras, Aqua Equus, 2023",2026-03,24.03.2026,59.05,EUR
 e10407fe-2c72-4490-a6df-a2fe786219ab,"Philip Tsiaras, Aqua Equus, 2023",2026-04,24.04.2026,68.12,EUR
 e10407fe-2c72-4490-a6df-a2fe786219ab,"Philip Tsiaras, Aqua Equus, 2023",2026-05,07.05.2026,68.12,EUR
 e10407fe-2c72-4490-a6df-a2fe786219ab,"Philip Tsiaras, Aqua Equus, 2023",2026-06,17.06.2026,68.31,EUR
-e10407fe-2c72-4490-a6df-a2fe786219ab,"Philip Tsiaras, Aqua Equus, 2023",2026-07,29.07.2026,68.31,EUR
+e10407fe-2c72-4490-a6df-a2fe786219ab,"Philip Tsiaras, Aqua Equus, 2023",2026-07,29.07.2026,68.41,EUR
 e9f8bb6f-76ba-45e1-9cdb-f77ba1ccaaf7,"Pieter Obels, Chasing a Feeling, 2024",2025-12,08.12.2025,69.92,EUR
 e9f8bb6f-76ba-45e1-9cdb-f77ba1ccaaf7,"Pieter Obels, Chasing a Feeling, 2024",2026-01,16.01.2026,69.92,EUR
 e9f8bb6f-76ba-45e1-9cdb-f77ba1ccaaf7,"Pieter Obels, Chasing a Feeling, 2024",2026-02,14.02.2026,69.92,EUR
@@ -818,13 +818,13 @@ cdf4de9a-7d20-4ae1-91f8-24bed347cbb5,"Pieter Obels, Go Whisper Softly, 2025",202
 cdf4de9a-7d20-4ae1-91f8-24bed347cbb5,"Pieter Obels, Go Whisper Softly, 2025",2026-04,24.04.2026,61.45,EUR
 cdf4de9a-7d20-4ae1-91f8-24bed347cbb5,"Pieter Obels, Go Whisper Softly, 2025",2026-05,07.05.2026,61.45,EUR
 cdf4de9a-7d20-4ae1-91f8-24bed347cbb5,"Pieter Obels, Go Whisper Softly, 2025",2026-06,17.06.2026,62.68,EUR
-cdf4de9a-7d20-4ae1-91f8-24bed347cbb5,"Pieter Obels, Go Whisper Softly, 2025",2026-07,29.07.2026,62.68,EUR
+cdf4de9a-7d20-4ae1-91f8-24bed347cbb5,"Pieter Obels, Go Whisper Softly, 2025",2026-07,29.07.2026,63.30,EUR
 ff19c3bd-93b4-4b9d-8b50-4e1a4b128850,Pokémon - 2 case fresh Fossil 1st Edition Booster Boxes,2026-02,14.02.2026,50.00,EUR
 ff19c3bd-93b4-4b9d-8b50-4e1a4b128850,Pokémon - 2 case fresh Fossil 1st Edition Booster Boxes,2026-03,24.03.2026,51.22,EUR
 ff19c3bd-93b4-4b9d-8b50-4e1a4b128850,Pokémon - 2 case fresh Fossil 1st Edition Booster Boxes,2026-04,24.04.2026,54.84,EUR
 ff19c3bd-93b4-4b9d-8b50-4e1a4b128850,Pokémon - 2 case fresh Fossil 1st Edition Booster Boxes,2026-05,07.05.2026,54.84,EUR
 ff19c3bd-93b4-4b9d-8b50-4e1a4b128850,Pokémon - 2 case fresh Fossil 1st Edition Booster Boxes,2026-06,17.06.2026,54.84,EUR
-ff19c3bd-93b4-4b9d-8b50-4e1a4b128850,Pokémon - 2 case fresh Fossil 1st Edition Booster Boxes,2026-07,29.07.2026,54.84,EUR
+ff19c3bd-93b4-4b9d-8b50-4e1a4b128850,Pokémon - 2 case fresh Fossil 1st Edition Booster Boxes,2026-07,29.07.2026,59.04,EUR
 d6bc6f41-bec9-4b1d-b3d3-caca635482f2,Pokémon Japanese Neo 2 - Crossing the Ruins Booster Box - Part 2,2025-12,08.12.2025,50.00,EUR
 d6bc6f41-bec9-4b1d-b3d3-caca635482f2,Pokémon Japanese Neo 2 - Crossing the Ruins Booster Box - Part 2,2026-01,16.01.2026,52.49,EUR
 d6bc6f41-bec9-4b1d-b3d3-caca635482f2,Pokémon Japanese Neo 2 - Crossing the Ruins Booster Box - Part 2,2026-02,14.02.2026,53.11,EUR
@@ -832,7 +832,7 @@ d6bc6f41-bec9-4b1d-b3d3-caca635482f2,Pokémon Japanese Neo 2 - Crossing the Ruin
 d6bc6f41-bec9-4b1d-b3d3-caca635482f2,Pokémon Japanese Neo 2 - Crossing the Ruins Booster Box - Part 2,2026-04,24.04.2026,59.01,EUR
 d6bc6f41-bec9-4b1d-b3d3-caca635482f2,Pokémon Japanese Neo 2 - Crossing the Ruins Booster Box - Part 2,2026-05,07.05.2026,59.01,EUR
 d6bc6f41-bec9-4b1d-b3d3-caca635482f2,Pokémon Japanese Neo 2 - Crossing the Ruins Booster Box - Part 2,2026-06,17.06.2026,65.42,EUR
-d6bc6f41-bec9-4b1d-b3d3-caca635482f2,Pokémon Japanese Neo 2 - Crossing the Ruins Booster Box - Part 2,2026-07,29.07.2026,65.42,EUR
+d6bc6f41-bec9-4b1d-b3d3-caca635482f2,Pokémon Japanese Neo 2 - Crossing the Ruins Booster Box - Part 2,2026-07,29.07.2026,70.44,EUR
 036ce9d2-cfb6-4e04-80e6-440d59906806,"Pokémon XY ""Furious Fists"" (sealed case)",2025-12,08.12.2025,50.20,EUR
 036ce9d2-cfb6-4e04-80e6-440d59906806,"Pokémon XY ""Furious Fists"" (sealed case)",2026-01,16.01.2026,52.35,EUR
 036ce9d2-cfb6-4e04-80e6-440d59906806,"Pokémon XY ""Furious Fists"" (sealed case)",2026-02,14.02.2026,50.56,EUR
@@ -840,14 +840,14 @@ d6bc6f41-bec9-4b1d-b3d3-caca635482f2,Pokémon Japanese Neo 2 - Crossing the Ruin
 036ce9d2-cfb6-4e04-80e6-440d59906806,"Pokémon XY ""Furious Fists"" (sealed case)",2026-04,24.04.2026,51.60,EUR
 036ce9d2-cfb6-4e04-80e6-440d59906806,"Pokémon XY ""Furious Fists"" (sealed case)",2026-05,07.05.2026,51.60,EUR
 036ce9d2-cfb6-4e04-80e6-440d59906806,"Pokémon XY ""Furious Fists"" (sealed case)",2026-06,17.06.2026,57.20,EUR
-036ce9d2-cfb6-4e04-80e6-440d59906806,"Pokémon XY ""Furious Fists"" (sealed case)",2026-07,29.07.2026,57.20,EUR
+036ce9d2-cfb6-4e04-80e6-440d59906806,"Pokémon XY ""Furious Fists"" (sealed case)",2026-07,29.07.2026,61.58,EUR
 fc78cdd8-92fc-456b-ac2f-2b7794e25270,"Pokémon XY Base Set & Primal Clash (2 Cases, 6 Boosterboxes each)",2026-01,16.01.2026,53.03,EUR
 fc78cdd8-92fc-456b-ac2f-2b7794e25270,"Pokémon XY Base Set & Primal Clash (2 Cases, 6 Boosterboxes each)",2026-02,14.02.2026,52.91,EUR
 fc78cdd8-92fc-456b-ac2f-2b7794e25270,"Pokémon XY Base Set & Primal Clash (2 Cases, 6 Boosterboxes each)",2026-03,24.03.2026,52.91,EUR
 fc78cdd8-92fc-456b-ac2f-2b7794e25270,"Pokémon XY Base Set & Primal Clash (2 Cases, 6 Boosterboxes each)",2026-04,24.04.2026,52.91,EUR
 fc78cdd8-92fc-456b-ac2f-2b7794e25270,"Pokémon XY Base Set & Primal Clash (2 Cases, 6 Boosterboxes each)",2026-05,07.05.2026,52.91,EUR
 fc78cdd8-92fc-456b-ac2f-2b7794e25270,"Pokémon XY Base Set & Primal Clash (2 Cases, 6 Boosterboxes each)",2026-06,17.06.2026,52.91,EUR
-fc78cdd8-92fc-456b-ac2f-2b7794e25270,"Pokémon XY Base Set & Primal Clash (2 Cases, 6 Boosterboxes each)",2026-07,29.07.2026,52.91,EUR
+fc78cdd8-92fc-456b-ac2f-2b7794e25270,"Pokémon XY Base Set & Primal Clash (2 Cases, 6 Boosterboxes each)",2026-07,29.07.2026,56.97,EUR
 e1216634-8d46-4f5d-9aaa-f1fe91a727db,"Porsche 911, 930 SSC, 1986",2025-12,08.12.2025,56.84,EUR
 e1216634-8d46-4f5d-9aaa-f1fe91a727db,"Porsche 911, 930 SSC, 1986",2026-01,16.01.2026,56.84,EUR
 e1216634-8d46-4f5d-9aaa-f1fe91a727db,"Porsche 911, 930 SSC, 1986",2026-02,14.02.2026,56.84,EUR
@@ -863,7 +863,7 @@ f92d95cb-ca4a-43a7-a7d8-f3c5c7a566e8,"Raghav Babbar, A Lone Winter Night, 2024",
 f92d95cb-ca4a-43a7-a7d8-f3c5c7a566e8,"Raghav Babbar, A Lone Winter Night, 2024",2026-04,24.04.2026,61.85,EUR
 f92d95cb-ca4a-43a7-a7d8-f3c5c7a566e8,"Raghav Babbar, A Lone Winter Night, 2024",2026-05,07.05.2026,61.85,EUR
 f92d95cb-ca4a-43a7-a7d8-f3c5c7a566e8,"Raghav Babbar, A Lone Winter Night, 2024",2026-06,17.06.2026,62.02,EUR
-f92d95cb-ca4a-43a7-a7d8-f3c5c7a566e8,"Raghav Babbar, A Lone Winter Night, 2024",2026-07,29.07.2026,62.02,EUR
+f92d95cb-ca4a-43a7-a7d8-f3c5c7a566e8,"Raghav Babbar, A Lone Winter Night, 2024",2026-07,29.07.2026,62.11,EUR
 ef1bee48-c50b-4bc1-b24b-1b4505524276,"Raghav Babbar, Flowers for Ceremony, 2023",2025-12,08.12.2025,72.28,EUR
 ef1bee48-c50b-4bc1-b24b-1b4505524276,"Raghav Babbar, Flowers for Ceremony, 2023",2026-01,16.01.2026,72.28,EUR
 ef1bee48-c50b-4bc1-b24b-1b4505524276,"Raghav Babbar, Flowers for Ceremony, 2023",2026-02,14.02.2026,72.28,EUR
@@ -884,19 +884,19 @@ f8a1662c-8a65-42d7-a46d-fabf286e0180,"Raghav Babbar, Mother and the Winter in No
 6ea266db-8054-452f-a64e-16c348495304,"Raghav Babbar, My Twin a Poser, 2021",2026-04,24.04.2026,57.69,EUR
 6ea266db-8054-452f-a64e-16c348495304,"Raghav Babbar, My Twin a Poser, 2021",2026-05,07.05.2026,57.69,EUR
 6ea266db-8054-452f-a64e-16c348495304,"Raghav Babbar, My Twin a Poser, 2021",2026-06,17.06.2026,57.86,EUR
-6ea266db-8054-452f-a64e-16c348495304,"Raghav Babbar, My Twin a Poser, 2021",2026-07,29.07.2026,57.86,EUR
+6ea266db-8054-452f-a64e-16c348495304,"Raghav Babbar, My Twin a Poser, 2021",2026-07,29.07.2026,57.94,EUR
 f7391f3b-30bc-401a-a433-74d13a39b89a,"Raghav Babbar, The Couple in Katong (Singapore), 2023",2026-02,14.02.2026,67.78,EUR
 f7391f3b-30bc-401a-a433-74d13a39b89a,"Raghav Babbar, The Couple in Katong (Singapore), 2023",2026-03,24.03.2026,67.78,EUR
 f7391f3b-30bc-401a-a433-74d13a39b89a,"Raghav Babbar, The Couple in Katong (Singapore), 2023",2026-04,24.04.2026,67.78,EUR
 f7391f3b-30bc-401a-a433-74d13a39b89a,"Raghav Babbar, The Couple in Katong (Singapore), 2023",2026-05,07.05.2026,67.78,EUR
 f7391f3b-30bc-401a-a433-74d13a39b89a,"Raghav Babbar, The Couple in Katong (Singapore), 2023",2026-06,17.06.2026,67.98,EUR
-f7391f3b-30bc-401a-a433-74d13a39b89a,"Raghav Babbar, The Couple in Katong (Singapore), 2023",2026-07,29.07.2026,67.98,EUR
+f7391f3b-30bc-401a-a433-74d13a39b89a,"Raghav Babbar, The Couple in Katong (Singapore), 2023",2026-07,29.07.2026,68.07,EUR
 d400480d-b463-4161-aa49-8c9e26a687bb,Rimowa x Aimé Leon Dore suitcase (set of 4),2026-06,17.06.2026,55.96,EUR
 d400480d-b463-4161-aa49-8c9e26a687bb,Rimowa x Aimé Leon Dore suitcase (set of 4),2026-07,29.07.2026,55.96,EUR
 a36fa6e2-6ea2-4904-bdb4-bd41b8b23f1b,"Robert Zehnder, Deep Tissue, 2021",2026-04,24.04.2026,53.19,EUR
 a36fa6e2-6ea2-4904-bdb4-bd41b8b23f1b,"Robert Zehnder, Deep Tissue, 2021",2026-05,07.05.2026,53.19,EUR
 a36fa6e2-6ea2-4904-bdb4-bd41b8b23f1b,"Robert Zehnder, Deep Tissue, 2021",2026-06,17.06.2026,53.34,EUR
-a36fa6e2-6ea2-4904-bdb4-bd41b8b23f1b,"Robert Zehnder, Deep Tissue, 2021",2026-07,29.07.2026,53.34,EUR
+a36fa6e2-6ea2-4904-bdb4-bd41b8b23f1b,"Robert Zehnder, Deep Tissue, 2021",2026-07,29.07.2026,53.42,EUR
 10c13e82-c182-482e-838d-2e6331f63b0f,Rolex Datejust - 2021 - Reference 126300,2025-12,08.12.2025,41.03,EUR
 10c13e82-c182-482e-838d-2e6331f63b0f,Rolex Datejust - 2021 - Reference 126300,2026-01,16.01.2026,40.64,EUR
 10c13e82-c182-482e-838d-2e6331f63b0f,Rolex Datejust - 2021 - Reference 126300,2026-02,14.02.2026,41.67,EUR
@@ -904,7 +904,7 @@ a36fa6e2-6ea2-4904-bdb4-bd41b8b23f1b,"Robert Zehnder, Deep Tissue, 2021",2026-07
 10c13e82-c182-482e-838d-2e6331f63b0f,Rolex Datejust - 2021 - Reference 126300,2026-04,24.04.2026,41.74,EUR
 10c13e82-c182-482e-838d-2e6331f63b0f,Rolex Datejust - 2021 - Reference 126300,2026-05,07.05.2026,41.74,EUR
 10c13e82-c182-482e-838d-2e6331f63b0f,Rolex Datejust - 2021 - Reference 126300,2026-06,17.06.2026,41.80,EUR
-10c13e82-c182-482e-838d-2e6331f63b0f,Rolex Datejust - 2021 - Reference 126300,2026-07,29.07.2026,41.80,EUR
+10c13e82-c182-482e-838d-2e6331f63b0f,Rolex Datejust - 2021 - Reference 126300,2026-07,29.07.2026,41.72,EUR
 0ee5ca21-9c1f-47d7-a031-14bf647ede71,"Rolex, Daytona, Ref. 6239 Vintage",2025-12,08.12.2025,48.43,EUR
 0ee5ca21-9c1f-47d7-a031-14bf647ede71,"Rolex, Daytona, Ref. 6239 Vintage",2026-01,16.01.2026,47.96,EUR
 0ee5ca21-9c1f-47d7-a031-14bf647ede71,"Rolex, Daytona, Ref. 6239 Vintage",2026-02,14.02.2026,47.37,EUR
@@ -912,7 +912,7 @@ a36fa6e2-6ea2-4904-bdb4-bd41b8b23f1b,"Robert Zehnder, Deep Tissue, 2021",2026-07
 0ee5ca21-9c1f-47d7-a031-14bf647ede71,"Rolex, Daytona, Ref. 6239 Vintage",2026-04,24.04.2026,43.40,EUR
 0ee5ca21-9c1f-47d7-a031-14bf647ede71,"Rolex, Daytona, Ref. 6239 Vintage",2026-05,07.05.2026,43.40,EUR
 0ee5ca21-9c1f-47d7-a031-14bf647ede71,"Rolex, Daytona, Ref. 6239 Vintage",2026-06,17.06.2026,43.68,EUR
-0ee5ca21-9c1f-47d7-a031-14bf647ede71,"Rolex, Daytona, Ref. 6239 Vintage",2026-07,29.07.2026,43.68,EUR
+0ee5ca21-9c1f-47d7-a031-14bf647ede71,"Rolex, Daytona, Ref. 6239 Vintage",2026-07,29.07.2026,43.66,EUR
 24879b9d-d906-4cd3-8ec8-913c7e727bb7,"Rudolf Stingel, Untitled, 2009",2025-12,08.12.2025,54.75,EUR
 24879b9d-d906-4cd3-8ec8-913c7e727bb7,"Rudolf Stingel, Untitled, 2009",2026-01,16.01.2026,54.75,EUR
 24879b9d-d906-4cd3-8ec8-913c7e727bb7,"Rudolf Stingel, Untitled, 2009",2026-02,14.02.2026,54.75,EUR
@@ -936,7 +936,7 @@ d79e0664-f7a4-43d3-8d87-2845129e100a,Sealed Pokémon EX Crystal Guardians Booste
 9521c06c-5f65-4bc2-bf6c-3e9353163e9c,"Sunlight to Bodega Bay, Winston Branch (2004)",2026-04,24.04.2026,52.49,EUR
 9521c06c-5f65-4bc2-bf6c-3e9353163e9c,"Sunlight to Bodega Bay, Winston Branch (2004)",2026-05,07.05.2026,52.49,EUR
 9521c06c-5f65-4bc2-bf6c-3e9353163e9c,"Sunlight to Bodega Bay, Winston Branch (2004)",2026-06,17.06.2026,52.64,EUR
-9521c06c-5f65-4bc2-bf6c-3e9353163e9c,"Sunlight to Bodega Bay, Winston Branch (2004)",2026-07,29.07.2026,52.64,EUR
+9521c06c-5f65-4bc2-bf6c-3e9353163e9c,"Sunlight to Bodega Bay, Winston Branch (2004)",2026-07,29.07.2026,52.72,EUR
 09e27fc7-08f1-47a7-8983-628294c23929,The Macallan – 50 und 55 YO,2025-12,08.12.2025,49.06,EUR
 09e27fc7-08f1-47a7-8983-628294c23929,The Macallan – 50 und 55 YO,2026-01,16.01.2026,48.76,EUR
 09e27fc7-08f1-47a7-8983-628294c23929,The Macallan – 50 und 55 YO,2026-02,14.02.2026,48.82,EUR
@@ -944,7 +944,7 @@ d79e0664-f7a4-43d3-8d87-2845129e100a,Sealed Pokémon EX Crystal Guardians Booste
 09e27fc7-08f1-47a7-8983-628294c23929,The Macallan – 50 und 55 YO,2026-04,24.04.2026,48.89,EUR
 09e27fc7-08f1-47a7-8983-628294c23929,The Macallan – 50 und 55 YO,2026-05,07.05.2026,48.89,EUR
 09e27fc7-08f1-47a7-8983-628294c23929,The Macallan – 50 und 55 YO,2026-06,17.06.2026,47.66,EUR
-09e27fc7-08f1-47a7-8983-628294c23929,The Macallan – 50 und 55 YO,2026-07,29.07.2026,47.66,EUR
+09e27fc7-08f1-47a7-8983-628294c23929,The Macallan – 50 und 55 YO,2026-07,29.07.2026,45.30,EUR
 ae18891a-39c0-4457-9bca-cd7a1b05d555,The Macallan – 57 YO,2025-12,08.12.2025,46.79,EUR
 ae18891a-39c0-4457-9bca-cd7a1b05d555,The Macallan – 57 YO,2026-01,16.01.2026,46.49,EUR
 ae18891a-39c0-4457-9bca-cd7a1b05d555,The Macallan – 57 YO,2026-02,14.02.2026,46.53,EUR
@@ -952,7 +952,7 @@ ae18891a-39c0-4457-9bca-cd7a1b05d555,The Macallan – 57 YO,2026-03,24.03.2026,4
 ae18891a-39c0-4457-9bca-cd7a1b05d555,The Macallan – 57 YO,2026-04,24.04.2026,46.64,EUR
 ae18891a-39c0-4457-9bca-cd7a1b05d555,The Macallan – 57 YO,2026-05,07.05.2026,46.64,EUR
 ae18891a-39c0-4457-9bca-cd7a1b05d555,The Macallan – 57 YO,2026-06,17.06.2026,45.46,EUR
-ae18891a-39c0-4457-9bca-cd7a1b05d555,The Macallan – 57 YO,2026-07,29.07.2026,45.46,EUR
+ae18891a-39c0-4457-9bca-cd7a1b05d555,The Macallan – 57 YO,2026-07,29.07.2026,43.21,EUR
 6c98432b-32d2-4144-87ee-4244e4a43dc1,The Macallan – 60 YO,2025-12,08.12.2025,48.90,EUR
 6c98432b-32d2-4144-87ee-4244e4a43dc1,The Macallan – 60 YO,2026-01,16.01.2026,48.60,EUR
 6c98432b-32d2-4144-87ee-4244e4a43dc1,The Macallan – 60 YO,2026-02,14.02.2026,48.65,EUR
@@ -960,7 +960,7 @@ ae18891a-39c0-4457-9bca-cd7a1b05d555,The Macallan – 57 YO,2026-07,29.07.2026,4
 6c98432b-32d2-4144-87ee-4244e4a43dc1,The Macallan – 60 YO,2026-04,24.04.2026,48.73,EUR
 6c98432b-32d2-4144-87ee-4244e4a43dc1,The Macallan – 60 YO,2026-05,07.05.2026,48.73,EUR
 6c98432b-32d2-4144-87ee-4244e4a43dc1,The Macallan – 60 YO,2026-06,17.06.2026,47.50,EUR
-6c98432b-32d2-4144-87ee-4244e4a43dc1,The Macallan – 60 YO,2026-07,29.07.2026,47.50,EUR
+6c98432b-32d2-4144-87ee-4244e4a43dc1,The Macallan – 60 YO,2026-07,29.07.2026,45.15,EUR
 ee483029-3a5d-49d2-9c84-b521ed41bae1,"The Macallan, 18 Yrs Double Cask, 2022",2026-07,29.07.2026,45.65,EUR
 f8904bc0-d734-404d-b988-1d70a469d8f1,"The Macallan, 18 Yrs Sherry Cask, 2017",2025-12,08.12.2025,48.26,EUR
 f8904bc0-d734-404d-b988-1d70a469d8f1,"The Macallan, 18 Yrs Sherry Cask, 2017",2026-01,16.01.2026,48.03,EUR
@@ -969,7 +969,7 @@ f8904bc0-d734-404d-b988-1d70a469d8f1,"The Macallan, 18 Yrs Sherry Cask, 2017",20
 f8904bc0-d734-404d-b988-1d70a469d8f1,"The Macallan, 18 Yrs Sherry Cask, 2017",2026-04,24.04.2026,47.81,EUR
 f8904bc0-d734-404d-b988-1d70a469d8f1,"The Macallan, 18 Yrs Sherry Cask, 2017",2026-05,07.05.2026,47.81,EUR
 f8904bc0-d734-404d-b988-1d70a469d8f1,"The Macallan, 18 Yrs Sherry Cask, 2017",2026-06,17.06.2026,46.60,EUR
-f8904bc0-d734-404d-b988-1d70a469d8f1,"The Macallan, 18 Yrs Sherry Cask, 2017",2026-07,29.07.2026,46.60,EUR
+f8904bc0-d734-404d-b988-1d70a469d8f1,"The Macallan, 18 Yrs Sherry Cask, 2017",2026-07,29.07.2026,44.30,EUR
 231a0763-ce31-4f02-9472-fbe0a66cda31,"The Macallan, 78 YO Red-Collection, 2020",2025-12,08.12.2025,46.73,EUR
 231a0763-ce31-4f02-9472-fbe0a66cda31,"The Macallan, 78 YO Red-Collection, 2020",2026-01,16.01.2026,46.50,EUR
 231a0763-ce31-4f02-9472-fbe0a66cda31,"The Macallan, 78 YO Red-Collection, 2020",2026-02,14.02.2026,46.57,EUR
@@ -977,7 +977,7 @@ f8904bc0-d734-404d-b988-1d70a469d8f1,"The Macallan, 18 Yrs Sherry Cask, 2017",20
 231a0763-ce31-4f02-9472-fbe0a66cda31,"The Macallan, 78 YO Red-Collection, 2020",2026-04,24.04.2026,46.43,EUR
 231a0763-ce31-4f02-9472-fbe0a66cda31,"The Macallan, 78 YO Red-Collection, 2020",2026-05,07.05.2026,46.43,EUR
 231a0763-ce31-4f02-9472-fbe0a66cda31,"The Macallan, 78 YO Red-Collection, 2020",2026-06,17.06.2026,45.26,EUR
-231a0763-ce31-4f02-9472-fbe0a66cda31,"The Macallan, 78 YO Red-Collection, 2020",2026-07,29.07.2026,45.26,EUR
+231a0763-ce31-4f02-9472-fbe0a66cda31,"The Macallan, 78 YO Red-Collection, 2020",2026-07,29.07.2026,43.02,EUR
 c8aee5a2-cbcf-4896-99f5-2443244939bf,"The Macallan, Easter Elchies, Vertical Collection",2025-12,08.12.2025,43.85,EUR
 c8aee5a2-cbcf-4896-99f5-2443244939bf,"The Macallan, Easter Elchies, Vertical Collection",2026-01,16.01.2026,43.62,EUR
 c8aee5a2-cbcf-4896-99f5-2443244939bf,"The Macallan, Easter Elchies, Vertical Collection",2026-02,14.02.2026,43.82,EUR
@@ -985,7 +985,7 @@ c8aee5a2-cbcf-4896-99f5-2443244939bf,"The Macallan, Easter Elchies, Vertical Col
 c8aee5a2-cbcf-4896-99f5-2443244939bf,"The Macallan, Easter Elchies, Vertical Collection",2026-04,24.04.2026,43.49,EUR
 c8aee5a2-cbcf-4896-99f5-2443244939bf,"The Macallan, Easter Elchies, Vertical Collection",2026-05,07.05.2026,43.49,EUR
 c8aee5a2-cbcf-4896-99f5-2443244939bf,"The Macallan, Easter Elchies, Vertical Collection",2026-06,17.06.2026,42.39,EUR
-c8aee5a2-cbcf-4896-99f5-2443244939bf,"The Macallan, Easter Elchies, Vertical Collection",2026-07,29.07.2026,42.39,EUR
+c8aee5a2-cbcf-4896-99f5-2443244939bf,"The Macallan, Easter Elchies, Vertical Collection",2026-07,29.07.2026,40.30,EUR
 1588c8ec-4727-4279-afc0-65be8fa369dc,"The Macallan, Exceptional Cask Selection, Vertical Collection",2025-12,08.12.2025,46.48,EUR
 1588c8ec-4727-4279-afc0-65be8fa369dc,"The Macallan, Exceptional Cask Selection, Vertical Collection",2026-01,16.01.2026,46.41,EUR
 1588c8ec-4727-4279-afc0-65be8fa369dc,"The Macallan, Exceptional Cask Selection, Vertical Collection",2026-02,14.02.2026,46.61,EUR
@@ -993,12 +993,12 @@ c8aee5a2-cbcf-4896-99f5-2443244939bf,"The Macallan, Easter Elchies, Vertical Col
 1588c8ec-4727-4279-afc0-65be8fa369dc,"The Macallan, Exceptional Cask Selection, Vertical Collection",2026-04,24.04.2026,47.11,EUR
 1588c8ec-4727-4279-afc0-65be8fa369dc,"The Macallan, Exceptional Cask Selection, Vertical Collection",2026-05,07.05.2026,47.11,EUR
 1588c8ec-4727-4279-afc0-65be8fa369dc,"The Macallan, Exceptional Cask Selection, Vertical Collection",2026-06,17.06.2026,45.91,EUR
-1588c8ec-4727-4279-afc0-65be8fa369dc,"The Macallan, Exceptional Cask Selection, Vertical Collection",2026-07,29.07.2026,45.91,EUR
+1588c8ec-4727-4279-afc0-65be8fa369dc,"The Macallan, Exceptional Cask Selection, Vertical Collection",2026-07,29.07.2026,43.65,EUR
 4ec79cff-19aa-4ba1-ab48-3ba01ecadc7e,"Thomas Dillon, Portfolio of two works, 2023/2025",2026-03,24.03.2026,52.62,EUR
 4ec79cff-19aa-4ba1-ab48-3ba01ecadc7e,"Thomas Dillon, Portfolio of two works, 2023/2025",2026-04,24.04.2026,52.62,EUR
 4ec79cff-19aa-4ba1-ab48-3ba01ecadc7e,"Thomas Dillon, Portfolio of two works, 2023/2025",2026-05,07.05.2026,52.62,EUR
 4ec79cff-19aa-4ba1-ab48-3ba01ecadc7e,"Thomas Dillon, Portfolio of two works, 2023/2025",2026-06,17.06.2026,52.77,EUR
-4ec79cff-19aa-4ba1-ab48-3ba01ecadc7e,"Thomas Dillon, Portfolio of two works, 2023/2025",2026-07,29.07.2026,52.77,EUR
+4ec79cff-19aa-4ba1-ab48-3ba01ecadc7e,"Thomas Dillon, Portfolio of two works, 2023/2025",2026-07,29.07.2026,52.84,EUR
 ad9e26eb-1047-4737-acc7-2de07e158814,"Tom Brady, 2014 Immaculate Premium Patch Auto (#12/49), BGS 8,5 / Auto 10",2025-12,08.12.2025,50.00,EUR
 ad9e26eb-1047-4737-acc7-2de07e158814,"Tom Brady, 2014 Immaculate Premium Patch Auto (#12/49), BGS 8,5 / Auto 10",2026-01,16.01.2026,50.68,EUR
 ad9e26eb-1047-4737-acc7-2de07e158814,"Tom Brady, 2014 Immaculate Premium Patch Auto (#12/49), BGS 8,5 / Auto 10",2026-02,14.02.2026,50.68,EUR
@@ -1006,7 +1006,7 @@ ad9e26eb-1047-4737-acc7-2de07e158814,"Tom Brady, 2014 Immaculate Premium Patch A
 ad9e26eb-1047-4737-acc7-2de07e158814,"Tom Brady, 2014 Immaculate Premium Patch Auto (#12/49), BGS 8,5 / Auto 10",2026-04,24.04.2026,54.13,EUR
 ad9e26eb-1047-4737-acc7-2de07e158814,"Tom Brady, 2014 Immaculate Premium Patch Auto (#12/49), BGS 8,5 / Auto 10",2026-05,07.05.2026,54.13,EUR
 ad9e26eb-1047-4737-acc7-2de07e158814,"Tom Brady, 2014 Immaculate Premium Patch Auto (#12/49), BGS 8,5 / Auto 10",2026-06,17.06.2026,56.64,EUR
-ad9e26eb-1047-4737-acc7-2de07e158814,"Tom Brady, 2014 Immaculate Premium Patch Auto (#12/49), BGS 8,5 / Auto 10",2026-07,29.07.2026,56.64,EUR
+ad9e26eb-1047-4737-acc7-2de07e158814,"Tom Brady, 2014 Immaculate Premium Patch Auto (#12/49), BGS 8,5 / Auto 10",2026-07,29.07.2026,58.62,EUR
 de3340bd-583d-4427-a949-dd7320547d43,"Tom de Freston, An Echo Chamber Waiting For Music, 2024",2025-12,08.12.2025,50.00,EUR
 de3340bd-583d-4427-a949-dd7320547d43,"Tom de Freston, An Echo Chamber Waiting For Music, 2024",2026-01,16.01.2026,60.07,EUR
 de3340bd-583d-4427-a949-dd7320547d43,"Tom de Freston, An Echo Chamber Waiting For Music, 2024",2026-02,14.02.2026,60.07,EUR
@@ -1014,19 +1014,19 @@ de3340bd-583d-4427-a949-dd7320547d43,"Tom de Freston, An Echo Chamber Waiting Fo
 de3340bd-583d-4427-a949-dd7320547d43,"Tom de Freston, An Echo Chamber Waiting For Music, 2024",2026-04,24.04.2026,70.15,EUR
 de3340bd-583d-4427-a949-dd7320547d43,"Tom de Freston, An Echo Chamber Waiting For Music, 2024",2026-05,07.05.2026,70.15,EUR
 de3340bd-583d-4427-a949-dd7320547d43,"Tom de Freston, An Echo Chamber Waiting For Music, 2024",2026-06,17.06.2026,70.35,EUR
-de3340bd-583d-4427-a949-dd7320547d43,"Tom de Freston, An Echo Chamber Waiting For Music, 2024",2026-07,29.07.2026,70.35,EUR
+de3340bd-583d-4427-a949-dd7320547d43,"Tom de Freston, An Echo Chamber Waiting For Music, 2024",2026-07,29.07.2026,70.46,EUR
 bc762b6c-2592-4795-87ad-ebc2e539b5ed,"Tom de Freston, Darkness Visible, 2021",2026-03,24.03.2026,70.39,EUR
 bc762b6c-2592-4795-87ad-ebc2e539b5ed,"Tom de Freston, Darkness Visible, 2021",2026-04,24.04.2026,70.39,EUR
 bc762b6c-2592-4795-87ad-ebc2e539b5ed,"Tom de Freston, Darkness Visible, 2021",2026-05,07.05.2026,70.39,EUR
 bc762b6c-2592-4795-87ad-ebc2e539b5ed,"Tom de Freston, Darkness Visible, 2021",2026-06,17.06.2026,70.59,EUR
-bc762b6c-2592-4795-87ad-ebc2e539b5ed,"Tom de Freston, Darkness Visible, 2021",2026-07,29.07.2026,70.59,EUR
+bc762b6c-2592-4795-87ad-ebc2e539b5ed,"Tom de Freston, Darkness Visible, 2021",2026-07,29.07.2026,70.69,EUR
 bfdea409-ff34-490d-939b-58e047254c7e,"Tom de Freston, On the Edge of the Forest, 2024",2026-01,16.01.2026,50.00,EUR
 bfdea409-ff34-490d-939b-58e047254c7e,"Tom de Freston, On the Edge of the Forest, 2024",2026-02,14.02.2026,59.84,EUR
 bfdea409-ff34-490d-939b-58e047254c7e,"Tom de Freston, On the Edge of the Forest, 2024",2026-03,24.03.2026,59.84,EUR
 bfdea409-ff34-490d-939b-58e047254c7e,"Tom de Freston, On the Edge of the Forest, 2024",2026-04,24.04.2026,69.68,EUR
 bfdea409-ff34-490d-939b-58e047254c7e,"Tom de Freston, On the Edge of the Forest, 2024",2026-05,07.05.2026,69.68,EUR
 bfdea409-ff34-490d-939b-58e047254c7e,"Tom de Freston, On the Edge of the Forest, 2024",2026-06,17.06.2026,69.88,EUR
-bfdea409-ff34-490d-939b-58e047254c7e,"Tom de Freston, On the Edge of the Forest, 2024",2026-07,29.07.2026,69.88,EUR
+bfdea409-ff34-490d-939b-58e047254c7e,"Tom de Freston, On the Edge of the Forest, 2024",2026-07,29.07.2026,69.99,EUR
 93d8c24b-a04b-426d-bade-0d2b6f39e17d,"Tracey Emin, I Did Not Say... (3 of 3), 2012",2025-12,08.12.2025,68.45,EUR
 93d8c24b-a04b-426d-bade-0d2b6f39e17d,"Tracey Emin, I Did Not Say... (3 of 3), 2012",2026-01,16.01.2026,68.45,EUR
 93d8c24b-a04b-426d-bade-0d2b6f39e17d,"Tracey Emin, I Did Not Say... (3 of 3), 2012",2026-02,14.02.2026,68.45,EUR
@@ -1034,7 +1034,7 @@ bfdea409-ff34-490d-939b-58e047254c7e,"Tom de Freston, On the Edge of the Forest,
 93d8c24b-a04b-426d-bade-0d2b6f39e17d,"Tracey Emin, I Did Not Say... (3 of 3), 2012",2026-04,24.04.2026,68.45,EUR
 93d8c24b-a04b-426d-bade-0d2b6f39e17d,"Tracey Emin, I Did Not Say... (3 of 3), 2012",2026-05,07.05.2026,68.45,EUR
 93d8c24b-a04b-426d-bade-0d2b6f39e17d,"Tracey Emin, I Did Not Say... (3 of 3), 2012",2026-06,17.06.2026,68.89,EUR
-93d8c24b-a04b-426d-bade-0d2b6f39e17d,"Tracey Emin, I Did Not Say... (3 of 3), 2012",2026-07,29.07.2026,68.89,EUR
+93d8c24b-a04b-426d-bade-0d2b6f39e17d,"Tracey Emin, I Did Not Say... (3 of 3), 2012",2026-07,29.07.2026,69.10,EUR
 b0ba4e49-7786-42e1-ba70-1269017884e3,Wayne Gretzky 2000 Upper Deck Master Collection Quad Patch Auto 6of9 BGS 8 + 10,2025-12,08.12.2025,52.49,EUR
 b0ba4e49-7786-42e1-ba70-1269017884e3,Wayne Gretzky 2000 Upper Deck Master Collection Quad Patch Auto 6of9 BGS 8 + 10,2026-01,16.01.2026,52.88,EUR
 b0ba4e49-7786-42e1-ba70-1269017884e3,Wayne Gretzky 2000 Upper Deck Master Collection Quad Patch Auto 6of9 BGS 8 + 10,2026-02,14.02.2026,54.09,EUR
@@ -1042,13 +1042,13 @@ b0ba4e49-7786-42e1-ba70-1269017884e3,Wayne Gretzky 2000 Upper Deck Master Collec
 b0ba4e49-7786-42e1-ba70-1269017884e3,Wayne Gretzky 2000 Upper Deck Master Collection Quad Patch Auto 6of9 BGS 8 + 10,2026-04,24.04.2026,52.76,EUR
 b0ba4e49-7786-42e1-ba70-1269017884e3,Wayne Gretzky 2000 Upper Deck Master Collection Quad Patch Auto 6of9 BGS 8 + 10,2026-05,07.05.2026,52.76,EUR
 b0ba4e49-7786-42e1-ba70-1269017884e3,Wayne Gretzky 2000 Upper Deck Master Collection Quad Patch Auto 6of9 BGS 8 + 10,2026-06,17.06.2026,55.07,EUR
-b0ba4e49-7786-42e1-ba70-1269017884e3,Wayne Gretzky 2000 Upper Deck Master Collection Quad Patch Auto 6of9 BGS 8 + 10,2026-07,29.07.2026,55.07,EUR
+b0ba4e49-7786-42e1-ba70-1269017884e3,Wayne Gretzky 2000 Upper Deck Master Collection Quad Patch Auto 6of9 BGS 8 + 10,2026-07,29.07.2026,57.08,EUR
 acd858bb-ae77-41fc-bfa6-55bd6f1b9383,Wayne Gretzky 2011 SP Game Used Eight Patches 1of1 BGS 7,2026-05,07.05.2026,50.00,EUR
 acd858bb-ae77-41fc-bfa6-55bd6f1b9383,Wayne Gretzky 2011 SP Game Used Eight Patches 1of1 BGS 7,2026-06,17.06.2026,54.64,EUR
 acd858bb-ae77-41fc-bfa6-55bd6f1b9383,Wayne Gretzky 2011 SP Game Used Eight Patches 1of1 BGS 7,2026-07,29.07.2026,54.64,EUR
 d81ce499-35e6-4eab-b061-c8dc05cb9c0b,"Winston Branch, Untitled, 1993",2026-05,07.05.2026,70.03,EUR
 d81ce499-35e6-4eab-b061-c8dc05cb9c0b,"Winston Branch, Untitled, 1993",2026-06,17.06.2026,70.23,EUR
-d81ce499-35e6-4eab-b061-c8dc05cb9c0b,"Winston Branch, Untitled, 1993",2026-07,29.07.2026,70.23,EUR
+d81ce499-35e6-4eab-b061-c8dc05cb9c0b,"Winston Branch, Untitled, 1993",2026-07,29.07.2026,70.33,EUR
 6111e1cd-2b33-4d5b-8498-ccb117552904,"Winston Branch, Untitled, 1997",2025-12,08.12.2025,74.71,EUR
 6111e1cd-2b33-4d5b-8498-ccb117552904,"Winston Branch, Untitled, 1997",2026-01,16.01.2026,74.71,EUR
 6111e1cd-2b33-4d5b-8498-ccb117552904,"Winston Branch, Untitled, 1997",2026-02,14.02.2026,74.71,EUR
@@ -1080,7 +1080,7 @@ c3698e49-4eb2-4e5c-a2b4-885274c755ec,"Zevs, Swimming Pools: Monet (PetroChina) &
 c3698e49-4eb2-4e5c-a2b4-885274c755ec,"Zevs, Swimming Pools: Monet (PetroChina) & Monet (Total), 2025",2026-04,24.04.2026,64.24,EUR
 c3698e49-4eb2-4e5c-a2b4-885274c755ec,"Zevs, Swimming Pools: Monet (PetroChina) & Monet (Total), 2025",2026-05,07.05.2026,64.24,EUR
 c3698e49-4eb2-4e5c-a2b4-885274c755ec,"Zevs, Swimming Pools: Monet (PetroChina) & Monet (Total), 2025",2026-06,17.06.2026,64.43,EUR
-c3698e49-4eb2-4e5c-a2b4-885274c755ec,"Zevs, Swimming Pools: Monet (PetroChina) & Monet (Total), 2025",2026-07,29.07.2026,64.43,EUR
+c3698e49-4eb2-4e5c-a2b4-885274c755ec,"Zevs, Swimming Pools: Monet (PetroChina) & Monet (Total), 2025",2026-07,29.07.2026,64.52,EUR
 2b2ac7b1-85c5-4fc5-9d63-9c7f094152ab,Zinedine Zidane 2024 Donruss FIFA Kaboom Black 1of1 PSA 8,2025-12,08.12.2025,55.89,EUR
 2b2ac7b1-85c5-4fc5-9d63-9c7f094152ab,Zinedine Zidane 2024 Donruss FIFA Kaboom Black 1of1 PSA 8,2026-01,16.01.2026,55.88,EUR
 2b2ac7b1-85c5-4fc5-9d63-9c7f094152ab,Zinedine Zidane 2024 Donruss FIFA Kaboom Black 1of1 PSA 8,2026-02,14.02.2026,55.92,EUR
@@ -1088,4 +1088,4 @@ c3698e49-4eb2-4e5c-a2b4-885274c755ec,"Zevs, Swimming Pools: Monet (PetroChina) &
 2b2ac7b1-85c5-4fc5-9d63-9c7f094152ab,Zinedine Zidane 2024 Donruss FIFA Kaboom Black 1of1 PSA 8,2026-04,24.04.2026,56.16,EUR
 2b2ac7b1-85c5-4fc5-9d63-9c7f094152ab,Zinedine Zidane 2024 Donruss FIFA Kaboom Black 1of1 PSA 8,2026-05,07.05.2026,56.16,EUR
 2b2ac7b1-85c5-4fc5-9d63-9c7f094152ab,Zinedine Zidane 2024 Donruss FIFA Kaboom Black 1of1 PSA 8,2026-06,17.06.2026,60.33,EUR
-2b2ac7b1-85c5-4fc5-9d63-9c7f094152ab,Zinedine Zidane 2024 Donruss FIFA Kaboom Black 1of1 PSA 8,2026-07,29.07.2026,60.33,EUR
+2b2ac7b1-85c5-4fc5-9d63-9c7f094152ab,Zinedine Zidane 2024 Donruss FIFA Kaboom Black 1of1 PSA 8,2026-07,29.07.2026,64.28,EUR
