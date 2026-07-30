@@ -1116,11 +1116,13 @@ function svgLineChart(points, opts={}){
   </svg>`;
 }
 
-// Kursverlauf: price line on the right axis (2 decimals) + month-over-month % change as
-// bars on the left axis (green = up, red = down, grey = flat), sharing the same x-axis.
+// Kursverlauf: Wert/Splint auf der linken Achse (Linie, 2 Dezimalstellen) + monatliche
+// Veränderung in % auf der rechten Achse (Säulen, 1 Dezimalstelle, mit Beschriftung an der Säule).
+// Alle Punkte/Säulen sind antippbar (touch-freundlich statt Hover-Tooltip) und zeigen den
+// exakten Wert im Readout unterhalb des Charts an.
 function svgPriceChangeChart(series, opts={}){
   // series: [{month, price}] ascending by month
-  const w = opts.width || 900, h = opts.height || 240;
+  const w = opts.width || 900, h = opts.height || 260;
   const padL = 54, padR = 54, padT = 16, padB = 28;
   const innerW = w - padL - padR, innerH = h - padT - padB;
   if (!series.length) return `<div class="empty-state" style="border:none;padding:30px;">Keine Kursdaten vorhanden.</div>`;
@@ -1136,28 +1138,28 @@ function svgPriceChangeChart(series, opts={}){
   const changeVals = changes.filter(v=>v!==null);
   let cMax = changeVals.length ? Math.max(...changeVals.map(Math.abs)) : 1;
   if (cMax === 0) cMax = 1;
-  cMax *= 1.2;
+  cMax *= 1.4; // extra headroom so bar-top labels don't get clipped
   const cRange = cMax*2;
 
   const x = i => padL + (n===1 ? innerW/2 : (i/(n-1))*innerW);
-  const yPrice = v => padT + innerH - ((v-pMin)/pRange)*innerH;
-  const yChange = v => padT + innerH - ((v+cMax)/cRange)*innerH;
+  const yPrice = v => padT + innerH - ((v-pMin)/pRange)*innerH;   // left axis: value/splint
+  const yChange = v => padT + innerH - ((v+cMax)/cRange)*innerH;  // right axis: % change
   const zeroY = yChange(0);
 
-  let ticksRight = '', ticksLeft = '';
+  let ticksLeft = '', ticksRight = '';
   const nTicks = 4;
   for(let i=0;i<=nTicks;i++){
     const v = pMin + (pRange*i/nTicks);
     const yy = yPrice(v);
-    if (i>0 && i<nTicks) ticksRight += `<line x1="${padL}" y1="${yy.toFixed(1)}" x2="${w-padR}" y2="${yy.toFixed(1)}" stroke="#eceef0" stroke-width="1"/>`;
-    ticksRight += `<text x="${w-padR+8}" y="${(yy+3).toFixed(1)}" text-anchor="start" class="chart-tooltip-label">${fmtNum(v,2)}</text>`;
+    if (i>0 && i<nTicks) ticksLeft += `<line x1="${padL}" y1="${yy.toFixed(1)}" x2="${w-padR}" y2="${yy.toFixed(1)}" stroke="#eceef0" stroke-width="1"/>`;
+    ticksLeft += `<text x="${padL-8}" y="${(yy+3).toFixed(1)}" text-anchor="end" class="chart-tooltip-label">${fmtNum(v,2)}</text>`;
   }
   for(let i=0;i<=nTicks;i++){
     const v = -cMax + (cRange*i/nTicks);
     const yy = yChange(v);
-    ticksLeft += `<text x="${padL-8}" y="${(yy+3).toFixed(1)}" text-anchor="end" class="chart-tooltip-label">${fmtNum(v,0)}%</text>`;
+    ticksRight += `<text x="${w-padR+8}" y="${(yy+3).toFixed(1)}" text-anchor="start" class="chart-tooltip-label">${fmtNum(v,1)}%</text>`;
   }
-  ticksLeft += `<line x1="${padL}" y1="${zeroY.toFixed(1)}" x2="${w-padR}" y2="${zeroY.toFixed(1)}" stroke="#d8dadd" stroke-width="1" stroke-dasharray="3,3"/>`;
+  ticksRight += `<line x1="${padL}" y1="${zeroY.toFixed(1)}" x2="${w-padR}" y2="${zeroY.toFixed(1)}" stroke="#d8dadd" stroke-width="1" stroke-dasharray="3,3"/>`;
 
   let labelsX = '';
   const step = Math.max(1, Math.ceil(n/8));
@@ -1167,34 +1169,41 @@ function svgPriceChangeChart(series, opts={}){
     }
   });
 
-  const barW = Math.max(4, (innerW/n)*0.5);
+  const barW = Math.max(6, (innerW/n)*0.5);
   let bars = '';
   changes.forEach((c,i)=>{
     if (c === null) return;
     const yTop = Math.min(yChange(c), zeroY);
     const barH = Math.max(1, Math.abs(yChange(c) - zeroY));
-    bars += `<rect x="${(x(i)-barW/2).toFixed(1)}" y="${yTop.toFixed(1)}" width="${barW.toFixed(1)}" height="${barH.toFixed(1)}" fill="${signColor(c)}" opacity="0.85"><title>${monthLabel(series[i].month)}: ${fmtPct(c,1)}</title></rect>`;
+    const color = signColor(c);
+    const dataAttrs = `data-month="${series[i].month}" data-price="${series[i].price}" data-change="${c.toFixed(2)}"`;
+    bars += `<rect class="chart-point" ${dataAttrs} x="${(x(i)-barW/2).toFixed(1)}" y="${yTop.toFixed(1)}" width="${barW.toFixed(1)}" height="${barH.toFixed(1)}" fill="${color}" opacity="0.85"/>`;
+    const labelY = c >= 0 ? (yTop - 4) : (yTop + barH + 10);
+    bars += `<text class="chart-point" ${dataAttrs} x="${x(i).toFixed(1)}" y="${labelY.toFixed(1)}" text-anchor="middle" font-size="9.5" fill="${color}">${fmtPct(c,1)}</text>`;
   });
 
   const linePts = series.map((p,i)=>`${x(i).toFixed(1)},${yPrice(p.price).toFixed(1)}`).join(' ');
   let dots = '';
   series.forEach((p,i)=>{
-    dots += `<circle cx="${x(i).toFixed(1)}" cy="${yPrice(p.price).toFixed(1)}" r="2.6" fill="#E30613"><title>${monthLabel(p.month)}: ${fmtNum(p.price,2)}</title></circle>`;
+    const dataAttrs = `data-month="${p.month}" data-price="${p.price}" data-change="${changes[i]===null?'':changes[i].toFixed(2)}"`;
+    dots += `<circle class="chart-point" ${dataAttrs} cx="${x(i).toFixed(1)}" cy="${yPrice(p.price).toFixed(1)}" r="5" fill="#E30613" opacity="0.01"/>`;
+    dots += `<circle cx="${x(i).toFixed(1)}" cy="${yPrice(p.price).toFixed(1)}" r="2.8" fill="#E30613" style="pointer-events:none;"/>`;
   });
 
   const legend = `<div style="display:flex;gap:16px;margin-bottom:6px;">
-    <span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-soft);"><span style="width:10px;height:10px;border-radius:2px;background:#E30613;display:inline-block;"></span>Kurs (rechts)</span>
-    <span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-soft);"><span style="width:10px;height:8px;border-radius:2px;background:var(--ink-soft);display:inline-block;"></span>Δ% zum Vormonat (links)</span>
+    <span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-soft);"><span style="width:10px;height:10px;border-radius:2px;background:#E30613;display:inline-block;"></span>Wert/Splint (links)</span>
+    <span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-soft);"><span style="width:10px;height:8px;border-radius:2px;background:var(--ink-soft);display:inline-block;"></span>Veränderung % zum Vormonat (rechts)</span>
   </div>`;
 
-  return `${legend}<svg viewBox="0 0 ${w} ${h}" width="100%" height="${h}" preserveAspectRatio="xMidYMid meet">
-    ${ticksRight}
+  return `${legend}<svg viewBox="0 0 ${w} ${h}" width="100%" height="${h}" preserveAspectRatio="xMidYMid meet" style="touch-action:manipulation;">
     ${ticksLeft}
+    ${ticksRight}
     ${bars}
     <polyline points="${linePts}" fill="none" stroke="#E30613" stroke-width="2"/>
     ${dots}
     ${labelsX}
-  </svg>`;
+  </svg>
+  <div id="sec-chart-readout" class="hint mono" style="margin-top:6px;min-height:18px;">Punkt oder Säule antippen für Details</div>`;
 }
 
 function svgMultiLineChart(series, opts={}){
@@ -1525,7 +1534,7 @@ function renderSecurityDetail(assetId){
       <td class="num">${fmtNum(t.splints,0)}</td>
       <td class="num">${fmtMoney(t.amount, t.currency)}</td>
       <td class="num">${fmtMoney(t.pricePerSplint, t.currency)}</td>
-      <td class="num">${(t.day1Profit===''||t.day1Profit===undefined||t.day1Profit===null||isNaN(t.day1Profit))?'<span class="hint">—</span>':fmtMoney(Number(t.day1Profit), t.currency, 2)}</td>
+      <td class="num"><input type="number" step="0.01" class="day1profit-input" data-tx-id="${escapeHtml(t.id)}" value="${(t.day1Profit===''||t.day1Profit===undefined||t.day1Profit===null)?'':t.day1Profit}" placeholder="—" style="width:80px;text-align:right;"> ${escapeHtml(t.currency)}</td>
       <td class="num">${fmtMoney(t.fees, t.currency)}</td>
     </tr>
   `).join('') || `<tr><td colspan="7" class="hint">Keine Transaktionen.</td></tr>`;
@@ -1555,7 +1564,7 @@ function renderSecurityDetail(assetId){
       <td class="num" style="color:${signColor(r.irr)}">${r.irr===null?'—':fmtPct(r.irr*100)}</td>
       <td class="mono">${r.firstBuy?isoToDMY(r.firstBuy):'—'}</td>
       <td class="mono">${r.exitDate?isoToDMY(r.exitDate):'—'}</td>
-      <td class="num">${r.targetExitYear===null?'—':r.targetExitYear}</td>
+      <td class="num">${!r.held?'n/a':(r.targetExitYear===null?'—':r.targetExitYear)}</td>
     </tr>
   `).join('') || `<tr><td colspan="10" class="hint">Keine ähnlichen Investments gefunden.</td></tr>`;
 }
@@ -1687,7 +1696,7 @@ function renderPortfolio(){
       <td class="num" style="color:${signColor(r.irr)}">${r.irr===null?'—':fmtPct(r.irr*100)}</td>
       <td class="mono">${r.firstBuy?isoToDMY(r.firstBuy):'—'}</td>
       <td class="mono">${r.exitDate?isoToDMY(r.exitDate):'—'}</td>
-      <td class="num">${r.targetExitYear===null?'—':r.targetExitYear}</td>
+      <td class="num">${!r.held?'n/a':(r.targetExitYear===null?'—':r.targetExitYear)}</td>
       <td>${escapeHtml(r.category)||'<span class="hint">—</span>'}</td>
       <td>${escapeHtml(r.subCategory)||'<span class="hint">—</span>'}</td>
     </tr>
@@ -1746,7 +1755,7 @@ document.querySelectorAll('nav.tabs button').forEach(btn => {
 
 document.getElementById('tx-search').addEventListener('input', renderTransactions);
 document.getElementById('tx-type-filter').addEventListener('change', renderTransactions);
-document.querySelector('#tx-table tbody').addEventListener('change', async (e) => {
+async function handleDay1ProfitInputChange(e){
   const input = e.target.closest('.day1profit-input');
   if (!input) return;
   const tx = DB.transactions.find(t => t.id === input.dataset.txId);
@@ -1754,6 +1763,21 @@ document.querySelector('#tx-table tbody').addEventListener('change', async (e) =
   const raw = input.value.trim();
   tx.day1Profit = raw === '' ? '' : parseFloat(raw);
   await autoSyncToGitHub('Day1Profit-Bearbeitung');
+}
+document.querySelector('#tx-table tbody').addEventListener('change', handleDay1ProfitInputChange);
+document.querySelector('#sec-tx-table tbody').addEventListener('change', handleDay1ProfitInputChange);
+
+// Kursverlauf: tap a point/bar to inspect its exact value (touch-friendly alternative to hover tooltips)
+document.getElementById('sec-chart-card').addEventListener('click', (e) => {
+  const el = e.target.closest('.chart-point');
+  const readout = document.getElementById('sec-chart-readout');
+  if (!el || !readout) return;
+  const month = el.dataset.month;
+  const price = parseFloat(el.dataset.price);
+  const changeRaw = el.dataset.change;
+  const hasChange = changeRaw !== '' && changeRaw !== undefined;
+  const changeHtml = hasChange ? ` · Veränderung: <span style="color:${signColor(parseFloat(changeRaw))}">${fmtPct(parseFloat(changeRaw),1)}</span>` : '';
+  readout.innerHTML = `<strong>${monthLabel(month)}</strong> · Wert/Splint: ${fmtMoney(price)}${changeHtml}`;
 });
 
 document.getElementById('portfolio-search').addEventListener('input', renderPortfolio);
