@@ -52,7 +52,7 @@ Transaction ID,Transaction Type,Asset ID,Date Of Transaction,Money Amount,Purcha
 709512,Primary market purchase,cdf4de9a-7d20-4ae1-91f8-24bed347cbb5,15.01.2026,50.00 EUR,50.00 EUR,0.00 EUR,generated_files/Purchase confirmation 2026-01-15 - GVWg4tt4.pdf,
 709521,Marketplace purchase,6bd641c1-ba46-4c74-893f-3e2b0567cea1,15.01.2026,55.00 EUR,55.00 EUR,0.00 EUR,generated_files/Purchase confirmation 2026-01-15 - 8GDpgnJ8.pdf,5.53
 709523,Marketplace purchase,f8fdee45-ec64-4081-87ff-13679e757d88,15.01.2026,52.00 EUR,52.00 EUR,0.00 EUR,generated_files/Purchase confirmation 2026-01-15 - 12wAT8Xn.pdf,5.45
-700996,Primary market purchase,4b354942-b3b9-4237-b7d0-df9cf1f3a79e,06.01.2026,50.00 EUR,50.00 EUR,0.00 EUR,generated_files/Purchase confirmation 2026-01-06 - HwG1Z8RU.pdf,
+700996,Primary market purchase,4b354942-b3b9-4237-b7d0-df9cf1f3a79e,06.01.2026,50.00 EUR,50.00 EUR,0.00 EUR,generated_files/Purchase confirmation 2026-01-06 - HwG1Z8RU.pdf,5.09
 693855,Primary market purchase,1f7f07b5-bf17-4ee8-a9c5-13f9f82d76b2,03.01.2026,50.00 EUR,50.00 EUR,0.00 EUR,generated_files/Purchase confirmation 2026-01-03 - dBJmBBq8.pdf,
 693858,Primary market purchase,3a8b7778-7281-40dd-a6c0-f380149a6a3e,03.01.2026,50.00 EUR,50.00 EUR,0.00 EUR,generated_files/Purchase confirmation 2026-01-03 - HH9y0M62.pdf,
 685644,Marketplace purchase,fc78cdd8-92fc-456b-ac2f-2b7794e25270,26.12.2025,49.90 EUR,49.90 EUR,0.00 EUR,generated_files/Purchase confirmation 2025-12-26 - ekZbiPa1.pdf,0.94
