@@ -3,7 +3,7 @@ AssetID,Asset Name,Asset Category,Asset SubCategory,Asset Category_old,Notes,Rel
 0a68e368-3993-47cc-b044-1d8c45b71788,2002 Ferrari 360 Modena Manual,Car,Ferrari,Car,,2024-12-10,2,4,12.4
 a4bbcf2f-b426-410f-b37c-6e0f5731b28d,"Albert Willem, The Very Wild West!, 2023",Art,Albert Willem,Art,,2024-05-24,2,4,
 164578a4-7644-4cb6-9df1-77330051de94,"Amanda Watt, The Ballroom, 2022",Art,Amanda Watt,Art,,2025-12-19,2,4,28.5
-a817302f-a842-41df-8a08-740242e385d8,"Anthony Daley, Epocate, 2022",,,,,2025-10-31,2,4,25
+a817302f-a842-41df-8a08-740242e385d8,"Anthony Daley, Epocate, 2022",Art,Anthony Daley,Art,,2025-10-31,2,4,25
 7db39931-690c-4d3d-b295-572ed743ce81,"Anthony James, 24” Dodecahedron (Jet Black), 2022",,,,,2025-03-04,2,4,
 25273f6a-1d6c-4e13-9493-282d7f8f35f2,"Aston Martin, V12 Vanquish, 2002",Car,Aston Martin,Car,,2023-12-30,2,4,
 6015ac5b-8e18-4e41-8923-eae00637fae7,"Aston Martin, V12 Vantage Carbon Black Edition",Car,Aston Martin,Car,,2024-06-28,2,4,
@@ -142,7 +142,7 @@ a36fa6e2-6ea2-4904-bdb4-bd41b8b23f1b,"Robert Zehnder, Deep Tissue, 2021",,,,,202
 d49828a9-d5d0-4427-bdc4-d45da3748109,"Sapphire, Blue, Oval, 9,15 Carat",Gemstones,Sapphire,,,2024-05-31,4,6,
 d79e0664-f7a4-43d3-8d87-2845129e100a,Sealed Pokémon EX Crystal Guardians Booster Box,,,,,,,,
 59fa9656-57bf-485f-8916-a91a4b716579,Shohei Ohtani 2018 Bowman Chrome Atomic Refractor CRASO 100/100 Rookie,Sports Trading Cards,,Various,,,,,
-9521c06c-5f65-4bc2-bf6c-3e9353163e9c,"Sunlight to Bodega Bay, Winston Branch (2004)",,,,,2026-03-18,2,4,
+9521c06c-5f65-4bc2-bf6c-3e9353163e9c,"Sunlight to Bodega Bay, Winston Branch (2004)",,,,,2026-03-18,2,4,25.3
 09e27fc7-08f1-47a7-8983-628294c23929,The Macallan – 50 und 55 YO,Spirits,The Macallen,Whisky,,2023-01-26,5,7,
 ae18891a-39c0-4457-9bca-cd7a1b05d555,The Macallan – 57 YO,Spirits,The Macallen,Whisky,,2023-05-25,5,7,
 6c98432b-32d2-4144-87ee-4244e4a43dc1,The Macallan – 60 YO,Spirits,The Macallen,Whisky,,2023-04-27,5,7,
