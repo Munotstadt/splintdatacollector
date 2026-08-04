@@ -20,7 +20,7 @@
     --green:#0d7a3f;
     --green-bg:#e7f4ec;
     --red-bg:#fdeceb;
-    --radius:2px;
+    --radius:4px;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
@@ -36,44 +36,47 @@
   .mono{font-family:'IBM Plex Mono',monospace;}
   a{color:inherit;}
 
-  /* ---------- Top bar ---------- */
+  /* ---------- Top bar (styled to match the Munotstadt suite's shared minimal layout) ---------- */
   header.topbar{
-    background:var(--ink);
-    color:#fff;
+    background:#fff;
+    color:var(--ink);
     display:flex;
     align-items:center;
     justify-content:space-between;
-    padding:14px 20px;
+    padding:18px 20px 14px;
     position:sticky; top:0; z-index:50;
-    border-bottom:3px solid var(--red);
+    border-bottom:2px solid var(--red);
   }
   .brand{display:flex; align-items:center; gap:10px;}
-  .brand .mark{
-    width:10px;height:22px;background:var(--red);
-    transform:skewX(-12deg);
-  }
-  .brand h1{font-size:17px; letter-spacing:0.02em; color:#fff;}
-  .brand .sub{font-family:'IBM Plex Mono',monospace; font-size:10px; color:#9aa4ac; letter-spacing:0.08em; text-transform:uppercase;}
+  .brand h1{font-size:20px; letter-spacing:0.02em; color:var(--ink); text-transform:uppercase; font-weight:700;}
+  .brand .sub{font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--ink-soft); letter-spacing:0.08em; text-transform:uppercase; margin-top:2px;}
 
   nav.tabs{
-    display:flex; gap:2px; overflow-x:auto;
-    background:var(--ink);
-    padding:0 20px;
-    border-bottom:1px solid #2a3138;
+    display:flex; gap:4px; overflow-x:auto; flex-wrap:wrap;
+    background:#fff;
+    padding:10px 20px;
+    border-bottom:1px solid var(--line);
   }
   nav.tabs button{
-    background:none;border:none;color:#c3cad0;
-    font-family:'Space Grotesk',sans-serif; font-size:13px; font-weight:500;
-    padding:11px 16px; cursor:pointer; white-space:nowrap;
-    border-bottom:3px solid transparent;
-    transition:color .15s, border-color .15s;
+    background:none; color:var(--ink-soft);
+    font-family:'IBM Plex Mono',monospace; font-size:12px; font-weight:500;
+    padding:6px 10px; cursor:pointer; white-space:nowrap;
+    border:1px solid transparent; border-radius:3px;
+    transition:color .15s, border-color .15s, background .15s;
   }
-  nav.tabs button:hover{color:#fff;}
-  nav.tabs button.active{color:#fff; border-bottom-color:var(--red);}
+  nav.tabs button:hover{color:var(--ink); border-color:var(--line);}
+  nav.tabs button.active{color:var(--ink); font-weight:600; border-color:var(--red); background:rgba(227,6,19,0.06);}
 
   main{max-width:1240px; margin:0 auto; padding:22px 20px 60px;}
   .view{display:none;}
   .view.active{display:block;}
+  /* Portfolio needs the widest table in the app (13+ columns) — let it use the full viewport
+     width instead of the standard centered max-width, via the full-bleed technique. */
+  #view-portfolio.active{
+    max-width:none; width:100vw;
+    margin-left:calc(50% - 50vw); margin-right:calc(50% - 50vw);
+    padding-left:20px; padding-right:20px;
+  }
 
   /* ---------- Cards / grid ---------- */
   .grid{display:grid; gap:14px;}
@@ -208,22 +211,22 @@
 
 <header class="topbar">
   <div class="brand">
-    <div class="mark"></div>
     <div>
-      <h1>SPLINT TRACKER</h1>
+      <h1>Splint Tracker</h1>
       <div class="sub">Munotstadt · Investment Monitoring</div>
     </div>
   </div>
-  <div class="sub mono" id="header-status" style="text-align:right;">Keine Daten geladen</div>
+  <div class="sub mono" id="header-status" style="text-align:right;">No data loaded</div>
 </header>
 
 <nav class="tabs">
   <button data-view="dashboard" class="active">Dashboard</button>
   <button data-view="portfolio">Portfolio</button>
-  <button data-view="transactions">Transaktionen</button>
-  <button data-view="securities">Wertschriften</button>
-  <button data-view="performance">Performance-Übersicht</button>
-  <button data-view="data">Daten verwalten</button>
+  <button data-view="transactions">Transactions</button>
+  <button data-view="securities">Securities</button>
+  <button data-view="performance">Performance Overview</button>
+  <button data-view="prices">Prices</button>
+  <button data-view="data">Data Management</button>
 </nav>
 
 <main>
@@ -249,7 +252,7 @@
       </div>
       <div class="table-wrap">
         <table id="category-table">
-          <thead><tr><th>Category</th><th class="num">Value</th><th class="num">Cost</th><th class="num">Return</th><th class="num">IRR p.a.</th></tr></thead>
+          <thead><tr><th>Category</th><th class="num">Splints</th><th class="num">Value</th><th class="num">Cost</th><th class="num">Return</th><th class="num">IRR p.a.</th></tr></thead>
           <tbody></tbody>
         </table>
       </div>
@@ -282,15 +285,16 @@
   <section id="view-portfolio" class="view">
     <div class="section-title">
       <h2>Portfolio</h2>
-      <span class="hint" id="portfolio-count-hint">Alle Assets, inkl. vollständig verkaufter</span>
+      <span class="hint" id="portfolio-count-hint">All assets, incl. fully sold</span>
     </div>
     <div class="toolbar">
-      <div class="search-box"><input type="text" id="portfolio-search" placeholder="Suche: Asset, Kategorie, Subkategorie …"></div>
+      <div class="search-box"><input type="text" id="portfolio-search" placeholder="Search: asset, category, subcategory …"></div>
       <div class="pill-nav" id="portfolio-filter-nav">
-        <button data-filter="all" class="active">Alle</button>
-        <button data-filter="held">Gehalten</button>
-        <button data-filter="sold">Verkauft</button>
+        <button data-filter="all" class="active">All</button>
+        <button data-filter="held">Held</button>
+        <button data-filter="sold">Sold</button>
       </div>
+      <select id="portfolio-category-filter"><option value="">All categories</option></select>
     </div>
     <div class="table-wrap">
       <table id="portfolio-table">
@@ -298,18 +302,18 @@
           <tr>
             <th data-key="name">Security</th>
             <th data-key="splints" class="num">Splints</th>
-            <th data-key="value" class="num">Wert</th>
-            <th data-key="cost" class="num">Kosten</th>
+            <th data-key="value" class="num">Value</th>
+            <th data-key="cost" class="num">Cost</th>
             <th data-key="returnAbs" class="num">Return abs.</th>
             <th data-key="returnRel" class="num">Return rel.</th>
             <th data-key="irr" class="num">IRR p.a.</th>
             <th data-key="eroi" class="num">eROI</th>
             <th data-key="eroiVsIrr" class="num">eROI vs IRR</th>
-            <th data-key="firstBuy">1. Kauf</th>
-            <th data-key="exitDate">Exit/Verkauf</th>
-            <th data-key="targetExitYear" class="num">Horizont bis</th>
-            <th data-key="category">Kategorie</th>
-            <th data-key="subCategory">Subkategorie</th>
+            <th data-key="firstBuy">1st Buy</th>
+            <th data-key="exitDate">Exit/Sale</th>
+            <th data-key="targetExitYear" class="num">Horizon until</th>
+            <th data-key="category">Category</th>
+            <th data-key="subCategory">Subcategory</th>
           </tr>
         </thead>
         <tbody></tbody>
@@ -321,15 +325,15 @@
   <!-- ============ TRANSACTIONS ============ -->
   <section id="view-transactions" class="view">
     <div class="section-title">
-      <h2>Transaktionen</h2>
+      <h2>Transactions</h2>
       <span class="hint" id="tx-count-hint"></span>
     </div>
     <div class="toolbar">
       <div class="search-box">
-        <input type="text" id="tx-search" placeholder="Suche: Asset, Typ, ID, Beleg …">
+        <input type="text" id="tx-search" placeholder="Search: asset, type, ID, receipt …">
       </div>
       <select id="tx-type-filter">
-        <option value="">Alle Typen</option>
+        <option value="">All types</option>
         <option value="Primary market purchase">Primary market purchase</option>
         <option value="Marketplace purchase">Marketplace purchase</option>
         <option value="Marketplace sale">Marketplace sale</option>
@@ -340,16 +344,16 @@
       <table id="tx-table">
         <thead>
           <tr>
-            <th data-key="dateISO">Datum</th>
-            <th data-key="type">Typ</th>
+            <th data-key="dateISO">Date</th>
+            <th data-key="type">Type</th>
             <th data-key="assetName">Asset</th>
             <th data-key="splints" class="num">Splints</th>
-            <th data-key="amount" class="num">Betrag</th>
-            <th data-key="pricePerSplint" class="num">Preis/Splint</th>
+            <th data-key="amount" class="num">Amount</th>
+            <th data-key="pricePerSplint" class="num">Price/Splint</th>
             <th data-key="day1Profit" class="num">Day1Profit</th>
-            <th data-key="fees" class="num">Gebühren</th>
-            <th data-key="id">Trans.-ID</th>
-            <th>Beleg</th>
+            <th data-key="fees" class="num">Fees</th>
+            <th data-key="id">Trans. ID</th>
+            <th>Receipt</th>
           </tr>
         </thead>
         <tbody></tbody>
@@ -360,17 +364,17 @@
   <!-- ============ SECURITIES ============ -->
   <section id="view-securities" class="view">
     <div class="section-title">
-      <h2>Wertschriften</h2>
+      <h2>Securities</h2>
     </div>
     <div class="toolbar">
       <div class="search-box">
-        <input type="text" id="sec-search" placeholder="Asset suchen …">
+        <input type="text" id="sec-search" placeholder="Search asset …">
       </div>
-      <select id="sec-select"><option value="">— Asset wählen —</option></select>
+      <select id="sec-select"><option value="">— choose asset —</option></select>
     </div>
 
     <div id="sec-empty" class="empty-state">
-      <p>Wähle oben ein Asset aus, um Kursverlauf, Transaktionen und Stammdaten zu sehen.</p>
+      <p>Choose an asset above to see its price history, transactions, and master data.</p>
     </div>
 
     <div id="sec-detail" style="display:none;">
@@ -380,94 +384,101 @@
             <h2 id="sec-name">—</h2>
             <div class="sec-meta" id="sec-meta">—</div>
           </div>
-          <div class="grid cols-3" style="min-width:320px;">
-            <div class="card kpi" style="padding:10px 12px;"><div class="label">Splints</div><div class="value" id="sec-owned" style="font-size:18px;">—</div></div>
-            <div class="card kpi" style="padding:10px 12px;"><div class="label">Wert</div><div class="value" id="sec-value" style="font-size:18px;">—</div></div>
-            <div class="card kpi" style="padding:10px 12px;"><div class="label">Wert pro Splint</div><div class="value" id="sec-value-per-splint" style="font-size:18px;">—</div></div>
-          </div>
         </div>
 
-        <div class="grid cols-4" style="margin-top:14px; border-top:1px solid var(--line-soft); padding-top:14px;">
+        <div class="grid cols-4" style="margin-top:14px;">
           <div class="card kpi" style="padding:10px 12px;">
-            <div class="label">Return absolut</div>
+            <div class="label">Splints</div>
+            <div class="value" id="sec-owned" style="font-size:18px;">—</div>
+          </div>
+          <div class="card kpi" style="padding:10px 12px;">
+            <div class="label">Value</div>
+            <div class="value" id="sec-value" style="font-size:18px;">—</div>
+          </div>
+          <div class="card kpi" style="padding:10px 12px;">
+            <div class="label">Cost</div>
+            <div class="value" id="sec-cost" style="font-size:18px;">—</div>
+          </div>
+          <div class="card kpi" style="padding:10px 12px;">
+            <div class="label">Return absolute</div>
             <div class="value" id="sec-return-abs" style="font-size:18px;">—</div>
           </div>
           <div class="card kpi" style="padding:10px 12px;">
-            <div class="label">Return relativ</div>
+            <div class="label">Return relative</div>
             <div class="value" id="sec-return-rel" style="font-size:18px;">—</div>
           </div>
           <div class="card kpi" style="padding:10px 12px;">
-            <div class="label">IRR p.a. (zeitgewichtet)</div>
+            <div class="label">IRR p.a. (time-weighted)</div>
             <div class="value" id="sec-irr" style="font-size:18px;">—</div>
+          </div>
+          <div class="card kpi" style="padding:10px 12px;">
+            <div class="label">eROI</div>
+            <div class="value" style="font-size:18px;"><input type="number" step="0.1" id="sec-eroi" placeholder="—" style="width:80px;font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:600;border:none;border-bottom:1px solid var(--line);padding:0 0 2px;color:var(--ink);"> %</div>
           </div>
           <div class="card kpi" style="padding:10px 12px;">
             <div class="label">eROI vs. IRR</div>
             <div class="value" id="sec-eroi-diff" style="font-size:18px;">—</div>
           </div>
         </div>
-        <div class="hint" style="margin-top:8px; font-size:11.5px;">Return = alle Käufe/Verkäufe dieses Assets, bei offener Position zusätzlich der aktuelle Wert als fiktiver Verkauf zu heute. IRR ist die annualisierte Rendite dieser Zahlungsreihe (Newton-Verfahren), berücksichtigt also den genauen Zeitpunkt jeder Transaktion.</div>
+        <div class="hint" style="margin-top:8px; font-size:11.5px;">Return = all buys/sells of this asset; for an open position the current value is also included as a hypothetical sale as of today. IRR is the annualized return of this cash flow series (Newton's method), so it accounts for the exact timing of every transaction. eROI vs. IRR = eROI − IRR.</div>
 
         <div class="field-grid" style="margin-top:18px; border-top:1px solid var(--line-soft); padding-top:14px;">
           <div style="grid-column:1/-1;">
-            <label>Asset-Name (Stammdaten — überschreibt den Namen aus dem Splint-Export, Pflicht falls noch keiner vorhanden)</label>
-            <input type="text" id="sec-name-input" placeholder="Name vergeben …">
+            <label>Asset name (master data — overrides the name from the Splint export; required if none exists yet)</label>
+            <input type="text" id="sec-name-input" placeholder="Set a name …">
           </div>
           <div>
-            <label>Asset-Kategorie</label>
-            <input type="text" id="sec-category" list="category-list" placeholder="z. B. Trading Cards, Kunst, Uhren …">
+            <label>Asset category</label>
+            <input type="text" id="sec-category" list="category-list" placeholder="e.g. Trading Cards, Art, Watches …">
             <datalist id="category-list"></datalist>
           </div>
           <div>
-            <label>Asset-Subkategorie</label>
-            <input type="text" id="sec-subcategory" list="subcategory-list" placeholder="z. B. Fussball, Gemälde, Sneaker …">
+            <label>Asset subcategory</label>
+            <input type="text" id="sec-subcategory" list="subcategory-list" placeholder="e.g. Football, Paintings, Sneakers …">
             <datalist id="subcategory-list"></datalist>
           </div>
           <div>
             <label>Asset Category_old</label>
-            <input type="text" id="sec-category-old" list="category-old-list" placeholder="frühere Kategorie-Zuordnung …">
+            <input type="text" id="sec-category-old" list="category-old-list" placeholder="former category mapping …">
             <datalist id="category-old-list"></datalist>
           </div>
-          <div>
-            <label>eROI (%, erwartete Rendite)</label>
-            <input type="number" step="0.01" id="sec-eroi" placeholder="z. B. 12.5">
-          </div>
           <div style="grid-column:1/-1;">
-            <label>Notizen (Stammdaten, nicht aus Splint-Exporten)</label>
-            <input type="text" id="sec-notes" placeholder="Freitext …">
+            <label>Notes (master data, not from Splint exports)</label>
+            <input type="text" id="sec-notes" placeholder="Free text …">
           </div>
         </div>
         <div style="margin-top:10px;">
-          <button class="btn primary" id="sec-save-btn">Stammdaten speichern</button>
+          <button class="btn primary" id="sec-save-btn">Save master data</button>
           <span class="hint mono" id="sec-save-status" style="margin-left:10px;"></span>
         </div>
       </div>
 
-      <div class="section-title"><h2>Kursverlauf</h2><span class="hint">Monatsendkurse aus prices.csv</span></div>
+      <div class="section-title"><h2>Price History</h2><span class="hint">Monthly prices from prices.csv</span></div>
       <div class="card" id="sec-chart-card" style="padding:18px 18px 10px;"></div>
 
-      <div class="section-title"><h2>Transaktionen dieses Assets</h2></div>
+      <div class="section-title"><h2>Transactions for this Asset</h2></div>
       <div class="table-wrap">
         <table id="sec-tx-table">
-          <thead><tr><th>Datum</th><th>Typ</th><th class="num">Splints</th><th class="num">Betrag</th><th class="num">Preis/Splint</th><th class="num">Day1Profit</th><th class="num">Gebühren</th></tr></thead>
+          <thead><tr><th>Date</th><th>Type</th><th class="num">Splints</th><th class="num">Amount</th><th class="num">Price/Splint</th><th class="num">Day1Profit</th><th class="num">Fees</th></tr></thead>
           <tbody></tbody>
         </table>
       </div>
 
-      <div class="section-title"><h2>Ähnliche Investments</h2><span class="hint" id="sec-similar-hint">Gleiche Kategorie &amp; Subkategorie</span></div>
+      <div class="section-title"><h2>Similar Investments</h2><span class="hint" id="sec-similar-hint">Same category &amp; subcategory</span></div>
       <div class="table-wrap">
         <table id="sec-similar-table">
           <thead>
             <tr>
               <th>Security</th>
               <th class="num">Splints</th>
-              <th class="num">Wert</th>
-              <th class="num">Kosten</th>
+              <th class="num">Value</th>
+              <th class="num">Cost</th>
               <th class="num">Return abs.</th>
               <th class="num">Return rel.</th>
               <th class="num">IRR p.a.</th>
-              <th>1. Kauf</th>
-              <th>Exit/Verkauf</th>
-              <th class="num">Horizont bis</th>
+              <th>1st Buy</th>
+              <th>Exit/Sale</th>
+              <th class="num">Horizon until</th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -479,14 +490,14 @@
   <!-- ============ PERFORMANCE OVERVIEW ============ -->
   <section id="view-performance" class="view">
     <div class="section-title">
-      <h2>Performance-Übersicht</h2>
-      <span class="hint">Letzter erfasster Kurs pro Monat und Asset</span>
+      <h2>Performance Overview</h2>
+      <span class="hint">Latest recorded price per month and asset</span>
     </div>
     <div class="toolbar">
-      <div class="search-box"><input type="text" id="perf-search" placeholder="Asset suchen …"></div>
+      <div class="search-box"><input type="text" id="perf-search" placeholder="Search asset …"></div>
       <div class="pill-nav" id="perf-mode-nav">
-        <button data-mode="price" class="active">Kurse</button>
-        <button data-mode="change">Δ % zum Vormonat</button>
+        <button data-mode="price" class="active">Prices</button>
+        <button data-mode="change">Δ % vs previous month</button>
       </div>
     </div>
     <div class="table-wrap">
@@ -497,18 +508,55 @@
     </div>
   </section>
 
+  <!-- ============ PRICES ============ -->
+  <section id="view-prices" class="view">
+    <div class="section-title">
+      <h2>Prices</h2>
+      <span class="hint">All price points across all assets · exactly one price per asset &amp; month</span>
+    </div>
+    <div class="toolbar">
+      <div class="search-box"><input type="text" id="prices-search" placeholder="Search asset …"></div>
+    </div>
+    <div class="card upload-card" style="margin-bottom:14px;">
+      <strong>Add / update a price</strong>
+      <div class="desc">Adding a price for an asset &amp; month that already has one updates it in place — it never creates a second entry for the same month.</div>
+      <div class="field-grid" style="grid-template-columns:2fr 1fr 1fr 1fr auto;">
+        <div><label>Asset</label><select id="price-add-asset"><option value="">— choose asset —</option></select></div>
+        <div><label>Month</label><input type="month" id="price-add-month"></div>
+        <div><label>Price</label><input type="number" step="0.01" id="price-add-value"></div>
+        <div><label>Currency</label><input type="text" id="price-add-currency" value="EUR"></div>
+        <div style="display:flex;align-items:flex-end;"><button class="btn primary" id="price-add-btn">Save</button></div>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table id="prices-table">
+        <thead>
+          <tr>
+            <th data-key="assetName">Asset</th>
+            <th data-key="month">Month</th>
+            <th data-key="price" class="num">Price</th>
+            <th data-key="currency">Currency</th>
+            <th data-key="dateDMY">Date</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
   <!-- ============ DATA MANAGEMENT ============ -->
   <section id="view-data" class="view">
     <div class="section-title">
-      <h2>1 · GitHub-Verbindung</h2>
-      <span class="hint">prices.csv / transactions.csv / stammdaten.csv leben nur im Repo</span>
+      <h2>1 · GitHub Connection</h2>
+      <span class="hint">prices.csv / transactions.csv / stammdaten.csv only live in the repo</span>
     </div>
     <div class="card upload-card">
       <div class="desc">
-        Personal Access Token mit <strong>Contents: Read and write</strong> auf dieses Repo (Fine-grained PAT unter
-        github.com → Settings → Developer settings → Personal access tokens). Sobald verbunden, wird <strong>jede Änderung
-        sofort auf GitHub gespeichert</strong> — Uploads, Stammdaten-Bearbeitung, alles. Es gibt keinen separaten
-        Zwischenstand mehr, der manuell gesichert werden müsste.
+        Personal Access Token with <strong>Contents: Read and write</strong> on this repo (Fine-grained PAT under
+        github.com → Settings → Developer settings → Personal access tokens). Once connected, <strong>every change
+        is saved to GitHub immediately</strong> — uploads, master-data edits, all of it. There's no separate local
+        state that would need to be saved manually anymore.
       </div>
       <div class="field-grid" style="grid-template-columns:1fr 1fr 1fr 2fr;">
         <div><label>Owner</label><input type="text" id="gh-owner" value="Munotstadt"></div>
@@ -518,27 +566,27 @@
       </div>
       <div class="upload-row" style="margin-top:6px;">
         <label class="hint" style="display:flex; align-items:center; gap:6px; cursor:pointer;">
-          <input type="checkbox" id="gh-remember" style="margin:0;"> Verbindung in diesem Browser merken (automatisches Laden beim Öffnen)
+          <input type="checkbox" id="gh-remember" style="margin:0;"> Remember this connection in this browser (auto-load on open)
         </label>
       </div>
       <div class="upload-row" style="margin-top:6px;">
-        <button class="btn ghost" id="gh-load">Manuell neu von GitHub laden</button>
-        <button class="btn ghost" id="gh-save">Manuell auf GitHub erzwingen</button>
-        <button class="btn ghost" id="gh-forget">Verbindung vergessen</button>
+        <button class="btn ghost" id="gh-load">Manually reload from GitHub</button>
+        <button class="btn ghost" id="gh-save">Manually force-save to GitHub</button>
+        <button class="btn ghost" id="gh-forget">Forget connection</button>
         <span class="hint mono" id="gh-status"></span>
       </div>
-      <div class="desc" style="margin-top:4px;">Pfade im Repo: <span class="mono">data/prices.csv</span>, <span class="mono">data/transactions.csv</span>, <span class="mono">data/stammdaten.csv</span> — werden beim ersten Speichern automatisch angelegt.</div>
-      <div class="desc" style="margin-top:4px;">Bei aktivierter Checkbox liegt das Token im <span class="mono">localStorage</span> dieses Browsers (unverschlüsselt) und wird beim Öffnen automatisch wieder eingefüllt <em>und sofort der letzte GitHub-Stand geladen</em> — kein manueller Klick nötig. Nur auf einem eigenen, vertrauenswürdigen Gerät aktivieren.</div>
+      <div class="desc" style="margin-top:4px;">Repo paths: <span class="mono">data/prices.csv</span>, <span class="mono">data/transactions.csv</span>, <span class="mono">data/stammdaten.csv</span> — created automatically on first save.</div>
+      <div class="desc" style="margin-top:4px;">With the checkbox enabled, the token is stored in this browser's <span class="mono">localStorage</span> (unencrypted) and is automatically refilled on open <em>and the latest GitHub state is loaded immediately</em> — no manual click needed. Only enable this on your own, trusted device.</div>
     </div>
 
-    <div class="section-title"><h2>2 · Splint-Exporte hochladen</h2><span class="hint">Nur diese zwei Buttons betreffen die Original-Dateien von Splint</span></div>
-    <div class="desc" style="margin:-6px 0 10px;">Diese Uploads <strong>ergänzen</strong> prices.csv, transactions.csv und stammdaten.csv um neue Zeilen — bestehende Zeilen werden nie überschrieben oder gelöscht (Kurspunkte werden pro Asset/Monat aktualisiert, Transaktionen per eindeutiger ID dedupliziert). Ist GitHub verbunden, wird direkt danach automatisch gespeichert.</div>
+    <div class="section-title"><h2>2 · Upload Splint exports</h2><span class="hint">Only these two buttons touch the original files from Splint</span></div>
+    <div class="desc" style="margin:-6px 0 10px;">These uploads <strong>append</strong> new rows to prices.csv, transactions.csv and stammdaten.csv — existing rows are never overwritten or deleted (price points are updated per asset/month, transactions are deduplicated by unique ID). If GitHub is connected, this saves automatically right afterwards.</div>
     <div class="grid cols-2">
       <div class="card upload-card">
         <strong><span class="step-num">A</span>Investment Opportunities Export</strong>
-        <div class="desc">Aktuelle Positionen mit heutigem Kurs. Wird als ein Kurspunkt pro Monat in prices.csv ergänzt/aktualisiert (letzter Upload pro Monat überschreibt nur den Monatswert, nie andere Monate).</div>
+        <div class="desc">Current positions with today's price. Added/updated as one price point per month in prices.csv (the latest upload for a given month only overwrites that month's value, never other months).</div>
         <div class="upload-row">
-          <label class="hint mono" style="white-space:nowrap;">Kursdatum</label>
+          <label class="hint mono" style="white-space:nowrap;">Price date</label>
           <input type="date" id="opp-date">
         </div>
         <div class="upload-row">
@@ -549,7 +597,7 @@
       </div>
       <div class="card upload-card">
         <strong><span class="step-num">B</span>Activities Export</strong>
-        <div class="desc">Vollständiges Transaktionsprotokoll von Splint. Neue Transaktions-IDs werden ergänzt, bestehende nicht dupliziert oder verändert.</div>
+        <div class="desc">Splint's complete transaction log. New transaction IDs are appended; existing ones are never duplicated or changed.</div>
         <div class="upload-row">
           <input type="file" id="load-act" accept=".csv">
           <button class="btn primary" id="upload-act-btn" disabled>Upload</button>
@@ -558,32 +606,40 @@
       </div>
     </div>
 
-    <div class="section-title"><h2>3 · Erweitert / Fallback</h2><span class="hint">Nur nötig ohne GitHub-Verbindung</span></div>
+    <div class="section-title"><h2>3 · Advanced / Fallback</h2><span class="hint">Only needed without a GitHub connection</span></div>
     <div class="grid cols-2">
       <div class="card upload-card">
-        <strong>prices.csv laden</strong>
-        <div class="upload-row"><input type="file" id="load-prices" accept=".csv"></div>
+        <strong>Load prices.csv</strong>
+        <div class="upload-row">
+          <input type="file" id="load-prices" accept=".csv">
+          <button class="btn primary" id="upload-prices-btn" disabled>Upload</button>
+        </div>
+        <div class="hint mono" id="load-prices-filename"></div>
       </div>
       <div class="card upload-card">
-        <strong>transactions.csv laden</strong>
-        <div class="upload-row"><input type="file" id="load-transactions" accept=".csv"></div>
+        <strong>Load transactions.csv</strong>
+        <div class="upload-row">
+          <input type="file" id="load-transactions" accept=".csv">
+          <button class="btn primary" id="upload-transactions-btn" disabled>Upload</button>
+        </div>
+        <div class="hint mono" id="load-transactions-filename"></div>
       </div>
     </div>
-    <div class="desc" style="margin-top:-4px;">Stammdaten (Name, Kategorie, Subkategorie, Notizen) gibt es nur als Export/GitHub-Stand — kein manueller Upload, da es dafür keine externe Quelldatei gibt. Bearbeitung erfolgt direkt im Tab «Wertschriften».</div>
+    <div class="desc" style="margin-top:-4px;">Master data (name, category, subcategory, notes) only exists as an export/GitHub state — no manual upload, since there's no external source file for it. Edit it directly in the "Securities" tab.</div>
     <div class="toolbar">
-      <button class="btn ghost" id="export-prices">prices.csv herunterladen</button>
-      <button class="btn ghost" id="export-transactions">transactions.csv herunterladen</button>
-      <button class="btn ghost" id="export-master">stammdaten.csv herunterladen</button>
-      <button class="btn ghost" id="reset-all">Session zurücksetzen</button>
+      <button class="btn ghost" id="export-prices">Download prices.csv</button>
+      <button class="btn ghost" id="export-transactions">Download transactions.csv</button>
+      <button class="btn ghost" id="export-master">Download stammdaten.csv</button>
+      <button class="btn ghost" id="reset-all">Reset session</button>
     </div>
 
-    <div class="section-title"><h2>Protokoll</h2></div>
-    <div class="log-box" id="log-box">Bereit.</div>
+    <div class="section-title"><h2>Log</h2></div>
+    <div class="log-box" id="log-box">Ready.</div>
   </section>
 
 </main>
 
-<footer class="foot">Splint Tracker · Munotstadt Suite · Alle Daten bleiben lokal im Browser (kein Server, kein Speichern ausser via Export)</footer>
+<footer class="foot">Splint Tracker · Munotstadt Suite · Data is stored in this GitHub repo — no separate server</footer>
 
 <script>
 /* =========================================================================
@@ -669,7 +725,7 @@ function isoToDMY(d){
 }
 function monthLabel(m){
   const [y,mo] = m.split('-');
-  const names = ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
+  const names = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   return names[parseInt(mo,10)-1] + ' ' + y.slice(2);
 }
 function fmtNum(n, decimals=2){
@@ -721,6 +777,23 @@ function ensureMaster(assetId, assetName){
 function assetName(assetId){
   return (DB.master[assetId] && DB.master[assetId].assetName) || assetId;
 }
+// Guarantees exactly one price per asset+month: re-derives the month key from the stored date
+// (rather than trusting a possibly-stale/mismatched Month column) and, if duplicates exist for
+// the same asset+month, keeps the one with the most recent exact date. Safe to call repeatedly.
+function normalizePrices(){
+  const byKey = {};
+  DB.prices.forEach(p => {
+    const iso = p.dateDMY ? dmyToISO(p.dateDMY) : (p.month ? p.month + '-01' : '');
+    const month = iso ? iso.slice(0,7) : p.month;
+    const key = p.assetId + '|' + month;
+    const candidate = {...p, month};
+    const existing = byKey[key];
+    if (!existing || (candidate.dateDMY && (!existing.dateDMY || dmyToISO(candidate.dateDMY) >= dmyToISO(existing.dateDMY)))) {
+      byKey[key] = candidate;
+    }
+  });
+  DB.prices = Object.values(byKey);
+}
 
 // ---------------------------------------------------------------- IMPORT --
 function importPricesCSV(text){
@@ -734,7 +807,7 @@ function importPricesCSV(text){
     const entry = {assetId, month, dateDMY: r['Date'], price: parseFloat(r['Price']) || 0, currency: r['Currency'] || 'EUR'};
     if (existing) Object.assign(existing, entry); else { DB.prices.push(entry); added++; }
   });
-  log(`prices.csv geladen: ${rows.length} Zeilen, ${added} neu.`);
+  log(`prices.csv loaded: ${rows.length} rows, ${added} new.`);
 }
 
 function importTransactionsCSV(text, sourceLabel){
@@ -765,7 +838,7 @@ function importTransactionsCSV(text, sourceLabel){
     });
     added++;
   });
-  log(`${sourceLabel} geladen: ${rows.length} Zeilen, ${added} neue Transaktionen.`);
+  log(`${sourceLabel} loaded: ${rows.length} rows, ${added} new transactions.`);
 }
 
 function importMasterCSV(text){
@@ -786,7 +859,7 @@ function importMasterCSV(text){
       eROI: r['eROI'] || '',
     };
   });
-  log(`stammdaten.csv geladen: ${rows.length} Assets.`);
+  log(`stammdaten.csv loaded: ${rows.length} assets.`);
 }
 
 function importOpportunitiesCSV(text, asOfISO){
@@ -824,7 +897,7 @@ function importOpportunitiesCSV(text, asOfISO){
     if (existing) Object.assign(existing, entry); else { DB.prices.push(entry); }
     priceUpserts++;
   });
-  log(`Investment Opportunities geladen: ${rows.length} offene Positionen zum Stichtag ${asOfDMY}. ${priceUpserts} Kurspunkte in prices.csv aktualisiert/ergänzt.`);
+  log(`Investment Opportunities loaded: ${rows.length} open positions as of ${asOfDMY}. ${priceUpserts} price points updated/added in prices.csv.`);
 }
 
 // ---------------------------------------------------------------- DERIVED --
@@ -1137,10 +1210,9 @@ function svgLineChart(points, opts={}){
   </svg>`;
 }
 
-// Kursverlauf: Wert/Splint auf der linken Achse (Linie, 2 Dezimalstellen) + monatliche
-// Veränderung in % auf der rechten Achse (Säulen, 1 Dezimalstelle, mit Beschriftung an der Säule).
-// Alle Punkte/Säulen sind antippbar (touch-freundlich statt Hover-Tooltip) und zeigen den
-// exakten Wert im Readout unterhalb des Charts an.
+// Price History: value/splint on the left axis (line, 2 decimals) + monthly change in % on
+// the right axis (bars, 1 decimal, labeled at the bar). All points/bars are tappable
+// (touch-friendly instead of hover tooltips) and show the exact value in the readout below the chart.
 function svgPriceChangeChart(series, opts={}){
   // series: [{month, price}] ascending by month
   const w = opts.width || 900, h = opts.height || 260;
@@ -1212,8 +1284,8 @@ function svgPriceChangeChart(series, opts={}){
   });
 
   const legend = `<div style="display:flex;gap:16px;margin-bottom:6px;">
-    <span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-soft);"><span style="width:10px;height:10px;border-radius:2px;background:#E30613;display:inline-block;"></span>Wert/Splint (links)</span>
-    <span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-soft);"><span style="width:10px;height:8px;border-radius:2px;background:var(--ink-soft);display:inline-block;"></span>Veränderung % zum Vormonat (rechts)</span>
+    <span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-soft);"><span style="width:10px;height:10px;border-radius:2px;background:#E30613;display:inline-block;"></span>Value/Splint (left)</span>
+    <span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-soft);"><span style="width:10px;height:8px;border-radius:2px;background:var(--ink-soft);display:inline-block;"></span>Change % vs previous month (right)</span>
   </div>`;
 
   return `${legend}<svg viewBox="0 0 ${w} ${h}" width="100%" height="${h}" preserveAspectRatio="xMidYMid meet" style="touch-action:manipulation;">
@@ -1224,7 +1296,7 @@ function svgPriceChangeChart(series, opts={}){
     ${dots}
     ${labelsX}
   </svg>
-  <div id="sec-chart-readout" class="hint mono" style="margin-top:6px;min-height:18px;">Punkt oder Säule antippen für Details</div>`;
+  <div id="sec-chart-readout" class="hint mono" style="margin-top:6px;min-height:18px;">Tap a point or bar for details</div>`;
 }
 
 function svgMultiLineChart(series, opts={}){
@@ -1319,6 +1391,9 @@ function renderDashboard(){
 
   // Portfolio value history: for each month, use the quantity actually held AT THAT MONTH-END
   // (ledger-derived, historical) × the latest known price up to that month — not today's quantity.
+  // If no price point exists yet for that month (e.g. an asset was just bought and hasn't had its
+  // first valuation upload), fall back to its average cost per splint instead of 0 — otherwise a
+  // freshly-bought asset would create a fake dip in the Value line before its first price arrives.
   // Second line: cost basis outstanding at that same month-end.
   const months = allMonthsSorted();
   const allIds = allAssetIds();
@@ -1330,7 +1405,8 @@ function renderDashboard(){
       const pos = computeOpenPosition(id, m);
       if (pos.qty <= 0.0001) return;
       const series = assetPriceSeries(id).filter(p => p.month <= m);
-      if (series.length) val += series[series.length-1].price * pos.qty;
+      const pricePerSplint = series.length ? series[series.length-1].price : (pos.costBasis / pos.qty);
+      val += pricePerSplint * pos.qty;
       cost += pos.costBasis;
     });
     valuePoints.push({label: monthLabel(m), value: val});
@@ -1346,33 +1422,35 @@ function renderDashboard(){
   allIds.forEach(id => {
     const pos = computeOpenPosition(id);
     if (pos.qty <= 0.0001) return;
-    const cat = (DB.master[id] && DB.master[id].category) ? DB.master[id].category : 'Ohne Kategorie';
+    const cat = (DB.master[id] && DB.master[id].category) ? DB.master[id].category : 'Uncategorized';
     if (!catMap[cat]) catMap[cat] = [];
     catMap[cat].push(id);
   });
   const catRows = Object.keys(catMap).map(cat => {
     const ids = catMap[cat];
-    let value = 0, cost = 0;
+    let value = 0, cost = 0, splints = 0;
     ids.forEach(id => {
       const pos = computeOpenPosition(id);
       const cp = currentPricePerSplint(id);
       value += cp.price === null ? 0 : pos.qty * cp.price;
       cost += pos.costBasis;
+      splints += pos.qty;
     });
     const ret = value - cost;
     const retPct = cost > 0 ? (ret/cost*100) : null;
     const irr = computePortfolioIRR(ids);
-    return {cat, value, cost, ret, retPct, irr};
+    return {cat, value, cost, ret, retPct, irr, splints};
   }).sort((a,b)=>b.value-a.value);
   document.querySelector('#category-table tbody').innerHTML = catRows.map(r => `
-    <tr>
+    <tr class="cat-row" data-category="${escapeHtml(r.cat)}" style="cursor:pointer;" title="Click to open Portfolio filtered by this category">
       <td>${escapeHtml(r.cat)}</td>
+      <td class="num">${fmtNum(r.splints,0)}</td>
       <td class="num">${fmtMoney(r.value)}</td>
       <td class="num">${fmtMoney(r.cost)}</td>
       <td class="num" style="color:${signColor(r.ret)}">${fmtMoney(r.ret)} (${r.retPct===null?'—':fmtPct(r.retPct)})</td>
       <td class="num" style="color:${signColor(r.irr)}">${r.irr===null?'—':fmtPct(r.irr*100)}</td>
     </tr>
-  `).join('') || `<tr><td colspan="5" class="hint">No open positions.</td></tr>`;
+  `).join('') || `<tr><td colspan="6" class="hint">No open positions.</td></tr>`;
 
   // top positions
   const rows = heldIds.map(id => {
@@ -1455,7 +1533,7 @@ function renderTransactions(){
     if (av > bv) return 1*txSort.dir;
     return 0;
   });
-  document.getElementById('tx-count-hint').textContent = `${rows.length} von ${DB.transactions.length} Transaktionen`;
+  document.getElementById('tx-count-hint').textContent = `${rows.length} of ${DB.transactions.length} transactions`;
   document.querySelector('#tx-table tbody').innerHTML = rows.map(r => `
     <tr>
       <td class="mono">${r.dateDMY}</td>
@@ -1492,8 +1570,8 @@ function populateSecuritySelect(){
     .map(id => ({id, name: assetName(id), held: isCurrentlyHeld(id)}))
     .filter(a => !search || a.name.toLowerCase().includes(search))
     .sort((a,b) => a.name.localeCompare(b.name));
-  sel.innerHTML = `<option value="">— Asset wählen —</option>` + ids.map(a =>
-    `<option value="${a.id}" ${a.id===current?'selected':''}>${escapeHtml(a.name)}${a.held?'':' (nicht mehr gehalten)'}</option>`
+  sel.innerHTML = `<option value="">— choose asset —</option>` + ids.map(a =>
+    `<option value="${a.id}" ${a.id===current?'selected':''}>${escapeHtml(a.name)}${a.held?'':' (no longer held)'}</option>`
   ).join('');
 }
 
@@ -1508,14 +1586,14 @@ function renderSecurityDetail(assetId){
   const pos = computeOpenPosition(assetId);
   const cp = currentPricePerSplint(assetId);
   const hasRealName = m.assetName && m.assetName !== assetId;
-  document.getElementById('sec-name').textContent = hasRealName ? m.assetName : 'Ohne Namen';
+  document.getElementById('sec-name').textContent = hasRealName ? m.assetName : 'Unnamed';
   const releaseDate = (h && h.releaseDate) || m.releaseDate || '';
   const minHorizon = (h && h.minHorizon) || m.minHorizon || '';
   const maxHorizon = (h && h.maxHorizon) || m.maxHorizon || '';
-  document.getElementById('sec-meta').textContent = `Asset-ID: ${assetId}` + (releaseDate ? ` · Release: ${isoToDMY(releaseDate)}` : '') + ((minHorizon&&maxHorizon) ? ` · Horizont ${minHorizon}-${maxHorizon} Jahre` : '');
+  document.getElementById('sec-meta').textContent = `Asset ID: ${assetId}` + (releaseDate ? ` · Release: ${isoToDMY(releaseDate)}` : '') + ((minHorizon&&maxHorizon) ? ` · Horizon ${minHorizon}-${maxHorizon} years` : '');
   document.getElementById('sec-owned').textContent = fmtNum(pos.qty,0);
   document.getElementById('sec-value').textContent = pos.qty>0.0001 ? (cp.price===null ? '—' : fmtMoney(pos.qty*cp.price, cp.currency)) : fmtMoney(0);
-  document.getElementById('sec-value-per-splint').textContent = cp.price===null ? '—' : fmtMoney(cp.price, cp.currency);
+  document.getElementById('sec-cost').textContent = fmtMoney(pos.costBasis);
 
   const perf = computeSecurityPerformance(assetId);
   const absEl = document.getElementById('sec-return-abs');
@@ -1527,6 +1605,7 @@ function renderSecurityDetail(assetId){
   const irrEl = document.getElementById('sec-irr');
   irrEl.textContent = perf.irr === null ? '—' : fmtPct(perf.irr*100);
   irrEl.style.color = signColor(perf.irr);
+  document.getElementById('sec-eroi').value = (m.eROI===''||m.eROI===undefined||m.eROI===null||isNaN(m.eROI)) ? '' : Number(m.eROI).toFixed(1);
   const eroiDiff = computeEroiVsIrr(assetId, perf.irr);
   const eroiDiffEl = document.getElementById('sec-eroi-diff');
   eroiDiffEl.textContent = eroiDiff === null ? 'n/a' : fmtPct(eroiDiff,1);
@@ -1536,7 +1615,6 @@ function renderSecurityDetail(assetId){
   document.getElementById('sec-category').value = m.category || '';
   document.getElementById('sec-subcategory').value = m.subCategory || '';
   document.getElementById('sec-category-old').value = m.categoryOld || '';
-  document.getElementById('sec-eroi').value = (m.eROI===''||m.eROI===undefined||m.eROI===null) ? '' : m.eROI;
   document.getElementById('sec-notes').value = m.notes || '';
   document.getElementById('sec-save-status').textContent = '';
 
@@ -1578,10 +1656,10 @@ function renderSecurityDetail(assetId){
     simIds = []; // no category/subcategory set on this asset -> nothing meaningful to compare
   }
   const simRows = simIds.map(computePortfolioRow).sort((a,b)=>b.value-a.value);
-  document.getElementById('sec-similar-hint').textContent = (myCat||mySub) ? `Gleiche Kategorie & Subkategorie: ${[myCat,mySub].filter(Boolean).join(' / ')}` : 'Keine Kategorie/Subkategorie hinterlegt';
+  document.getElementById('sec-similar-hint').textContent = (myCat||mySub) ? `Same category & subcategory: ${[myCat,mySub].filter(Boolean).join(' / ')}` : 'No category/subcategory set';
   document.querySelector('#sec-similar-table tbody').innerHTML = simRows.map(r => `
     <tr>
-      <td>${assetLinkHTML(r.id, r.name)}${r.held?'':' <span class="hint">(verkauft)</span>'}</td>
+      <td>${assetLinkHTML(r.id, r.name)}${r.held?'':' <span class="hint">(sold)</span>'}</td>
       <td class="num">${fmtNum(r.splints,0)}</td>
       <td class="num">${fmtMoney(r.value)}</td>
       <td class="num">${fmtMoney(r.cost)}</td>
@@ -1592,7 +1670,7 @@ function renderSecurityDetail(assetId){
       <td class="mono">${r.exitDate?isoToDMY(r.exitDate):'—'}</td>
       <td class="num">${!r.held?'n/a':(r.targetExitYear===null?'—':r.targetExitYear)}</td>
     </tr>
-  `).join('') || `<tr><td colspan="10" class="hint">Keine ähnlichen Investments gefunden.</td></tr>`;
+  `).join('') || `<tr><td colspan="10" class="hint">No similar investments found.</td></tr>`;
 }
 
 // ---------------------------------------------------------------- RENDER: PERFORMANCE --
@@ -1639,22 +1717,75 @@ function renderPerformance(){
       cellsByMonth[m] = `<td class="num"${bg}>${display}</td>`;
     });
     const cells = monthsDesc.map(m => cellsByMonth[m]).join('');
-    return `<tr><td>${assetLinkHTML(id, assetName(id))}${isCurrentlyHeld(id)?'':' <span class="hint">(verkauft)</span>'}</td>${cells}</tr>`;
+    return `<tr><td>${assetLinkHTML(id, assetName(id))}${isCurrentlyHeld(id)?'':' <span class="hint">(sold)</span>'}</td>${cells}</tr>`;
   });
-  document.querySelector('#perf-table tbody').innerHTML = bodyRows.join('') || `<tr><td class="hint">Keine Kursdaten vorhanden.</td></tr>`;
+  document.querySelector('#perf-table tbody').innerHTML = bodyRows.join('') || `<tr><td class="hint">No price data available.</td></tr>`;
+}
+
+// ---------------------------------------------------------------- RENDER: PRICES --
+let pricesSort = {key:'assetName', dir:1};
+// Adds or updates a single price point. Always upserts by asset+month, so there is never
+// more than one price for the same asset in the same month (see normalizePrices() too).
+function upsertPrice(assetId, month, price, currency, dateDMY){
+  const existing = DB.prices.find(p => p.assetId === assetId && p.month === month);
+  if (existing){ existing.price = price; existing.currency = currency; if (dateDMY) existing.dateDMY = dateDMY; }
+  else DB.prices.push({assetId, month, price, currency, dateDMY: dateDMY || isoToDMY(month+'-01')});
+}
+function renderPrices(){
+  const search = document.getElementById('prices-search').value.trim().toLowerCase();
+  let rows = DB.prices.map(p => ({...p, assetNameStr: assetName(p.assetId)}));
+  if (search) rows = rows.filter(r => r.assetNameStr.toLowerCase().includes(search));
+  rows.sort((a,b) => {
+    let av = pricesSort.key === 'assetName' ? a.assetNameStr : a[pricesSort.key];
+    let bv = pricesSort.key === 'assetName' ? b.assetNameStr : b[pricesSort.key];
+    if (typeof av === 'string') av = av.toLowerCase();
+    if (typeof bv === 'string') bv = bv.toLowerCase();
+    if (av < bv) return -1*pricesSort.dir;
+    if (av > bv) return 1*pricesSort.dir;
+    return 0;
+  });
+  document.getElementById('prices-count-hint') && (document.getElementById('prices-count-hint').textContent = `${rows.length} price points`);
+  document.querySelector('#prices-table tbody').innerHTML = rows.map(r => `
+    <tr>
+      <td>${assetLinkHTML(r.assetId, r.assetNameStr)}</td>
+      <td class="mono">${monthLabel(r.month)}</td>
+      <td class="num"><input type="number" step="0.01" class="price-edit-input" data-asset-id="${escapeHtml(r.assetId)}" data-month="${escapeHtml(r.month)}" value="${r.price}" style="width:90px;text-align:right;"></td>
+      <td class="mono">${escapeHtml(r.currency)}</td>
+      <td class="mono">${escapeHtml(r.dateDMY||'')}</td>
+      <td><button class="btn ghost price-delete-btn" data-asset-id="${escapeHtml(r.assetId)}" data-month="${escapeHtml(r.month)}" style="padding:3px 9px;font-size:11px;">Delete</button></td>
+    </tr>
+  `).join('') || `<tr><td colspan="6" class="hint">No prices found.</td></tr>`;
+
+  document.querySelectorAll('#prices-table thead th[data-key]').forEach(th => {
+    th.querySelectorAll('.arrow').forEach(a=>a.remove());
+    if (th.dataset.key === pricesSort.key){
+      const span = document.createElement('span');
+      span.className = 'arrow';
+      span.textContent = pricesSort.dir === 1 ? '↑' : '↓';
+      th.appendChild(span);
+    }
+  });
+
+  // keep the "add/update" asset dropdown in sync with currently known assets
+  const addSel = document.getElementById('price-add-asset');
+  const prevVal = addSel.value;
+  const ids = allAssetIds().sort((a,b)=>assetName(a).localeCompare(assetName(b)));
+  addSel.innerHTML = `<option value="">— choose asset —</option>` + ids.map(id=>`<option value="${escapeHtml(id)}">${escapeHtml(assetName(id))}</option>`).join('');
+  addSel.value = ids.includes(prevVal) ? prevVal : '';
 }
 
 // ---------------------------------------------------------------- HEADER --
 function updateHeaderStatus(){
   const el = document.getElementById('header-status');
   const heldCount = allAssetIds().filter(isCurrentlyHeld).length;
-  if (!DB.transactions.length && !heldCount){ el.textContent = 'Keine Daten geladen'; return; }
-  el.textContent = `${DB.transactions.length} Transaktionen · ${heldCount} offene Positionen · ${DB.prices.length} Kurspunkte`;
+  if (!DB.transactions.length && !heldCount){ el.textContent = 'No data loaded'; return; }
+  el.textContent = `${DB.transactions.length} transactions · ${heldCount} open positions · ${DB.prices.length} price points`;
 }
 
 // ---------------------------------------------------------------- RENDER: PORTFOLIO --
 let portfolioSort = {key:'value', dir:-1};
 let portfolioFilter = 'all';
+let portfolioCategoryFilter = '';
 
 function computePortfolioRow(id){
   const pos = computeOpenPosition(id);
@@ -1688,8 +1819,18 @@ function renderPortfolio(){
 
   let rows = ids.map(computePortfolioRow);
 
+  // keep the category dropdown's options in sync with whatever categories currently exist
+  const catSelect = document.getElementById('portfolio-category-filter');
+  const allCats = Array.from(new Set(rows.map(r=>r.category).filter(Boolean))).sort();
+  const prevSelection = catSelect.value;
+  catSelect.innerHTML = `<option value="">All categories</option>` + allCats.map(c=>`<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
+  catSelect.value = allCats.includes(portfolioCategoryFilter) ? portfolioCategoryFilter : (allCats.includes(prevSelection) ? prevSelection : '');
+  portfolioCategoryFilter = catSelect.value;
+
   if (portfolioFilter === 'held') rows = rows.filter(r => r.held);
   else if (portfolioFilter === 'sold') rows = rows.filter(r => !r.held);
+
+  if (portfolioCategoryFilter) rows = rows.filter(r => r.category === portfolioCategoryFilter);
 
   if (search) rows = rows.filter(r =>
     r.name.toLowerCase().includes(search) ||
@@ -1711,18 +1852,18 @@ function renderPortfolio(){
     return 0;
   });
 
-  document.getElementById('portfolio-count-hint').textContent = `${rows.length} von ${ids.length} Assets (inkl. verkaufter)`;
+  document.getElementById('portfolio-count-hint').textContent = `${rows.length} of ${ids.length} assets (incl. fully sold)`;
 
   document.querySelector('#portfolio-table tbody').innerHTML = rows.map(r => `
     <tr>
-      <td>${assetLinkHTML(r.id, r.name)}${r.held?'':' <span class="hint">(verkauft)</span>'}</td>
+      <td>${assetLinkHTML(r.id, r.name)}${r.held?'':' <span class="hint">(sold)</span>'}</td>
       <td class="num">${fmtNum(r.splints,0)}</td>
       <td class="num">${fmtMoney(r.value)}</td>
       <td class="num">${fmtMoney(r.cost)}</td>
       <td class="num" style="color:${signColor(r.returnAbs)}">${fmtMoney(r.returnAbs)}</td>
       <td class="num" style="color:${signColor(r.returnRel)}">${r.returnRel===null?'—':fmtPct(r.returnRel)}</td>
       <td class="num" style="color:${signColor(r.irr)}">${r.irr===null?'—':fmtPct(r.irr*100)}</td>
-      <td class="num"><input type="number" step="0.01" class="eroi-input" data-asset-id="${escapeHtml(r.id)}" value="${(r.eroi===''||r.eroi===undefined||r.eroi===null)?'':r.eroi}" placeholder="—" style="width:64px;text-align:right;"> %</td>
+      <td class="num"><input type="number" step="0.1" class="eroi-input" data-asset-id="${escapeHtml(r.id)}" value="${(r.eroi===''||r.eroi===undefined||r.eroi===null||isNaN(r.eroi))?'':Number(r.eroi).toFixed(1)}" placeholder="—" style="width:64px;text-align:right;"> %</td>
       <td class="num" data-eroi-diff-for="${escapeHtml(r.id)}" style="color:${r.eroiVsIrr===null?'var(--ink-soft)':signColor(r.eroiVsIrr)}">${r.eroiVsIrr===null?'n/a':fmtPct(r.eroiVsIrr,1)}</td>
       <td class="mono">${r.firstBuy?isoToDMY(r.firstBuy):'—'}</td>
       <td class="mono">${r.exitDate?isoToDMY(r.exitDate):'—'}</td>
@@ -1730,10 +1871,10 @@ function renderPortfolio(){
       <td>${escapeHtml(r.category)||'<span class="hint">—</span>'}</td>
       <td>${escapeHtml(r.subCategory)||'<span class="hint">—</span>'}</td>
     </tr>
-  `).join('') || `<tr><td colspan="14" class="hint">Keine Assets gefunden.</td></tr>`;
+  `).join('') || `<tr><td colspan="14" class="hint">No assets found.</td></tr>`;
 
   // Total / Subtotal row — reflects whatever is currently filtered/searched
-  const isFiltered = portfolioFilter !== 'all' || !!search;
+  const isFiltered = portfolioFilter !== 'all' || !!portfolioCategoryFilter || !!search;
   const totalSplints = rows.reduce((s,r)=>s+r.splints, 0);
   const totalValue = rows.reduce((s,r)=>s+r.value, 0);
   const totalCost = rows.reduce((s,r)=>s+r.cost, 0);
@@ -1764,6 +1905,7 @@ function renderPortfolio(){
 
 // ---------------------------------------------------------------- MASTER RENDER --
 function renderAll(){
+  normalizePrices();
   updateHeaderStatus();
   renderDashboard();
   renderPortfolio();
@@ -1771,6 +1913,7 @@ function renderAll(){
   populateSecuritySelect();
   renderSecurityDetail(document.getElementById('sec-select').value);
   renderPerformance();
+  renderPrices();
 }
 
 // ---------------------------------------------------------------- EVENTS --
@@ -1792,7 +1935,7 @@ async function handleDay1ProfitInputChange(e){
   if (!tx) return;
   const raw = input.value.trim();
   tx.day1Profit = raw === '' ? '' : parseFloat(raw);
-  await autoSyncToGitHub('Day1Profit-Bearbeitung');
+  await autoSyncToGitHub('Day1Profit edited');
 }
 document.querySelector('#tx-table tbody').addEventListener('change', handleDay1ProfitInputChange);
 document.querySelector('#sec-tx-table tbody').addEventListener('change', handleDay1ProfitInputChange);
@@ -1806,8 +1949,8 @@ document.getElementById('sec-chart-card').addEventListener('click', (e) => {
   const price = parseFloat(el.dataset.price);
   const changeRaw = el.dataset.change;
   const hasChange = changeRaw !== '' && changeRaw !== undefined;
-  const changeHtml = hasChange ? ` · Veränderung: <span style="color:${signColor(parseFloat(changeRaw))}">${fmtPct(parseFloat(changeRaw),1)}</span>` : '';
-  readout.innerHTML = `<strong>${monthLabel(month)}</strong> · Wert/Splint: ${fmtMoney(price)}${changeHtml}`;
+  const changeHtml = hasChange ? ` · Change: <span style="color:${signColor(parseFloat(changeRaw))}">${fmtPct(parseFloat(changeRaw),1)}</span>` : '';
+  readout.innerHTML = `<strong>${monthLabel(month)}</strong> · Value/Splint: ${fmtMoney(price)}${changeHtml}`;
 });
 
 document.getElementById('portfolio-search').addEventListener('input', renderPortfolio);
@@ -1827,7 +1970,7 @@ document.querySelector('#portfolio-table tbody').addEventListener('change', asyn
     diffCell.textContent = diff===null ? 'n/a' : fmtPct(diff,1);
     diffCell.style.color = diff===null ? 'var(--ink-soft)' : signColor(diff);
   }
-  await autoSyncToGitHub('eROI-Bearbeitung');
+  await autoSyncToGitHub('eROI edited');
 });
 document.querySelectorAll('#portfolio-table thead th[data-key]').forEach(th => {
   th.addEventListener('click', () => {
@@ -1844,6 +1987,27 @@ document.querySelectorAll('#portfolio-filter-nav button').forEach(btn => {
     renderPortfolio();
   });
 });
+document.getElementById('portfolio-category-filter').addEventListener('change', (e) => {
+  portfolioCategoryFilter = e.target.value;
+  renderPortfolio();
+});
+// Dashboard "By Category" rows are clickable: jump to Portfolio pre-filtered to that category.
+function goToPortfolioFilteredByCategory(category){
+  portfolioCategoryFilter = category;
+  document.querySelectorAll('#portfolio-filter-nav button').forEach(b=>b.classList.remove('active'));
+  document.querySelector('#portfolio-filter-nav button[data-filter="all"]').classList.add('active');
+  portfolioFilter = 'all';
+  document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.remove('active'));
+  document.querySelector('nav.tabs button[data-view="portfolio"]').classList.add('active');
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-portfolio').classList.add('active');
+  renderPortfolio();
+}
+document.querySelector('#category-table tbody').addEventListener('click', (e) => {
+  const row = e.target.closest('.cat-row');
+  if (!row) return;
+  goToPortfolioFilteredByCategory(row.dataset.category);
+});
 document.querySelectorAll('#tx-table thead th[data-key]').forEach(th => {
   th.addEventListener('click', () => {
     if (txSort.key === th.dataset.key) txSort.dir *= -1;
@@ -1859,14 +2023,12 @@ document.getElementById('sec-save-btn').addEventListener('click', async () => {
   if (!id) return;
   const m = ensureMaster(id, assetName(id));
   const nameInput = document.getElementById('sec-name-input').value.trim();
-  m.assetName = nameInput || id; // falls kein Name vergeben: intern auf Asset-ID zurückfallen
+  m.assetName = nameInput || id; // fall back to the Asset ID internally if no name was set
   m.category = document.getElementById('sec-category').value.trim();
   m.subCategory = document.getElementById('sec-subcategory').value.trim();
   m.categoryOld = document.getElementById('sec-category-old').value.trim();
-  const eroiRaw = document.getElementById('sec-eroi').value.trim();
-  m.eROI = eroiRaw === '' ? '' : parseFloat(eroiRaw);
   m.notes = document.getElementById('sec-notes').value.trim();
-  document.getElementById('sec-save-status').textContent = 'Gespeichert ✓';
+  document.getElementById('sec-save-status').textContent = 'Saved ✓';
   populateSecuritySelect();
   document.getElementById('sec-select').value = id;
   renderSecurityDetail(id);
@@ -1874,7 +2036,20 @@ document.getElementById('sec-save-btn').addEventListener('click', async () => {
   renderPortfolio();
   renderTransactions();
   renderPerformance();
-  await autoSyncToGitHub('Stammdaten aktualisiert');
+  await autoSyncToGitHub('Master data updated');
+});
+document.getElementById('sec-eroi').addEventListener('change', async (e) => {
+  const id = document.getElementById('sec-select').value;
+  if (!id) return;
+  const m = ensureMaster(id, assetName(id));
+  const raw = e.target.value.trim();
+  m.eROI = raw === '' ? '' : parseFloat(raw);
+  const perf = computeSecurityPerformance(id);
+  const eroiDiff = computeEroiVsIrr(id, perf.irr);
+  const eroiDiffEl = document.getElementById('sec-eroi-diff');
+  eroiDiffEl.textContent = eroiDiff === null ? 'n/a' : fmtPct(eroiDiff,1);
+  eroiDiffEl.style.color = eroiDiff === null ? 'var(--ink-soft)' : signColor(eroiDiff);
+  await autoSyncToGitHub('eROI edited');
 });
 
 document.getElementById('perf-search').addEventListener('input', renderPerformance);
@@ -1887,10 +2062,48 @@ document.querySelectorAll('#perf-mode-nav button').forEach(btn => {
   });
 });
 
+document.getElementById('prices-search').addEventListener('input', renderPrices);
+document.querySelectorAll('#prices-table thead th[data-key]').forEach(th => {
+  th.addEventListener('click', () => {
+    if (pricesSort.key === th.dataset.key) pricesSort.dir *= -1;
+    else { pricesSort.key = th.dataset.key; pricesSort.dir = 1; }
+    renderPrices();
+  });
+});
+document.querySelector('#prices-table tbody').addEventListener('change', async (e) => {
+  const input = e.target.closest('.price-edit-input');
+  if (!input) return;
+  const p = DB.prices.find(x => x.assetId === input.dataset.assetId && x.month === input.dataset.month);
+  if (!p) return;
+  const val = parseFloat(input.value);
+  if (isNaN(val)) return;
+  p.price = val;
+  await autoSyncToGitHub('Price edited');
+  renderAll();
+});
+document.querySelector('#prices-table tbody').addEventListener('click', async (e) => {
+  const btn = e.target.closest('.price-delete-btn');
+  if (!btn) return;
+  DB.prices = DB.prices.filter(x => !(x.assetId === btn.dataset.assetId && x.month === btn.dataset.month));
+  await autoSyncToGitHub('Price deleted');
+  renderAll();
+});
+document.getElementById('price-add-btn').addEventListener('click', async () => {
+  const assetId = document.getElementById('price-add-asset').value;
+  const month = document.getElementById('price-add-month').value; // 'YYYY-MM'
+  const price = parseFloat(document.getElementById('price-add-value').value);
+  const currency = document.getElementById('price-add-currency').value.trim() || 'EUR';
+  if (!assetId || !month || isNaN(price)){ log('Please choose an asset, a month and a valid price.', true); return; }
+  upsertPrice(assetId, month, price, currency);
+  document.getElementById('price-add-value').value = '';
+  await autoSyncToGitHub('Price added/updated');
+  renderAll();
+});
+
 function readFile(inputEl){
   return new Promise((resolve, reject) => {
     const file = inputEl.files[0];
-    if (!file){ reject(new Error('Keine Datei ausgewählt.')); return; }
+    if (!file){ reject(new Error('No file selected.')); return; }
     const reader = new FileReader();
     reader.onload = () => resolve(reader.result);
     reader.onerror = () => reject(reader.error);
@@ -1898,18 +2111,52 @@ function readFile(inputEl){
   });
 }
 
-document.getElementById('load-prices').addEventListener('change', async (e) => {
-  try{ importPricesCSV(await readFile(e.target)); renderAll(); } catch(err){ log('Fehler beim Laden von prices.csv: '+err.message, true); }
+document.getElementById('load-prices').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  const btn = document.getElementById('upload-prices-btn');
+  const label = document.getElementById('load-prices-filename');
+  btn.disabled = !file;
+  label.textContent = file ? `Selected: ${file.name}` : '';
 });
-document.getElementById('load-transactions').addEventListener('change', async (e) => {
-  try{ importTransactionsCSV(await readFile(e.target), 'transactions.csv'); renderAll(); } catch(err){ log('Fehler beim Laden von transactions.csv: '+err.message, true); }
+document.getElementById('upload-prices-btn').addEventListener('click', async () => {
+  const input = document.getElementById('load-prices');
+  const btn = document.getElementById('upload-prices-btn');
+  if (!input.files[0]) return;
+  btn.disabled = true;
+  try{
+    importPricesCSV(await readFile(input));
+    renderAll();
+    await autoSyncToGitHub('prices.csv manually loaded');
+    document.getElementById('load-prices-filename').textContent = '';
+    input.value = '';
+  } catch(err){ log('Error loading prices.csv: '+err.message, true); btn.disabled = false; }
+});
+document.getElementById('load-transactions').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  const btn = document.getElementById('upload-transactions-btn');
+  const label = document.getElementById('load-transactions-filename');
+  btn.disabled = !file;
+  label.textContent = file ? `Selected: ${file.name}` : '';
+});
+document.getElementById('upload-transactions-btn').addEventListener('click', async () => {
+  const input = document.getElementById('load-transactions');
+  const btn = document.getElementById('upload-transactions-btn');
+  if (!input.files[0]) return;
+  btn.disabled = true;
+  try{
+    importTransactionsCSV(await readFile(input), 'transactions.csv');
+    renderAll();
+    await autoSyncToGitHub('transactions.csv manually loaded');
+    document.getElementById('load-transactions-filename').textContent = '';
+    input.value = '';
+  } catch(err){ log('Error loading transactions.csv: '+err.message, true); btn.disabled = false; }
 });
 document.getElementById('load-opp').addEventListener('change', (e) => {
   const file = e.target.files[0];
   const btn = document.getElementById('upload-opp-btn');
   const label = document.getElementById('load-opp-filename');
   btn.disabled = !file;
-  label.textContent = file ? `Ausgewählt: ${file.name}` : '';
+  label.textContent = file ? `Selected: ${file.name}` : '';
 });
 document.getElementById('upload-opp-btn').addEventListener('click', async () => {
   const input = document.getElementById('load-opp');
@@ -1920,10 +2167,10 @@ document.getElementById('upload-opp-btn').addEventListener('click', async () => 
     const asOf = document.getElementById('opp-date').value || todayISO();
     importOpportunitiesCSV(await readFile(input), asOf);
     renderAll();
-    await autoSyncToGitHub('Investment-Opportunities-Import');
+    await autoSyncToGitHub('Investment Opportunities import');
     document.getElementById('load-opp-filename').textContent = '';
     input.value = '';
-  } catch(err){ log('Fehler beim Laden des Opportunities-Exports: '+err.message, true); btn.disabled = false; }
+  } catch(err){ log('Error loading the Opportunities export: '+err.message, true); btn.disabled = false; }
 });
 
 document.getElementById('load-act').addEventListener('change', (e) => {
@@ -1931,7 +2178,7 @@ document.getElementById('load-act').addEventListener('change', (e) => {
   const btn = document.getElementById('upload-act-btn');
   const label = document.getElementById('load-act-filename');
   btn.disabled = !file;
-  label.textContent = file ? `Ausgewählt: ${file.name}` : '';
+  label.textContent = file ? `Selected: ${file.name}` : '';
 });
 document.getElementById('upload-act-btn').addEventListener('click', async () => {
   const input = document.getElementById('load-act');
@@ -1941,10 +2188,10 @@ document.getElementById('upload-act-btn').addEventListener('click', async () => 
   try{
     importTransactionsCSV(await readFile(input), 'Activities-Export');
     renderAll();
-    await autoSyncToGitHub('Activities-Import');
+    await autoSyncToGitHub('Activities import');
     document.getElementById('load-act-filename').textContent = '';
     input.value = '';
-  } catch(err){ log('Fehler beim Laden des Activities-Exports: '+err.message, true); btn.disabled = false; }
+  } catch(err){ log('Error loading the Activities export: '+err.message, true); btn.disabled = false; }
 });
 
 // ---------------------------------------------------------------- CSV BUILDERS (shared by download + GitHub save) --
@@ -1971,21 +2218,21 @@ function buildMasterCSV(){
   return toCSV(['AssetID','Asset Name','Asset Category','Asset SubCategory','Asset Category_old','Notes','Release Date','Min Horizon','Max Horizon','eROI'], rows);
 }
 
-document.getElementById('export-prices').addEventListener('click', () => { downloadText('prices.csv', buildPricesCSV()); log('prices.csv heruntergeladen.'); });
-document.getElementById('export-transactions').addEventListener('click', () => { downloadText('transactions.csv', buildTransactionsCSV()); log('transactions.csv heruntergeladen.'); });
-document.getElementById('export-master').addEventListener('click', () => { downloadText('stammdaten.csv', buildMasterCSV()); log('stammdaten.csv heruntergeladen.'); });
+document.getElementById('export-prices').addEventListener('click', () => { downloadText('prices.csv', buildPricesCSV()); log('prices.csv downloaded.'); });
+document.getElementById('export-transactions').addEventListener('click', () => { downloadText('transactions.csv', buildTransactionsCSV()); log('transactions.csv downloaded.'); });
+document.getElementById('export-master').addEventListener('click', () => { downloadText('stammdaten.csv', buildMasterCSV()); log('stammdaten.csv downloaded.'); });
 
 document.getElementById('reset-all').addEventListener('click', () => {
-  if (!confirm('Session wirklich zurücksetzen? Alle nicht via GitHub/Download gesicherten Daten gehen verloren.')) return;
+  if (!confirm('Really reset the session? All data not saved via GitHub/download will be lost.')) return;
   DB.transactions = []; DB.prices = []; DB.master = {}; DB.holdings = {};
   GH.shas = {prices:null, transactions:null, master:null};
   renderAll();
-  log('Session zurückgesetzt.');
+  log('Session reset.');
 });
 
 // ---------------------------------------------------------------- GITHUB CONTENTS API --
-// Token lives in memory only, UNLESS the person explicitly ticks "Verbindung in diesem
-// Browser merken" — only then is it written to localStorage (opt-in, off by default).
+// Token lives in memory only, UNLESS the person explicitly ticks "Remember this connection
+// in this browser" — only then is it written to localStorage (opt-in, off by default).
 const GH = {
   shas: {prices:null, transactions:null, master:null},
 };
@@ -1995,7 +2242,7 @@ function ghSaveConfigToStorage(){
   try{
     const cfg = ghConfig();
     localStorage.setItem(GH_STORAGE_KEY, JSON.stringify(cfg));
-  } catch(err){ log('Konnte Verbindung nicht im Browser speichern: ' + err.message, true); }
+  } catch(err){ log('Could not save connection in this browser: ' + err.message, true); }
 }
 function ghForgetConfigFromStorage(){
   try{ localStorage.removeItem(GH_STORAGE_KEY); } catch(err){ /* ignore */ }
@@ -2079,8 +2326,8 @@ function ghStatus(msg, isErr){
 
 async function performGhLoad(){
   const cfg = ghConfig();
-  if (!cfg.owner || !cfg.repo || !cfg.token){ ghStatus('Owner, Repo und Token angeben.', true); return {ok:false}; }
-  ghStatus('Lade von GitHub …');
+  if (!cfg.owner || !cfg.repo || !cfg.token){ ghStatus('Please enter owner, repo and token.', true); return {ok:false}; }
+  ghStatus('Loading from GitHub …');
   try{
     const files = [
       {path:'data/prices.csv', key:'prices', importer: t => importPricesCSV(t)},
@@ -2091,17 +2338,17 @@ async function performGhLoad(){
       const result = await ghGetFile(cfg, f.path);
       if (result === null){
         GH.shas[f.key] = null;
-        log(`${f.path} existiert im Repo noch nicht — wird beim ersten Speichern angelegt.`);
+        log(`${f.path} doesn't exist in the repo yet — will be created on first save.`);
       } else {
         GH.shas[f.key] = result.sha;
         f.importer(result.content);
       }
     }
     renderAll();
-    ghStatus('Aktueller Stand ✓ (' + zurichTimestamp() + ')');
+    ghStatus('Up to date ✓ (' + zurichTimestamp() + ')');
     return {ok:true};
   } catch(err){
-    ghStatus('Fehler: ' + err.message, true);
+    ghStatus('Error: ' + err.message, true);
     log('GitHub-Laden fehlgeschlagen: ' + err.message, true);
     return {ok:false, error:err};
   }
@@ -2117,9 +2364,9 @@ document.getElementById('gh-load').addEventListener('click', async () => {
 async function saveToGitHub(commitMessage){
   const cfg = ghConfig();
   if (!cfg.owner || !cfg.repo || !cfg.token) return {ok:false, reason:'no-config'};
-  ghStatus('Speichere auf GitHub …');
+  ghStatus('Saving to GitHub …');
   const ts = zurichTimestamp();
-  const message = commitMessage || `Update Splint-Daten – ${ts}`;
+  const message = commitMessage || `Update Splint data – ${ts}`;
   try{
     const files = [
       {path:'data/prices.csv', key:'prices', content: buildPricesCSV()},
@@ -2129,13 +2376,13 @@ async function saveToGitHub(commitMessage){
     for (const f of files){
       const newSha = await ghPutFile(cfg, f.path, f.content, message, GH.shas[f.key]);
       GH.shas[f.key] = newSha;
-      log(`${f.path} auf GitHub gespeichert.`);
+      log(`${f.path} saved to GitHub.`);
     }
-    ghStatus('Gespeichert ✓ (' + ts + ')');
+    ghStatus('Saved ✓ (' + ts + ')');
     return {ok:true};
   } catch(err){
-    ghStatus('Fehler: ' + err.message, true);
-    log('GitHub-Speichern fehlgeschlagen: ' + err.message, true);
+    ghStatus('Error: ' + err.message, true);
+    log('GitHub save failed: ' + err.message, true);
     return {ok:false, reason:'error', error:err};
   }
 }
@@ -2146,32 +2393,32 @@ async function saveToGitHub(commitMessage){
 async function autoSyncToGitHub(reason){
   const cfg = ghConfig();
   if (!cfg.owner || !cfg.repo || !cfg.token){
-    log('GitHub nicht verbunden (Owner/Repo/Token fehlt) — bitte Stand manuell exportieren oder Verbindung herstellen.');
+    log('GitHub not connected (owner/repo/token missing) — please export manually or connect.');
     return;
   }
   const ts = zurichTimestamp();
   const result = await saveToGitHub(`${reason} – ${ts}`);
-  if (result.ok) log(`Automatisch auf GitHub gesichert (${reason}).`);
+  if (result.ok) log(`Automatically saved to GitHub (${reason}).`);
 }
 
 document.getElementById('gh-save').addEventListener('click', async () => {
   const btn = document.getElementById('gh-save'); btn.disabled = true;
   const result = await saveToGitHub();
-  if (result.reason === 'no-config') ghStatus('Owner, Repo und Token angeben.', true);
+  if (result.reason === 'no-config') ghStatus('Please enter owner, repo and token.', true);
   if (result.ok) ghMaybePersist();
   btn.disabled = false;
 });
 
 document.getElementById('gh-remember').addEventListener('change', (e) => {
-  if (e.target.checked) { ghSaveConfigToStorage(); log('Verbindung wird ab jetzt in diesem Browser gespeichert.'); }
-  else { ghForgetConfigFromStorage(); log('Verbindung wird nicht mehr im Browser gespeichert.'); }
+  if (e.target.checked) { ghSaveConfigToStorage(); log('Connection will now be saved in this browser.'); }
+  else { ghForgetConfigFromStorage(); log('Connection will no longer be saved in this browser.'); }
 });
 document.getElementById('gh-forget').addEventListener('click', () => {
   ghForgetConfigFromStorage();
   document.getElementById('gh-token').value = '';
   document.getElementById('gh-remember').checked = false;
-  ghStatus('Gespeicherte Verbindung gelöscht.');
-  log('Gespeicherte GitHub-Verbindung aus diesem Browser gelöscht.');
+  ghStatus('Saved connection deleted.');
+  log('Saved GitHub connection deleted from this browser.');
 });
 
 // Restore a previously remembered connection (owner/repo/branch/token), if any — and
@@ -2185,7 +2432,7 @@ document.getElementById('gh-forget').addEventListener('click', () => {
   if (saved.branch) document.getElementById('gh-branch').value = saved.branch;
   if (saved.token) document.getElementById('gh-token').value = saved.token;
   document.getElementById('gh-remember').checked = true;
-  log('Gespeicherte GitHub-Verbindung aus diesem Browser geladen.');
+  log('Saved GitHub connection loaded from this browser.');
   if (saved.token) performGhLoad();
 })();
 
