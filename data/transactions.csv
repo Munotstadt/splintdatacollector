@@ -26,7 +26,7 @@ Transaction ID,Transaction Type,Asset ID,Date Of Transaction,Money Amount,Purcha
 761637,Primary market purchase,bd92e467-6cbb-4283-af1e-fd47d6b8b40c,07.04.2026,50.00 EUR,50.00 EUR,0.00 EUR,generated_files/Purchase confirmation 2026-04-07 - pljH89NY.pdf,
 761635,Primary market purchase,2824e42b-9fe9-4d88-a77c-839c152596db,07.04.2026,50.00 EUR,50.00 EUR,0.00 EUR,generated_files/Purchase confirmation 2026-04-07 - teQsHyQI.pdf,
 759241,Marketplace purchase,a36fa6e2-6ea2-4904-bdb4-bd41b8b23f1b,02.04.2026,50.40 EUR,50.40 EUR,0.00 EUR,generated_files/Purchase confirmation 2026-04-02 - 1MFE9kQe.pdf,
-759235,Marketplace purchase,b8a049c6-7bc7-48e2-81fe-b2706a46fac6,02.04.2026,55.70 EUR,55.70 EUR,0.00 EUR,generated_files/Purchase confirmation 2026-04-02 - zwSRhyRY.pdf,
+759235,Marketplace purchase,b8a049c6-7bc7-48e2-81fe-b2706a46fac6,02.04.2026,55.70 EUR,55.70 EUR,0.00 EUR,generated_files/Purchase confirmation 2026-04-02 - zwSRhyRY.pdf,7.62
 753395,Primary market purchase,21f735b6-6060-4db4-9294-4c12b39df750,24.03.2026,50.00 EUR,50.00 EUR,0.00 EUR,generated_files/Purchase confirmation 2026-03-24 - Bdpe8HJv.pdf,
 752736,Exit sale,d79e0664-f7a4-43d3-8d87-2845129e100a,23.03.2026,70.86 EUR,70.86 EUR,0.00 EUR,generated_files/Exit confirmation 2026-03-23 - R2JgDzyg.pdf,
 750274,Primary market purchase,9521c06c-5f65-4bc2-bf6c-3e9353163e9c,18.03.2026,50.00 EUR,50.00 EUR,0.00 EUR,generated_files/Purchase confirmation 2026-03-18 - j6BLE2jT.pdf,
