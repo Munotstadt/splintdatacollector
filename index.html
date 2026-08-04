@@ -352,6 +352,8 @@
             <th data-key="pricePerSplint" class="num">Price/Splint</th>
             <th data-key="day1Profit" class="num">Day1Profit</th>
             <th data-key="fees" class="num">Fees</th>
+            <th data-key="priceChf" class="num">Price CHF</th>
+            <th data-key="valueChf" class="num">Value CHF</th>
             <th data-key="id">Trans. ID</th>
             <th>Receipt</th>
           </tr>
@@ -420,7 +422,7 @@
             <div class="value" id="sec-eroi-diff" style="font-size:18px;">—</div>
           </div>
         </div>
-        <div class="hint" style="margin-top:8px; font-size:11.5px;">Return = all buys/sells of this asset; for an open position the current value is also included as a hypothetical sale as of today. IRR is the annualized return of this cash flow series (Newton's method), so it accounts for the exact timing of every transaction. eROI vs. IRR = eROI − IRR.</div>
+        <div class="hint" style="margin-top:8px; font-size:11.5px;">Return = all buys/sells of this asset; for an open position the current value is also included as a hypothetical sale as of today. IRR is the annualized return of this cash flow series (Newton's method), so it accounts for the exact timing of every transaction. eROI vs. IRR = IRR − eROI.</div>
 
         <div class="field-grid" style="margin-top:18px; border-top:1px solid var(--line-soft); padding-top:14px;">
           <div style="grid-column:1/-1;">
@@ -456,10 +458,13 @@
       <div class="section-title"><h2>Price History</h2><span class="hint">Monthly prices from prices.csv</span></div>
       <div class="card" id="sec-chart-card" style="padding:18px 18px 10px;"></div>
 
+      <div class="section-title"><h2>Zeitablauf</h2><span class="hint">Release, buy(s), sale(s), today, and the expected exit window</span></div>
+      <div class="card" id="sec-timeline-card" style="padding:18px 18px 10px;"></div>
+
       <div class="section-title"><h2>Transactions for this Asset</h2></div>
       <div class="table-wrap">
         <table id="sec-tx-table">
-          <thead><tr><th>Date</th><th>Type</th><th class="num">Splints</th><th class="num">Amount</th><th class="num">Price/Splint</th><th class="num">Day1Profit</th><th class="num">Fees</th></tr></thead>
+          <thead><tr><th>Date</th><th>Type</th><th class="num">Splints</th><th class="num">Amount</th><th class="num">Price/Splint</th><th class="num">Day1Profit</th><th class="num">Fees</th><th class="num">Price CHF</th><th class="num">Value CHF</th></tr></thead>
           <tbody></tbody>
         </table>
       </div>
@@ -570,7 +575,6 @@
         </label>
       </div>
       <div class="upload-row" style="margin-top:6px;">
-        <button class="btn ghost" id="gh-load">Manually reload from GitHub</button>
         <button class="btn ghost" id="gh-save">Manually force-save to GitHub</button>
         <button class="btn ghost" id="gh-forget">Forget connection</button>
         <span class="hint mono" id="gh-status"></span>
@@ -604,33 +608,6 @@
         </div>
         <div class="hint mono" id="load-act-filename"></div>
       </div>
-    </div>
-
-    <div class="section-title"><h2>3 · Advanced / Fallback</h2><span class="hint">Only needed without a GitHub connection</span></div>
-    <div class="grid cols-2">
-      <div class="card upload-card">
-        <strong>Load prices.csv</strong>
-        <div class="upload-row">
-          <input type="file" id="load-prices" accept=".csv">
-          <button class="btn primary" id="upload-prices-btn" disabled>Upload</button>
-        </div>
-        <div class="hint mono" id="load-prices-filename"></div>
-      </div>
-      <div class="card upload-card">
-        <strong>Load transactions.csv</strong>
-        <div class="upload-row">
-          <input type="file" id="load-transactions" accept=".csv">
-          <button class="btn primary" id="upload-transactions-btn" disabled>Upload</button>
-        </div>
-        <div class="hint mono" id="load-transactions-filename"></div>
-      </div>
-    </div>
-    <div class="desc" style="margin-top:-4px;">Master data (name, category, subcategory, notes) only exists as an export/GitHub state — no manual upload, since there's no external source file for it. Edit it directly in the "Securities" tab.</div>
-    <div class="toolbar">
-      <button class="btn ghost" id="export-prices">Download prices.csv</button>
-      <button class="btn ghost" id="export-transactions">Download transactions.csv</button>
-      <button class="btn ghost" id="export-master">Download stammdaten.csv</button>
-      <button class="btn ghost" id="reset-all">Reset session</button>
     </div>
 
     <div class="section-title"><h2>Log</h2></div>
@@ -722,6 +699,65 @@ function isoToDMY(d){
   if (!d) return '';
   const [yyyy,mm,dd] = d.split('-');
   return `${dd}.${mm}.${yyyy}`;
+}
+
+// ---------------------------------------------------------------- FX RATES (CHF conversion) --
+// Sourced from the Munotstadt securitydatacollector repo, which tracks FX pairs (e.g. "EUR/CHF")
+// alongside regular securities in the same price feed. Loaded once per session in the background;
+// tables using it re-render automatically when it becomes available.
+const FX = {loaded:false, loading:false, rates:{}}; // rates['EUR/CHF'] = [{date:Date, rate:number}, ...] ascending
+function parseGhDateTime(s){
+  // "DD.MM.YYYY HH:MM:SS" -> Date
+  if (!s) return new Date(NaN);
+  const [datePart, timePart] = s.trim().split(' ');
+  const parts = (datePart||'').split('.');
+  if (parts.length !== 3) return new Date(NaN);
+  const [dd,mm,yyyy] = parts;
+  return new Date(`${yyyy}-${mm.padStart(2,'0')}-${dd.padStart(2,'0')}T${timePart||'00:00:00'}`);
+}
+async function loadFxRates(){
+  if (FX.loaded || FX.loading) return;
+  FX.loading = true;
+  try{
+    const res = await fetch('https://raw.githubusercontent.com/Munotstadt/securitydatacollector/main/data/security_prices.csv');
+    if (!res.ok) throw new Error('HTTP '+res.status);
+    const text = await res.text();
+    const rows = parseCSV(text);
+    const byPair = {};
+    rows.forEach(r => {
+      const name = (r['SecurityName']||'').trim();
+      if (!/\/CHF$/i.test(name)) return;
+      const price = parseFloat(r['Price']);
+      if (isNaN(price)) return;
+      const dt = parseGhDateTime(r['PriceDate']);
+      if (isNaN(dt.getTime())) return;
+      if (!byPair[name]) byPair[name] = [];
+      byPair[name].push({date: dt, rate: price});
+    });
+    Object.keys(byPair).forEach(name => byPair[name].sort((a,b)=>a.date-b.date));
+    FX.rates = byPair;
+    FX.loaded = true;
+    log(`FX rates loaded from securitydatacollector: ${Object.keys(byPair).map(k=>`${k} (${byPair[k].length})`).join(', ') || 'none found'}.`);
+    renderAll();
+  } catch(err){
+    log('Could not load FX rates from securitydatacollector (Price CHF / Value CHF will stay blank): '+err.message, true);
+  } finally {
+    FX.loading = false;
+  }
+}
+// Best-known CHF rate for a currency as of a given transaction date: the latest known rate at or
+// before that date, falling back to the earliest known rate if the transaction predates all FX
+// data. Returns null (leave blank) if the pair isn't known yet or hasn't loaded.
+function chfRateForCurrencyAtDate(currency, dateISO){
+  if (!currency) return null;
+  if (currency.toUpperCase() === 'CHF') return 1;
+  const series = FX.rates[currency.toUpperCase()+'/CHF'];
+  if (!series || !series.length) return null;
+  const target = new Date(dateISO+'T23:59:59');
+  let best = null;
+  for (const p of series){ if (p.date <= target) best = p; else break; }
+  if (!best) best = series[0];
+  return best.rate;
 }
 function monthLabel(m){
   const [y,mo] = m.split('-');
@@ -961,13 +997,16 @@ function computeTargetExitYear(assetId){
 }
 // eROI (manually entered expected ROI, in %) vs. the realized/current IRR p.a. (a decimal rate,
 // e.g. 0.15 = 15%). Returns eROI% - IRR%, or null if eROI is missing or IRR can't be computed.
+// eROI (manually entered expected ROI, in %) vs. the realized/current IRR p.a. (a decimal rate,
+// e.g. 0.15 = 15%). Returns IRR% - eROI%, or null if eROI is missing or IRR can't be computed.
+// Example: IRR 2.5%, eROI 25% -> 2.5 - 25 = -22.5%.
 function computeEroiVsIrr(assetId, irr){
   const m = DB.master[assetId];
   const eroiRaw = m ? m.eROI : '';
   if (eroiRaw === '' || eroiRaw === undefined || eroiRaw === null) return null;
   const eroi = parseFloat(eroiRaw);
   if (isNaN(eroi) || irr === null || irr === undefined || isNaN(irr)) return null;
-  return eroi - irr * 100;
+  return irr * 100 - eroi;
 }
 function latestPrice(assetId){
   const list = DB.prices.filter(p => p.assetId === assetId).sort((a,b)=> a.month < b.month ? -1 : 1);
@@ -1207,6 +1246,83 @@ function svgLineChart(points, opts={}){
     <polyline points="${linePts}" fill="none" stroke="#E30613" stroke-width="2"/>
     ${dots}
     ${labelsX}
+  </svg>`;
+}
+
+// Zeitablauf: a horizontal milestone timeline for one asset — Release, Buy(s), Sale(s), Today,
+// and a shaded band for the expected exit window (release date + min/max investment horizon).
+function svgAssetTimeline(assetId, releaseDate, minHorizon, maxHorizon){
+  const w = 900, h = 170;
+  const padL = 50, padR = 50;
+  const midY = 95;
+
+  // Collect + group events (same date + type collapse into one marker with a ×N count)
+  const raw = [];
+  if (releaseDate) raw.push({date: new Date(releaseDate+'T00:00:00'), label: 'Release', type: 'release'});
+  DB.transactions.filter(t=>t.assetId===assetId).forEach(t => {
+    raw.push({date: new Date(t.dateISO+'T00:00:00'), label: /purchase/i.test(t.type) ? 'Buy' : 'Sale', type: /purchase/i.test(t.type) ? 'buy' : 'sell'});
+  });
+  const today = new Date(); today.setHours(0,0,0,0);
+  raw.push({date: today, label: 'Today', type: 'today'});
+
+  const grouped = {};
+  raw.forEach(e => {
+    const key = e.date.toISOString().slice(0,10) + '|' + e.type;
+    if (!grouped[key]) grouped[key] = {...e, count:0};
+    grouped[key].count++;
+  });
+  const events = Object.values(grouped).sort((a,b)=>a.date-b.date);
+  if (!events.length) return `<div class="empty-state" style="border:none;padding:30px;">No dates available yet.</div>`;
+
+  // Expected exit window band: release + min horizon .. release + max horizon (years, may be fractional)
+  let band = null;
+  const minH = parseFloat(minHorizon), maxH = parseFloat(maxHorizon);
+  if (releaseDate && !isNaN(minH) && !isNaN(maxH)){
+    const rd = new Date(releaseDate+'T00:00:00');
+    const start = new Date(rd); start.setMonth(start.getMonth() + Math.round(minH*12));
+    const end = new Date(rd); end.setMonth(end.getMonth() + Math.round(maxH*12));
+    band = {start, end, label: `Expected exit window (${minHorizon}–${maxHorizon}y)`};
+  }
+
+  const allDates = events.map(e=>e.date).concat(band?[band.start,band.end]:[]);
+  let minD = new Date(Math.min(...allDates.map(d=>d.getTime())));
+  let maxD = new Date(Math.max(...allDates.map(d=>d.getTime())));
+  const span = Math.max(1, maxD - minD);
+  minD = new Date(minD.getTime() - span*0.08);
+  maxD = new Date(maxD.getTime() + span*0.08);
+  const range = maxD - minD;
+  const x = d => padL + ((d - minD)/range) * (w - padL - padR);
+
+  const colors = {release:'var(--ink-soft)', buy:'var(--green)', sell:'var(--red)', today:'var(--ink)'};
+
+  let bandSvg = '';
+  if (band){
+    const x1 = x(band.start), x2 = x(band.end);
+    bandSvg = `<rect x="${x1.toFixed(1)}" y="${(midY-16).toFixed(1)}" width="${Math.max(1,x2-x1).toFixed(1)}" height="32" fill="var(--red)" opacity="0.08" rx="3"/>
+      <text x="${((x1+x2)/2).toFixed(1)}" y="${(midY-22).toFixed(1)}" text-anchor="middle" class="chart-tooltip-label" fill="var(--red)">${escapeHtml(band.label)}</text>`;
+  }
+
+  const axisLine = `<line x1="${padL}" y1="${midY}" x2="${w-padR}" y2="${midY}" stroke="var(--line)" stroke-width="2"/>`;
+
+  let markers = '';
+  events.forEach((e,i) => {
+    const xx = x(e.date);
+    const above = i % 2 === 0;
+    const color = colors[e.type] || 'var(--ink)';
+    const labelText = e.count > 1 ? `${e.label} ×${e.count}` : e.label;
+    const labelY = above ? midY - 20 : midY + 34;
+    const dateY = above ? midY - 34 : midY + 48;
+    const tickY1 = midY, tickY2 = above ? midY - 12 : midY + 12;
+    markers += `<line x1="${xx.toFixed(1)}" y1="${tickY1}" x2="${xx.toFixed(1)}" y2="${tickY2.toFixed(1)}" stroke="${color}" stroke-width="1.5"/>`;
+    markers += `<circle cx="${xx.toFixed(1)}" cy="${midY}" r="5.5" fill="${color}"/>`;
+    markers += `<text x="${xx.toFixed(1)}" y="${labelY.toFixed(1)}" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-size="11.5" font-weight="600" fill="${color}">${escapeHtml(labelText)}</text>`;
+    markers += `<text x="${xx.toFixed(1)}" y="${dateY.toFixed(1)}" text-anchor="middle" class="chart-tooltip-label">${isoToDMY(e.date.toISOString().slice(0,10))}</text>`;
+  });
+
+  return `<svg viewBox="0 0 ${w} ${h}" width="100%" height="${h}" preserveAspectRatio="xMidYMid meet">
+    ${bandSvg}
+    ${axisLine}
+    ${markers}
   </svg>`;
 }
 
@@ -1515,7 +1631,11 @@ function escapeHtml(s){
 function renderTransactions(){
   const search = document.getElementById('tx-search').value.trim().toLowerCase();
   const typeFilter = document.getElementById('tx-type-filter').value;
-  let rows = DB.transactions.map(t => ({...t, assetName: assetName(t.assetId)}));
+  let rows = DB.transactions.map(t => {
+    const priceChf = chfRateForCurrencyAtDate(t.currency, t.dateISO);
+    const valueChf = priceChf === null ? null : t.amount * priceChf;
+    return {...t, assetName: assetName(t.assetId), priceChf, valueChf};
+  });
   if (typeFilter) rows = rows.filter(r => r.type === typeFilter);
   if (search) rows = rows.filter(r =>
     r.assetName.toLowerCase().includes(search) ||
@@ -1544,10 +1664,12 @@ function renderTransactions(){
       <td class="num">${fmtMoney(r.pricePerSplint, r.currency)}</td>
       <td class="num"><input type="number" step="0.01" class="day1profit-input" data-tx-id="${escapeHtml(r.id)}" value="${(r.day1Profit===''||r.day1Profit===undefined||r.day1Profit===null)?'':r.day1Profit}" placeholder="—" style="width:80px;text-align:right;"> ${escapeHtml(r.currency)}</td>
       <td class="num">${fmtMoney(r.fees, r.currency)}</td>
+      <td class="num">${r.priceChf===null?'':fmtNum(r.priceChf,4)}</td>
+      <td class="num">${r.valueChf===null?'':fmtMoney(r.valueChf,'CHF')}</td>
       <td class="mono">${r.id}</td>
-      <td>${r.confirmation ? `<span class="hint mono" title="${escapeHtml(r.confirmation)}">Beleg</span>` : ''}</td>
+      <td>${r.confirmation ? `<span class="hint mono" title="${escapeHtml(r.confirmation)}">Receipt</span>` : ''}</td>
     </tr>
-  `).join('') || `<tr><td colspan="10" class="hint">Keine Transaktionen gefunden.</td></tr>`;
+  `).join('') || `<tr><td colspan="12" class="hint">No transactions found.</td></tr>`;
 
   // header sort arrows
   document.querySelectorAll('#tx-table thead th').forEach(th => {
@@ -1621,17 +1743,23 @@ function renderSecurityDetail(assetId){
   // datalists for categories
   const cats = new Set(), subcats = new Set(), catsOld = new Set();
   Object.values(DB.master).forEach(mm => { if(mm.category) cats.add(mm.category); if(mm.subCategory) subcats.add(mm.subCategory); if(mm.categoryOld) catsOld.add(mm.categoryOld); });
-  document.getElementById('category-list').innerHTML = Array.from(cats).map(c=>`<option value="${escapeHtml(c)}">`).join('');
-  document.getElementById('subcategory-list').innerHTML = Array.from(subcats).map(c=>`<option value="${escapeHtml(c)}">`).join('');
-  document.getElementById('category-old-list').innerHTML = Array.from(catsOld).map(c=>`<option value="${escapeHtml(c)}">`).join('');
+  document.getElementById('category-list').innerHTML = Array.from(cats).sort((a,b)=>a.localeCompare(b)).map(c=>`<option value="${escapeHtml(c)}">`).join('');
+  document.getElementById('subcategory-list').innerHTML = Array.from(subcats).sort((a,b)=>a.localeCompare(b)).map(c=>`<option value="${escapeHtml(c)}">`).join('');
+  document.getElementById('category-old-list').innerHTML = Array.from(catsOld).sort((a,b)=>a.localeCompare(b)).map(c=>`<option value="${escapeHtml(c)}">`).join('');
 
   // price chart
   const series = assetPriceSeries(assetId);
   document.getElementById('sec-chart-card').innerHTML = svgPriceChangeChart(series);
 
+  // Zeitablauf: release, buy(s), sale(s), today, and the expected exit window
+  document.getElementById('sec-timeline-card').innerHTML = svgAssetTimeline(assetId, releaseDate, minHorizon, maxHorizon);
+
   // transactions for this asset
   const txs = DB.transactions.filter(t=>t.assetId===assetId).sort((a,b)=> a.dateISO < b.dateISO ? 1 : -1);
-  document.querySelector('#sec-tx-table tbody').innerHTML = txs.map(t => `
+  document.querySelector('#sec-tx-table tbody').innerHTML = txs.map(t => {
+    const priceChf = chfRateForCurrencyAtDate(t.currency, t.dateISO);
+    const valueChf = priceChf === null ? null : t.amount * priceChf;
+    return `
     <tr>
       <td class="mono">${t.dateDMY}</td>
       <td><span class="tag ${/purchase/i.test(t.type)?'buy':'sell'}">${t.type}</span></td>
@@ -1640,8 +1768,10 @@ function renderSecurityDetail(assetId){
       <td class="num">${fmtMoney(t.pricePerSplint, t.currency)}</td>
       <td class="num"><input type="number" step="0.01" class="day1profit-input" data-tx-id="${escapeHtml(t.id)}" value="${(t.day1Profit===''||t.day1Profit===undefined||t.day1Profit===null)?'':t.day1Profit}" placeholder="—" style="width:80px;text-align:right;"> ${escapeHtml(t.currency)}</td>
       <td class="num">${fmtMoney(t.fees, t.currency)}</td>
-    </tr>
-  `).join('') || `<tr><td colspan="7" class="hint">Keine Transaktionen.</td></tr>`;
+      <td class="num">${priceChf===null?'':fmtNum(priceChf,4)}</td>
+      <td class="num">${valueChf===null?'':fmtMoney(valueChf,'CHF')}</td>
+    </tr>`;
+  }).join('') || `<tr><td colspan="9" class="hint">No transactions.</td></tr>`;
 
   // similar investments: same category & subcategory, excluding this asset itself
   const myCat = m.category || '';
@@ -1675,20 +1805,50 @@ function renderSecurityDetail(assetId){
 
 // ---------------------------------------------------------------- RENDER: PERFORMANCE --
 let perfMode = 'price';
+let perfSort = {key:'name', dir:1};
 function renderPerformance(){
   const search = document.getElementById('perf-search').value.trim().toLowerCase();
   const monthsAsc = allMonthsSorted();
   const monthsDesc = monthsAsc.slice().reverse();
   const thead = document.querySelector('#perf-table thead tr');
-  thead.innerHTML = `<th>Asset</th>` + monthsDesc.map(m=>`<th class="num">${monthLabel(m)}</th>`).join('');
+  thead.innerHTML = `<th data-key="name">Asset</th><th data-key="category">Category</th>` +
+    monthsDesc.map(m=>`<th class="num" data-key="${m}">${monthLabel(m)}</th>`).join('');
+  thead.querySelectorAll('th[data-key]').forEach(th => {
+    if (th.dataset.key === perfSort.key){
+      const span = document.createElement('span');
+      span.className = 'arrow';
+      span.textContent = perfSort.dir === 1 ? '↑' : '↓';
+      th.appendChild(span);
+    }
+  });
 
   let ids = allAssetIds().filter(id => DB.prices.some(p=>p.assetId===id));
   if (search) ids = ids.filter(id => assetName(id).toLowerCase().includes(search));
-  ids.sort((a,b)=>assetName(a).localeCompare(assetName(b)));
 
-  const bodyRows = ids.map(id => {
+  // build each row's data once so both sorting and rendering can use it
+  let rows = ids.map(id => {
     const series = {};
     assetPriceSeries(id).forEach(p => series[p.month] = p.price);
+    return {id, name: assetName(id), category: (DB.master[id] && DB.master[id].category) || '', series};
+  });
+
+  rows.sort((a,b) => {
+    let av, bv;
+    if (perfSort.key === 'name'){ av = a.name.toLowerCase(); bv = b.name.toLowerCase(); }
+    else if (perfSort.key === 'category'){ av = a.category.toLowerCase(); bv = b.category.toLowerCase(); }
+    else { av = a.series[perfSort.key]; bv = b.series[perfSort.key]; }
+    const aNull = (av === undefined || av === null || av === '');
+    const bNull = (bv === undefined || bv === null || bv === '');
+    if (aNull && bNull) return 0;
+    if (aNull) return 1;
+    if (bNull) return -1;
+    if (av < bv) return -1*perfSort.dir;
+    if (av > bv) return 1*perfSort.dir;
+    return 0;
+  });
+
+  const bodyRows = rows.map(row => {
+    const series = row.series;
     // Δ% needs the chronologically preceding month's value, so compute cell contents walking
     // months oldest-to-newest first, then render the resulting cells newest-to-oldest (left to right).
     let lastVal = null;
@@ -1717,7 +1877,7 @@ function renderPerformance(){
       cellsByMonth[m] = `<td class="num"${bg}>${display}</td>`;
     });
     const cells = monthsDesc.map(m => cellsByMonth[m]).join('');
-    return `<tr><td>${assetLinkHTML(id, assetName(id))}${isCurrentlyHeld(id)?'':' <span class="hint">(sold)</span>'}</td>${cells}</tr>`;
+    return `<tr><td>${assetLinkHTML(row.id, row.name)}${isCurrentlyHeld(row.id)?'':' <span class="hint">(sold)</span>'}</td><td>${escapeHtml(row.category)||'<span class="hint">—</span>'}</td>${cells}</tr>`;
   });
   document.querySelector('#perf-table tbody').innerHTML = bodyRows.join('') || `<tr><td class="hint">No price data available.</td></tr>`;
 }
@@ -2053,6 +2213,13 @@ document.getElementById('sec-eroi').addEventListener('change', async (e) => {
 });
 
 document.getElementById('perf-search').addEventListener('input', renderPerformance);
+document.querySelector('#perf-table thead').addEventListener('click', (e) => {
+  const th = e.target.closest('th[data-key]');
+  if (!th) return;
+  if (perfSort.key === th.dataset.key) perfSort.dir *= -1;
+  else { perfSort.key = th.dataset.key; perfSort.dir = 1; }
+  renderPerformance();
+});
 document.querySelectorAll('#perf-mode-nav button').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('#perf-mode-nav button').forEach(b=>b.classList.remove('active'));
@@ -2111,46 +2278,6 @@ function readFile(inputEl){
   });
 }
 
-document.getElementById('load-prices').addEventListener('change', (e) => {
-  const file = e.target.files[0];
-  const btn = document.getElementById('upload-prices-btn');
-  const label = document.getElementById('load-prices-filename');
-  btn.disabled = !file;
-  label.textContent = file ? `Selected: ${file.name}` : '';
-});
-document.getElementById('upload-prices-btn').addEventListener('click', async () => {
-  const input = document.getElementById('load-prices');
-  const btn = document.getElementById('upload-prices-btn');
-  if (!input.files[0]) return;
-  btn.disabled = true;
-  try{
-    importPricesCSV(await readFile(input));
-    renderAll();
-    await autoSyncToGitHub('prices.csv manually loaded');
-    document.getElementById('load-prices-filename').textContent = '';
-    input.value = '';
-  } catch(err){ log('Error loading prices.csv: '+err.message, true); btn.disabled = false; }
-});
-document.getElementById('load-transactions').addEventListener('change', (e) => {
-  const file = e.target.files[0];
-  const btn = document.getElementById('upload-transactions-btn');
-  const label = document.getElementById('load-transactions-filename');
-  btn.disabled = !file;
-  label.textContent = file ? `Selected: ${file.name}` : '';
-});
-document.getElementById('upload-transactions-btn').addEventListener('click', async () => {
-  const input = document.getElementById('load-transactions');
-  const btn = document.getElementById('upload-transactions-btn');
-  if (!input.files[0]) return;
-  btn.disabled = true;
-  try{
-    importTransactionsCSV(await readFile(input), 'transactions.csv');
-    renderAll();
-    await autoSyncToGitHub('transactions.csv manually loaded');
-    document.getElementById('load-transactions-filename').textContent = '';
-    input.value = '';
-  } catch(err){ log('Error loading transactions.csv: '+err.message, true); btn.disabled = false; }
-});
 document.getElementById('load-opp').addEventListener('change', (e) => {
   const file = e.target.files[0];
   const btn = document.getElementById('upload-opp-btn');
@@ -2217,18 +2344,6 @@ function buildMasterCSV(){
     .map(m => ({AssetID:m.assetId, 'Asset Name':m.assetName, 'Asset Category':m.category, 'Asset SubCategory':m.subCategory, 'Asset Category_old':m.categoryOld||'', Notes:m.notes, 'Release Date':m.releaseDate||'', 'Min Horizon':m.minHorizon||'', 'Max Horizon':m.maxHorizon||'', 'eROI':m.eROI||''}));
   return toCSV(['AssetID','Asset Name','Asset Category','Asset SubCategory','Asset Category_old','Notes','Release Date','Min Horizon','Max Horizon','eROI'], rows);
 }
-
-document.getElementById('export-prices').addEventListener('click', () => { downloadText('prices.csv', buildPricesCSV()); log('prices.csv downloaded.'); });
-document.getElementById('export-transactions').addEventListener('click', () => { downloadText('transactions.csv', buildTransactionsCSV()); log('transactions.csv downloaded.'); });
-document.getElementById('export-master').addEventListener('click', () => { downloadText('stammdaten.csv', buildMasterCSV()); log('stammdaten.csv downloaded.'); });
-
-document.getElementById('reset-all').addEventListener('click', () => {
-  if (!confirm('Really reset the session? All data not saved via GitHub/download will be lost.')) return;
-  DB.transactions = []; DB.prices = []; DB.master = {}; DB.holdings = {};
-  GH.shas = {prices:null, transactions:null, master:null};
-  renderAll();
-  log('Session reset.');
-});
 
 // ---------------------------------------------------------------- GITHUB CONTENTS API --
 // Token lives in memory only, UNLESS the person explicitly ticks "Remember this connection
@@ -2354,13 +2469,6 @@ async function performGhLoad(){
   }
 }
 
-document.getElementById('gh-load').addEventListener('click', async () => {
-  const btn = document.getElementById('gh-load'); btn.disabled = true;
-  const result = await performGhLoad();
-  if (result.ok) ghMaybePersist();
-  btn.disabled = false;
-});
-
 async function saveToGitHub(commitMessage){
   const cfg = ghConfig();
   if (!cfg.owner || !cfg.repo || !cfg.token) return {ok:false, reason:'no-config'};
@@ -2438,6 +2546,7 @@ document.getElementById('gh-forget').addEventListener('click', () => {
 
 // default opp-date to today
 document.getElementById('opp-date').value = todayISO();
+loadFxRates();
 
 renderAll();
 </script>
