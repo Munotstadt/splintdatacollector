@@ -1,4 +1,5 @@
 Transaction ID,Transaction Type,Asset ID,Date Of Transaction,Money Amount,Purchase/Sale Price Per Splint,Fees,Purchase/Sale Confirmation,Day1Profit
+852930,Primary market purchase,228a8d05-26ed-4061-b133-45c4ff509dad,04.08.2026,50.00 EUR,50.00 EUR,0.00 EUR,generated_files/Purchase confirmation 2026-08-04 - e30DgPRv.pdf,
 845363,Primary market purchase,5c107acb-042c-4b17-bbcf-20232f4c8d9c,26.07.2026,50.00 EUR,50.00 EUR,0.00 EUR,generated_files/Purchase confirmation 2026-07-26 - euMHX8bM.pdf,
 840641,Exit sale,e9f8bb6f-76ba-45e1-9cdb-f77ba1ccaaf7,20.07.2026,59.77 EUR,59.77 EUR,0.00 EUR,generated_files/Exit confirmation 2026-07-20 - YMgiVjr6.pdf,
 830939,Primary market purchase,139efc0e-2ee7-43b8-b887-524f03643a8f,08.07.2026,50.00 EUR,50.00 EUR,0.00 EUR,generated_files/Purchase confirmation 2026-07-08 - XWNHIUMk.pdf,
