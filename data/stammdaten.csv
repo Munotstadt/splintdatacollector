@@ -1,5 +1,5 @@
 AssetID,Asset Name,Asset Category,Asset SubCategory,Asset Category_old,Notes,Release Date,Min Horizon,Max Horizon,eROI
-32bff738-cf09-457a-95af-1ae86afef6a8,1988 Porsche 911 (930) 3.2 SC Targa in Guards Red,Car,Porsche,,,2024-09-06,2,4,
+32bff738-cf09-457a-95af-1ae86afef6a8,1988 Porsche 911 (930) 3.2 SC Targa in Guards Red,Car,Porsche,Car,,2024-09-06,2,4,
 0a68e368-3993-47cc-b044-1d8c45b71788,2002 Ferrari 360 Modena Manual,Car,Ferrari,Car,,2024-12-10,2,4,12.4
 a4bbcf2f-b426-410f-b37c-6e0f5731b28d,"Albert Willem, The Very Wild West!, 2023",,,,,2024-05-24,2,4,
 164578a4-7644-4cb6-9df1-77330051de94,"Amanda Watt, The Ballroom, 2022",,,,,2025-12-19,2,4,
@@ -128,7 +128,7 @@ ff19c3bd-93b4-4b9d-8b50-4e1a4b128850,Pokémon - 2 case fresh Fossil 1st Edition 
 d6bc6f41-bec9-4b1d-b3d3-caca635482f2,Pokémon Japanese Neo 2 - Crossing the Ruins Booster Box - Part 2,Trading Cards,Pokémon,Various,,2025-12-04,4,6,27.3
 036ce9d2-cfb6-4e04-80e6-440d59906806,"Pokémon XY ""Furious Fists"" (sealed case)",Trading Cards,Pokémon,Various,,2025-11-05,4,6,29.9
 fc78cdd8-92fc-456b-ac2f-2b7794e25270,"Pokémon XY Base Set & Primal Clash (2 Cases, 6 Boosterboxes each)",Trading Cards,Pokémon,Various,,2025-10-27,4,6,28.8
-e1216634-8d46-4f5d-9aaa-f1fe91a727db,"Porsche 911, 930 SSC, 1986",,,,,2023-12-05,2,4,
+e1216634-8d46-4f5d-9aaa-f1fe91a727db,"Porsche 911, 930 SSC, 1986",Car,Porsche,Car,,2023-12-05,2,4,
 f92d95cb-ca4a-43a7-a7d8-f3c5c7a566e8,"Raghav Babbar, A Lone Winter Night, 2024",,,,,2025-01-07,2,4,
 ef1bee48-c50b-4bc1-b24b-1b4505524276,"Raghav Babbar, Flowers for Ceremony, 2023",,Raghav Babbar,,,2023-11-20,2,4,
 f8a1662c-8a65-42d7-a46d-fabf286e0180,"Raghav Babbar, Mother and the Winter in North India, 2023",,,,,2023-12-18,2,4,
