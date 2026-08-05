@@ -269,12 +269,23 @@
       </div>
 
       <div class="section-title">
-        <h2>Cash Flow</h2>
-        <span class="hint">Monthly investments, exits/sales, net cash flow, and realized return · newest first</span>
+        <h2>Recent Transactions</h2>
+        <span class="hint">Last 10 · newest first</span>
+      </div>
+      <div class="table-wrap">
+        <table id="recent-tx-table">
+          <thead><tr><th>Date</th><th>Type</th><th>Asset</th><th class="num">Amount</th><th class="num">Price/Splint</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div class="section-title">
+        <h2>Cash Flow and Performance</h2>
+        <span class="hint">Monthly investments, exits/sales, net cash flow, unrealized and realized return · newest first</span>
       </div>
       <div class="table-wrap">
         <table id="cashflow-table">
-          <thead><tr><th>Month</th><th class="num">Investments</th><th class="num">Exits/Sales</th><th class="num">Net Cash Flow</th><th class="num">Realized Return</th></tr></thead>
+          <thead><tr><th>Month</th><th class="num">Investments</th><th class="num">Exits/Sales</th><th class="num">Net Cash Flow</th><th class="num">Unrealized Return</th><th class="num">Realized Return</th></tr></thead>
           <tbody></tbody>
         </table>
       </div>
@@ -311,7 +322,8 @@
             <th data-key="eroiVsIrr" class="num">eROI vs IRR</th>
             <th data-key="firstBuy">1st Buy</th>
             <th data-key="exitDate">Exit/Sale</th>
-            <th data-key="targetExitYear" class="num">Horizon until</th>
+            <th data-key="holdingPeriod" class="num">Holding Period</th>
+            <th data-key="targetExitYear" class="num">Horizon</th>
             <th data-key="category">Category</th>
             <th data-key="subCategory">Subcategory</th>
           </tr>
@@ -420,6 +432,10 @@
           <div class="card kpi" style="padding:10px 12px;">
             <div class="label">eROI vs. IRR</div>
             <div class="value" id="sec-eroi-diff" style="font-size:18px;">—</div>
+          </div>
+          <div class="card kpi" style="padding:10px 12px;">
+            <div class="label">Holding Period</div>
+            <div class="value" id="sec-holding-period" style="font-size:18px;">—</div>
           </div>
         </div>
         <div class="hint" style="margin-top:8px; font-size:11.5px;">Return = all buys/sells of this asset; for an open position the current value is also included as a hypothetical sale as of today. IRR is the annualized return of this cash flow series (Newton's method), so it accounts for the exact timing of every transaction. eROI vs. IRR = IRR − eROI.</div>
@@ -745,9 +761,24 @@ async function loadFxRates(){
     FX.loading = false;
   }
 }
+// Fills in the FX Rate field for any transaction that doesn't have one yet, from the loaded FX
+// data. This value is then a normal, persisted, editable field in transactions.csv — once set
+// (auto or manually), it is never silently overwritten again. Returns true if anything changed.
+function backfillFxRates(){
+  if (!FX.loaded) return false;
+  let changed = false;
+  DB.transactions.forEach(t => {
+    if (t.fxRate === undefined || t.fxRate === null || t.fxRate === ''){
+      const rate = chfRateForCurrencyAtDate(t.currency, t.dateISO);
+      if (rate !== null){ t.fxRate = Math.round(rate*10000)/10000; changed = true; }
+    }
+  });
+  return changed;
+}
 // Best-known CHF rate for a currency as of a given transaction date: the latest known rate at or
-// before that date, falling back to the earliest known rate if the transaction predates all FX
-// data. Returns null (leave blank) if the pair isn't known yet or hasn't loaded.
+// before that date. Returns null (leave FX / Value CHF blank) if the pair isn't known, hasn't
+// loaded yet, or the transaction predates the earliest available rate for that pair — no
+// forward- or backward-guessing across dates with no actual data.
 function chfRateForCurrencyAtDate(currency, dateISO){
   if (!currency) return null;
   if (currency.toUpperCase() === 'CHF') return 1;
@@ -756,8 +787,7 @@ function chfRateForCurrencyAtDate(currency, dateISO){
   const target = new Date(dateISO+'T23:59:59');
   let best = null;
   for (const p of series){ if (p.date <= target) best = p; else break; }
-  if (!best) best = series[0];
-  return best.rate;
+  return best ? best.rate : null;
 }
 function monthLabel(m){
   const [y,mo] = m.split('-');
@@ -886,6 +916,7 @@ function importTransactionsCSV(text, sourceLabel){
       confirmation: r['Purchase/Sale Confirmation'] || r['confirmation'] || '',
       splints,
       day1Profit: (r['Day1Profit'] !== undefined && r['Day1Profit'] !== null) ? r['Day1Profit'] : '',
+      fxRate: (r['FX Rate'] !== undefined && r['FX Rate'] !== null && r['FX Rate'] !== '') ? r['FX Rate'] : '',
     });
     added++;
   });
@@ -1177,6 +1208,16 @@ function assetLastExitDate(assetId){
   const sales = DB.transactions.filter(t => t.assetId === assetId && !/purchase/i.test(t.type));
   if (!sales.length) return null;
   return sales.reduce((max, t) => (t.dateISO > max ? t.dateISO : max), sales[0].dateISO);
+}
+// Holding period in years: (today, or the exit date if fully sold) minus the first buy date.
+function computeHoldingPeriodYears(assetId){
+  const firstBuy = assetFirstBuyDate(assetId);
+  if (!firstBuy) return null;
+  const held = isCurrentlyHeld(assetId);
+  const exitDate = held ? null : assetLastExitDate(assetId);
+  const endDate = exitDate ? new Date(exitDate+'T00:00:00') : new Date();
+  const startDate = new Date(firstBuy+'T00:00:00');
+  return (endDate - startDate) / (1000*60*60*24*365.25);
 }
 
 function computePortfolioIRR(assetIds){
@@ -1491,6 +1532,8 @@ function renderDashboard(){
 
   const k = computeKPIs();
   const portfolioIrr = computePortfolioIRR();
+  const holdingPeriods = allAssetIds().map(id => computeHoldingPeriodYears(id)).filter(v => v !== null);
+  const avgHoldingPeriod = holdingPeriods.length ? holdingPeriods.reduce((s,v)=>s+v,0) / holdingPeriods.length : null;
   const kpiGrid = document.getElementById('kpi-grid');
   kpiGrid.innerHTML = `
     <div class="card kpi">
@@ -1517,6 +1560,11 @@ function renderDashboard(){
       <div class="label">Portfolio IRR p.a.</div>
       <div class="value" style="color:${signColor(portfolioIrr)}">${portfolioIrr===null?'—':fmtPct(portfolioIrr*100)}</div>
       <div class="delta">All cash flows; open positions at today's value</div>
+    </div>
+    <div class="card kpi">
+      <div class="label">Average Holding Period</div>
+      <div class="value">${avgHoldingPeriod===null?'—':fmtNum(avgHoldingPeriod,1)+'y'}</div>
+      <div class="delta">Across ${holdingPeriods.length} assets, held &amp; sold</div>
     </div>
   `;
 
@@ -1606,10 +1654,22 @@ function renderDashboard(){
     </tr>
   `).join('') || `<tr><td colspan="5" class="hint">No open positions.</td></tr>`;
 
-  renderCashFlow(months);
+  // recent transactions
+  const recentTx = DB.transactions.slice().sort((a,b)=> a.dateISO < b.dateISO ? 1 : -1).slice(0,10);
+  document.querySelector('#recent-tx-table tbody').innerHTML = recentTx.map(t => `
+    <tr>
+      <td class="mono">${t.dateDMY}</td>
+      <td><span class="tag ${/purchase/i.test(t.type)?'buy':'sell'}">${t.type}</span></td>
+      <td>${assetLinkHTML(t.assetId, assetName(t.assetId))}</td>
+      <td class="num">${fmtMoney(t.amount, t.currency)}</td>
+      <td class="num">${fmtMoney(t.pricePerSplint, t.currency)}</td>
+    </tr>
+  `).join('') || `<tr><td colspan="5" class="hint">No transactions yet.</td></tr>`;
+
+  renderCashFlow(months, valuePoints, costPoints);
 }
 
-function renderCashFlow(months){
+function renderCashFlow(months, valuePoints, costPoints){
   const ledger = computeRealizedLedger();
   const invByMonth = {}, exitByMonth = {}, realizedByMonth = {};
   DB.transactions.forEach(t => {
@@ -1621,21 +1681,31 @@ function renderCashFlow(months){
     const mo = e.dateISO.slice(0,7);
     realizedByMonth[mo] = (realizedByMonth[mo]||0) + e.gain;
   });
+  // Monthly unrealized return: the month-over-month change in total unrealized P&L
+  // (portfolio Value − Cost), i.e. the paper-gain swing caused purely by price moves that month.
+  const unrealizedByMonth = {};
+  months.forEach((m, i) => {
+    const now = valuePoints[i].value - costPoints[i].value;
+    const prev = i>0 ? (valuePoints[i-1].value - costPoints[i-1].value) : 0;
+    unrealizedByMonth[m] = now - prev;
+  });
   const allMonths = Array.from(new Set([...months, ...Object.keys(invByMonth), ...Object.keys(exitByMonth)])).sort().reverse();
   document.querySelector('#cashflow-table tbody').innerHTML = allMonths.map(m => {
     const inv = invByMonth[m] || 0;
     const ext = exitByMonth[m] || 0;
     const extVal = -ext;
     const net = inv + extVal;
+    const unreal = unrealizedByMonth[m];
     const real = realizedByMonth[m] || 0;
     return `<tr>
       <td class="mono">${monthLabel(m)}</td>
       <td class="num" style="color:${signColor(inv)}">${inv ? fmtMoney(inv) : '—'}</td>
       <td class="num" style="color:${signColor(extVal)}">${ext ? fmtMoney(extVal) : '—'}</td>
       <td class="num" style="color:${signColor(net)}">${fmtMoney(net)}</td>
+      <td class="num" style="color:${unreal===undefined?'var(--ink-soft)':signColor(unreal)}">${unreal===undefined?'—':fmtMoney(unreal)}</td>
       <td class="num" style="color:${signColor(real)}">${real ? fmtMoney(real) : '—'}</td>
     </tr>`;
-  }).join('') || `<tr><td colspan="5" class="hint">No cash flow data yet.</td></tr>`;
+  }).join('') || `<tr><td colspan="6" class="hint">No cash flow data yet.</td></tr>`;
 }
 
 function escapeHtml(s){
@@ -1647,7 +1717,7 @@ function renderTransactions(){
   const search = document.getElementById('tx-search').value.trim().toLowerCase();
   const typeFilter = document.getElementById('tx-type-filter').value;
   let rows = DB.transactions.map(t => {
-    const priceChf = chfRateForCurrencyAtDate(t.currency, t.dateISO);
+    const priceChf = (t.fxRate !== '' && t.fxRate !== undefined && t.fxRate !== null && !isNaN(t.fxRate)) ? Number(t.fxRate) : null;
     const valueChf = priceChf === null ? null : t.amount * priceChf;
     return {...t, assetName: assetName(t.assetId), priceChf, valueChf};
   });
@@ -1679,8 +1749,8 @@ function renderTransactions(){
       <td class="num">${fmtMoney(r.pricePerSplint, r.currency)}</td>
       <td class="num"><input type="number" step="0.01" class="day1profit-input" data-tx-id="${escapeHtml(r.id)}" value="${(r.day1Profit===''||r.day1Profit===undefined||r.day1Profit===null)?'':r.day1Profit}" placeholder="—" style="width:80px;text-align:right;"> ${escapeHtml(r.currency)}</td>
       <td class="num">${fmtMoney(r.fees, r.currency)}</td>
-      <td class="num">${r.priceChf===null?'':fmtNum(r.priceChf,4)}</td>
-      <td class="num">${r.valueChf===null?'':fmtMoney(r.valueChf,'CHF')}</td>
+      <td class="num"><input type="number" step="0.0001" class="fxrate-input" data-tx-id="${escapeHtml(r.id)}" value="${r.priceChf===null?'':r.priceChf}" placeholder="—" style="width:80px;text-align:right;"></td>
+      <td class="num" data-value-chf-for="${escapeHtml(r.id)}">${r.valueChf===null?'':fmtMoney(r.valueChf,'CHF')}</td>
       <td class="mono">${r.id}</td>
       <td>${r.confirmation ? `<span class="hint mono" title="${escapeHtml(r.confirmation)}">Receipt</span>` : ''}</td>
     </tr>
@@ -1747,6 +1817,8 @@ function renderSecurityDetail(assetId){
   const eroiDiffEl = document.getElementById('sec-eroi-diff');
   eroiDiffEl.textContent = eroiDiff === null ? 'n/a' : fmtPct(eroiDiff,1);
   eroiDiffEl.style.color = eroiDiff === null ? 'var(--ink-soft)' : signColor(eroiDiff);
+  const holdingPeriod = computeHoldingPeriodYears(assetId);
+  document.getElementById('sec-holding-period').textContent = holdingPeriod===null ? '—' : fmtNum(holdingPeriod,1)+'y';
 
   document.getElementById('sec-name-input').value = hasRealName ? m.assetName : '';
   document.getElementById('sec-category').value = m.category || '';
@@ -1772,7 +1844,7 @@ function renderSecurityDetail(assetId){
   // transactions for this asset
   const txs = DB.transactions.filter(t=>t.assetId===assetId).sort((a,b)=> a.dateISO < b.dateISO ? 1 : -1);
   document.querySelector('#sec-tx-table tbody').innerHTML = txs.map(t => {
-    const priceChf = chfRateForCurrencyAtDate(t.currency, t.dateISO);
+    const priceChf = (t.fxRate !== '' && t.fxRate !== undefined && t.fxRate !== null && !isNaN(t.fxRate)) ? Number(t.fxRate) : null;
     const valueChf = priceChf === null ? null : t.amount * priceChf;
     return `
     <tr>
@@ -1783,8 +1855,8 @@ function renderSecurityDetail(assetId){
       <td class="num">${fmtMoney(t.pricePerSplint, t.currency)}</td>
       <td class="num"><input type="number" step="0.01" class="day1profit-input" data-tx-id="${escapeHtml(t.id)}" value="${(t.day1Profit===''||t.day1Profit===undefined||t.day1Profit===null)?'':t.day1Profit}" placeholder="—" style="width:80px;text-align:right;"> ${escapeHtml(t.currency)}</td>
       <td class="num">${fmtMoney(t.fees, t.currency)}</td>
-      <td class="num">${priceChf===null?'':fmtNum(priceChf,4)}</td>
-      <td class="num">${valueChf===null?'':fmtMoney(valueChf,'CHF')}</td>
+      <td class="num"><input type="number" step="0.0001" class="fxrate-input" data-tx-id="${escapeHtml(t.id)}" value="${priceChf===null?'':priceChf}" placeholder="—" style="width:80px;text-align:right;"></td>
+      <td class="num" data-value-chf-for="${escapeHtml(t.id)}">${valueChf===null?'':fmtMoney(valueChf,'CHF')}</td>
     </tr>`;
   }).join('') || `<tr><td colspan="9" class="hint">No transactions.</td></tr>`;
 
@@ -1840,17 +1912,29 @@ function renderPerformance(){
   let ids = allAssetIds().filter(id => DB.prices.some(p=>p.assetId===id));
   if (search) ids = ids.filter(id => assetName(id).toLowerCase().includes(search));
 
-  // build each row's data once so both sorting and rendering can use it
+  // build each row's data once so both sorting and rendering can use it — including a delta
+  // (% change vs previous month) series, since sorting by a month column must reflect whichever
+  // mode (price or Δ%) is currently displayed.
   let rows = ids.map(id => {
     const series = {};
     assetPriceSeries(id).forEach(p => series[p.month] = p.price);
-    return {id, name: assetName(id), category: (DB.master[id] && DB.master[id].category) || '', series};
+    const deltaSeries = {};
+    let lastVal = null;
+    monthsAsc.forEach(m => {
+      const v = series[m];
+      if (v !== undefined){
+        if (lastVal !== null && lastVal !== 0) deltaSeries[m] = ((v-lastVal)/lastVal)*100;
+        lastVal = v;
+      }
+    });
+    return {id, name: assetName(id), category: (DB.master[id] && DB.master[id].category) || '', series, deltaSeries};
   });
 
   rows.sort((a,b) => {
     let av, bv;
     if (perfSort.key === 'name'){ av = a.name.toLowerCase(); bv = b.name.toLowerCase(); }
     else if (perfSort.key === 'category'){ av = a.category.toLowerCase(); bv = b.category.toLowerCase(); }
+    else if (perfMode === 'change'){ av = a.deltaSeries[perfSort.key]; bv = b.deltaSeries[perfSort.key]; }
     else { av = a.series[perfSort.key]; bv = b.series[perfSort.key]; }
     const aNull = (av === undefined || av === null || av === '');
     const bNull = (bv === undefined || bv === null || bv === '');
@@ -1983,6 +2067,7 @@ function computePortfolioRow(id){
     eroiVsIrr: computeEroiVsIrr(id, perf.irr),
     firstBuy: assetFirstBuyDate(id),
     exitDate: held ? null : assetLastExitDate(id),
+    holdingPeriod: computeHoldingPeriodYears(id),
     targetExitYear: computeTargetExitYear(id),
     category: m ? m.category : '',
     subCategory: m ? m.subCategory : '',
@@ -2042,11 +2127,12 @@ function renderPortfolio(){
       <td class="num" data-eroi-diff-for="${escapeHtml(r.id)}" style="color:${r.eroiVsIrr===null?'var(--ink-soft)':signColor(r.eroiVsIrr)}">${r.eroiVsIrr===null?'n/a':fmtPct(r.eroiVsIrr,1)}</td>
       <td class="mono">${r.firstBuy?isoToDMY(r.firstBuy):'—'}</td>
       <td class="mono">${r.exitDate?isoToDMY(r.exitDate):'—'}</td>
+      <td class="num">${r.holdingPeriod===null?'—':fmtNum(r.holdingPeriod,1)+'y'}</td>
       <td class="num">${!r.held?'n/a':(r.targetExitYear===null?'—':r.targetExitYear)}</td>
       <td>${escapeHtml(r.category)||'<span class="hint">—</span>'}</td>
       <td>${escapeHtml(r.subCategory)||'<span class="hint">—</span>'}</td>
     </tr>
-  `).join('') || `<tr><td colspan="14" class="hint">No assets found.</td></tr>`;
+  `).join('') || `<tr><td colspan="15" class="hint">No assets found.</td></tr>`;
 
   // Total / Subtotal row — reflects whatever is currently filtered/searched
   const isFiltered = portfolioFilter !== 'all' || !!portfolioCategoryFilter || !!search;
@@ -2064,7 +2150,7 @@ function renderPortfolio(){
     <td class="num" style="color:${signColor(totalReturnAbs)}">${fmtMoney(totalReturnAbs)}</td>
     <td class="num" style="color:${signColor(totalReturnRel)}">${totalReturnRel===null?'—':fmtPct(totalReturnRel)}</td>
     <td class="num" style="color:${signColor(totalIrr)}">${totalIrr===null?'—':fmtPct(totalIrr*100)}</td>
-    <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
   `;
 
   document.querySelectorAll('#portfolio-table thead th').forEach(th => {
@@ -2081,6 +2167,7 @@ function renderPortfolio(){
 // ---------------------------------------------------------------- MASTER RENDER --
 function renderAll(){
   normalizePrices();
+  if (backfillFxRates()) autoSyncToGitHub('FX rates auto-filled from securitydatacollector');
   updateHeaderStatus();
   renderDashboard();
   renderPortfolio();
@@ -2114,6 +2201,22 @@ async function handleDay1ProfitInputChange(e){
 }
 document.querySelector('#tx-table tbody').addEventListener('change', handleDay1ProfitInputChange);
 document.querySelector('#sec-tx-table tbody').addEventListener('change', handleDay1ProfitInputChange);
+
+async function handleFxRateInputChange(e){
+  const input = e.target.closest('.fxrate-input');
+  if (!input) return;
+  const tx = DB.transactions.find(t => t.id === input.dataset.txId);
+  if (!tx) return;
+  const raw = input.value.trim();
+  tx.fxRate = raw === '' ? '' : parseFloat(raw);
+  const valueChf = (tx.fxRate === '' || isNaN(tx.fxRate)) ? null : tx.amount * Number(tx.fxRate);
+  document.querySelectorAll(`[data-value-chf-for="${tx.id}"]`).forEach(cell => {
+    cell.textContent = valueChf === null ? '' : fmtMoney(valueChf, 'CHF');
+  });
+  await autoSyncToGitHub('FX Rate edited');
+}
+document.querySelector('#tx-table tbody').addEventListener('change', handleFxRateInputChange);
+document.querySelector('#sec-tx-table tbody').addEventListener('change', handleFxRateInputChange);
 
 // Kursverlauf: tap a point/bar to inspect its exact value (touch-friendly alternative to hover tooltips)
 document.getElementById('sec-chart-card').addEventListener('click', (e) => {
@@ -2351,8 +2454,9 @@ function buildTransactionsCSV(){
       'Purchase/Sale Price Per Splint': `${t.pricePerSplint.toFixed(2)} ${t.currency}`,
       'Fees': `${t.fees.toFixed(2)} ${t.currency}`, 'Purchase/Sale Confirmation': t.confirmation,
       'Day1Profit': t.day1Profit ?? '',
+      'FX Rate': t.fxRate ?? '',
     }));
-  return toCSV(['Transaction ID','Transaction Type','Asset ID','Date Of Transaction','Money Amount','Purchase/Sale Price Per Splint','Fees','Purchase/Sale Confirmation','Day1Profit'], rows);
+  return toCSV(['Transaction ID','Transaction Type','Asset ID','Date Of Transaction','Money Amount','Purchase/Sale Price Per Splint','Fees','Purchase/Sale Confirmation','Day1Profit','FX Rate'], rows);
 }
 function buildMasterCSV(){
   const rows = Object.values(DB.master).sort((a,b)=>a.assetName.localeCompare(b.assetName))
