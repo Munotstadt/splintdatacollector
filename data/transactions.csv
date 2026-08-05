@@ -15,7 +15,7 @@ Transaction ID,Transaction Type,Asset ID,Date Of Transaction,Money Amount,Purcha
 789246,Marketplace purchase,396b576c-100b-462a-97ca-55339ba4a03a,18.05.2026,52.90 EUR,52.90 EUR,0.00 EUR,generated_files/Purchase confirmation 2026-05-18 - sHTbmQNo.pdf,4.11
 779655,Primary market purchase,acd858bb-ae77-41fc-bfa6-55bd6f1b9383,06.05.2026,50.00 EUR,50.00 EUR,0.00 EUR,generated_files/Purchase confirmation 2026-05-06 - Rpc7VXGP.pdf,
 777907,Exit sale,64169723-b0fe-46f5-ba8a-2e371c3c28d0,04.05.2026,80.66 EUR,80.66 EUR,0.00 EUR,generated_files/Exit confirmation 2026-05-04 - N500xuKi.pdf,
-776981,Marketplace purchase,e2bc0133-ffde-41f4-93a5-df858b0849b3,03.05.2026,52.20 EUR,52.20 EUR,0.00 EUR,generated_files/Purchase confirmation 2026-05-03 - ior1iIrZ.pdf,
+776981,Marketplace purchase,e2bc0133-ffde-41f4-93a5-df858b0849b3,03.05.2026,52.20 EUR,52.20 EUR,0.00 EUR,generated_files/Purchase confirmation 2026-05-03 - ior1iIrZ.pdf,13.02
 776983,Marketplace purchase,d81ce499-35e6-4eab-b061-c8dc05cb9c0b,03.05.2026,56.10 EUR,56.10 EUR,0.00 EUR,generated_files/Purchase confirmation 2026-05-03 - eBRXl7xn.pdf,
 776987,Marketplace purchase,563eb0f2-d1fb-4745-aac5-1577a2ab7e68,03.05.2026,48.90 EUR,48.90 EUR,0.00 EUR,generated_files/Purchase confirmation 2026-05-03 - 7RFIngaS.pdf,5.43
 770313,Marketplace purchase,4215353a-68ff-4718-b3d4-a717b6bf2eb8,24.04.2026,44.00 EUR,44.00 EUR,0.00 EUR,generated_files/Purchase confirmation 2026-04-24 - S4JAJuNI.pdf,5.97
